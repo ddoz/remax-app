@@ -105,3 +105,24 @@ class ItemList extends StatelessWidget {
     );
   }
 }
+
+class ImageDialog extends StatelessWidget {
+  final String url;
+  ImageDialog(this.url);
+  @override
+  Widget build(BuildContext context) {
+    return Dialog(
+      child: Container(
+        width: 200,
+        height: 200,
+        decoration: BoxDecoration(
+            image: DecorationImage(
+                image:  NetworkImage(
+                    url),
+                fit: BoxFit.cover
+            )
+        ),
+      ),
+    );
+  }
+}
