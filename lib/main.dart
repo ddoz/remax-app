@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:remax_app/screen/detail_page.dart';
 import 'package:remax_app/screen/main_drawer.dart';
 
 void main() {
@@ -44,6 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xff1A3668),
         title: Text(widget.title),
       ),
       drawer: MainDrawer(),
@@ -78,7 +80,13 @@ class ItemList extends StatelessWidget {
         return new Container(
           padding: const EdgeInsets.all(10.0),
           child: new GestureDetector(
-            onTap: () {},
+            onTap: () =>
+                Navigator.of(context).push(new MaterialPageRoute(
+                    builder: (BuildContext context) =>
+                    new DetailPage(
+                      list: list,
+                      index: i,
+                    ))),
             child: new Card(
               child: Column(
                 children: <Widget>[

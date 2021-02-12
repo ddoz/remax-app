@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:remax_app/screen/about_page.dart';
 import 'package:remax_app/screen/agents_page.dart';
 import 'package:remax_app/screen/contact_us_page.dart';
-import 'package:remax_app/screen/detail_page.dart';
 import 'package:remax_app/screen/favourite_page.dart';
 import 'package:remax_app/screen/gallery_page.dart';
 import 'package:remax_app/screen/map_page.dart';
@@ -17,7 +16,7 @@ class MainDrawer extends StatelessWidget {
           Container(
             width: double.infinity,
             padding: EdgeInsets.all(20),
-            color: Theme.of(context).primaryColor,
+            color: const Color(0xff1A3668),
             child: Center(
               child: Column(
                 children: <Widget>[
@@ -47,7 +46,7 @@ class MainDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (BuildContext context) => new DetailPage()));
+                  builder: (BuildContext context) => new GalleryPage()));
             },
           ),
           ListTile(
