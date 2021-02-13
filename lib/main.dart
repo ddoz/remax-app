@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 import 'package:remax_app/screen/detail_page.dart';
 import 'package:remax_app/screen/main_drawer.dart';
 
@@ -72,6 +73,12 @@ class ItemList extends StatelessWidget {
 
   ItemList({this.list});
 
+  int toInt(String str) {
+    var myInt = int.parse(str);
+    assert(myInt is int);
+    return myInt;
+  }
+
   @override
   Widget build(BuildContext context) {
     return new ListView.builder(
@@ -80,10 +87,8 @@ class ItemList extends StatelessWidget {
         return new Container(
           padding: const EdgeInsets.all(10.0),
           child: new GestureDetector(
-            onTap: () =>
-                Navigator.of(context).push(new MaterialPageRoute(
-                    builder: (BuildContext context) =>
-                    new DetailPage(
+            onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                builder: (BuildContext context) => new DetailPage(
                       list: list,
                       index: i,
                     ))),
@@ -91,19 +96,143 @@ class ItemList extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Container(
-                    width:  double.infinity,
+                    width: double.infinity,
                     padding: EdgeInsets.all(100),
                     decoration: BoxDecoration(
                       image: DecorationImage(
                           image: NetworkImage(
-                              'https://genius.remax.co.id/papi/'+list[i]['listThumbnail']),
-                          fit: BoxFit.fill),
+                              'https://genius.remax.co.id/papi/' +
+                                  list[i]['listThumbnail']),
+                          fit: BoxFit.cover),
                     ),
                   ),
-                  ListTile(
-                    title: new Text(list[i]['listTitle']),
-                    subtitle: new Text(list[i]['listListingPrice']),
+                  Container(
+                    margin: EdgeInsets.all(10.0),
+                    child: new Text(
+                      list[i]['listTitle'],
+                      overflow: TextOverflow.ellipsis,
+                      style: new TextStyle(
+                        fontSize: 21.0,
+                        color: const Color(0xff767472),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                   ),
+                  Row(
+                    children: <Widget>[
+                      new Container(
+                        margin:
+                            EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
+                        child: new Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              children: <Widget>[
+                                new Image.asset('assets/images/bed.png',
+                                    width: 20, height: 20),
+                                list[i]['listBedroom'] != null
+                                    ? new Text(list[i]['listBedroom'])
+                                    : new Text('-')
+                              ],
+                            )),
+                      ),
+                      new Container(
+                        margin:
+                            EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
+                        child: new Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              children: <Widget>[
+                                new Image.asset('assets/images/bathtub.png',
+                                    width: 20, height: 20),
+                                list[i]['listBathroom'] != null
+                                    ? new Text(list[i]['listBathroom'])
+                                    : new Text('-')
+                              ],
+                            )),
+                      ),
+                      new Container(
+                        margin:
+                            EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
+                        child: new Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              children: <Widget>[
+                                new Image.asset('assets/images/home.png',
+                                    width: 20, height: 20),
+                                list[i]['listBuildingSize'] != null
+                                    ? new Text(list[i]['listBuildingSize'])
+                                    : new Text('-')
+                              ],
+                            )),
+                      ),
+                      new Container(
+                        margin:
+                            EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
+                        child: new Align(
+                            alignment: Alignment.centerLeft,
+                            child: Column(
+                              children: <Widget>[
+                                new Image.asset('assets/images/area.png',
+                                    width: 20, height: 20),
+                                list[i]['listLandSize'] != null
+                                    ? new Text(list[i]['listLandSize'])
+                                    : new Text('-')
+                              ],
+                            )),
+                      ),
+                    ],
+                  ),
+                  list[i]['links']['listListingCategoryId'] == "1"
+                      ? Row(children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.all(10.0),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: new Text(
+                                NumberFormat.compactCurrency(
+                                        locale: 'id',
+                                        symbol: 'Rp ',
+                                        decimalDigits: 0)
+                                    .format(toInt(list[i]['listListingPrice'])),
+                                style: new TextStyle(
+                                  fontSize: 21.0,
+                                  color: const Color(0xffDC1B2E),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          new Text(
+                            "DIJUAL",
+                            style: new TextStyle(
+                                fontSize: 12.0, color: const Color(0xffDC1B2E)),
+                          )
+                        ])
+                      : Row(children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.all(10.0),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: new Text(
+                                NumberFormat.compactCurrency(
+                                        locale: 'id',
+                                        symbol: 'Rp ',
+                                        decimalDigits: 0)
+                                    .format(toInt(list[i]['listListingPrice'])),
+                                style: new TextStyle(
+                                  fontSize: 21.0,
+                                  color: const Color(0xff1A3668),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                          ),
+                          new Text(
+                            "DISEWAKAN",
+                            style: new TextStyle(
+                                fontSize: 12.0, color: const Color(0xff1A3668)),
+                          )
+                        ]),
                 ],
               ),
             ),
@@ -116,7 +245,9 @@ class ItemList extends StatelessWidget {
 
 class ImageDialog extends StatelessWidget {
   final String url;
+
   ImageDialog(this.url);
+
   @override
   Widget build(BuildContext context) {
     return Dialog(
@@ -124,12 +255,8 @@ class ImageDialog extends StatelessWidget {
         width: 200,
         height: 200,
         decoration: BoxDecoration(
-            image: DecorationImage(
-                image:  NetworkImage(
-                    url),
-                fit: BoxFit.cover
-            )
-        ),
+            image:
+                DecorationImage(image: NetworkImage(url), fit: BoxFit.cover)),
       ),
     );
   }

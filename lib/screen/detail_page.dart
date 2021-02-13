@@ -16,24 +16,46 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-//  static final List<String> imgSlider = [
-//    '241027',
-//    '241028',
-//    '241029',
-//    '241030',
-//    '241031'
-//  ];
-  //static final List<String> imgSlider = DetailPage().list[DetailPage().index]['links']['listFile'];
 
   List<dynamic> imgSlider() {
     List<dynamic> data = widget.list[widget.index]['links']['listFile'];
     return data;
   }
 
+  Future<String> getDataKota() async {
+    final response = await http.get(
+        "https://genius.remax.co.id/papi/City/${widget.list[widget.index]['links']['listCityId']}");
+    String prov = json.decode(response.body)['data']['mctyDescription'];
+    return prov;
+  }
+
   Future<String> getDataProv() async {
-    final response = await http.get("https://genius.remax.co.id/papi/Province/${widget.list[widget.index]['links']['listProvinceId']}");
+    final response = await http.get(
+        "https://genius.remax.co.id/papi/Province/${widget.list[widget.index]['links']['listProvinceId']}");
     String prov = json.decode(response.body)['data']['mprvDescription'];
     return prov;
+  }
+
+  Future<String> getDataNegara() async {
+    final response = await http.get(
+        "https://genius.remax.co.id/papi/Country/${widget.list[widget.index]['links']['listCountryId']}");
+    String prov = json.decode(response.body)['data']['mctrDescription'];
+    return prov;
+  }
+
+  Future<List<dynamic>> getDataMemberFoto() async {
+    final response = await http.get(
+        "https://genius.remax.co.id/papi/Membership/${widget.list[widget.index]['links']['listMmbsId']}");
+    List<dynamic> data = json.decode(response.body)['data']['links']['mmbsFile'];
+    return data;
+  }
+
+  Future<String> getDataMemberNama() async {
+    final response = await http.get(
+        "https://genius.remax.co.id/papi/Membership/${widget.list[widget.index]['links']['listMmbsId']}");
+    String namadepan = json.decode(response.body)['data']['mmbsFirstName'];
+    String namabelakang = json.decode(response.body)['data']['mmbsLastName'];
+    return namadepan + ' ' + namabelakang;
   }
 
   @override
@@ -97,8 +119,15 @@ class _DetailPageState extends State<DetailPage> {
               margin: EdgeInsets.all(15.0),
               child: new Row(
                 children: <Widget>[
-                  new Text("Listing ID ", style: new TextStyle(fontSize: 20.0),),
-                  new Text("#${widget.list[widget.index]['listIdListing']}", style: new TextStyle(fontSize: 20.0, color: const Color(0xffDC1B2E)),),
+                  new Text(
+                    "Listing ID ",
+                    style: new TextStyle(fontSize: 20.0),
+                  ),
+                  new Text(
+                    "#${widget.list[widget.index]['listIdListing']}",
+                    style: new TextStyle(
+                        fontSize: 20.0, color: const Color(0xffDC1B2E)),
+                  ),
                 ],
               ),
             ),
@@ -109,9 +138,9 @@ class _DetailPageState extends State<DetailPage> {
                 child: new Text(
                   widget.list[widget.index]['listTitle'],
                   style: new TextStyle(
-                      fontSize: 23.0,
-                      fontWeight: FontWeight.bold,
-                     ),
+                    fontSize: 23.0,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
               ),
             ),
@@ -126,30 +155,142 @@ class _DetailPageState extends State<DetailPage> {
                 ),
               ),
             ),
+            Row(
+              children: <Widget>[
+                new Container(
+                  margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
+                  child: new Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        children: <Widget>[
+                          new Image.asset('assets/images/bed.png',
+                              width: 40, height: 40),
+                          widget.list[widget.index]['listBedroom'] != null
+                              ? new Text(
+                                  widget.list[widget.index]['listBedroom'])
+                              : new Text('0')
+                        ],
+                      )),
+                ),
+                new Container(
+                  margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
+                  child: new Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        children: <Widget>[
+                          new Image.asset('assets/images/bathtub.png',
+                              width: 40, height: 40),
+                          widget.list[widget.index]['listBathroom'] != null
+                              ? new Text(
+                                  widget.list[widget.index]['listBathroom'])
+                              : new Text('0')
+                        ],
+                      )),
+                ),
+                new Container(
+                  margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
+                  child: new Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        children: <Widget>[
+                          new Image.asset('assets/images/home.png',
+                              width: 40, height: 40),
+                          widget.list[widget.index]['listBuildingSize'] != null
+                              ? new Text(
+                                  widget.list[widget.index]['listBuildingSize'])
+                              : new Text('0')
+                        ],
+                      )),
+                ),
+                new Container(
+                  margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
+                  child: new Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        children: <Widget>[
+                          new Image.asset('assets/images/area.png',
+                              width: 40, height: 40),
+                          widget.list[widget.index]['listLandSize'] != null
+                              ? new Text(
+                                  widget.list[widget.index]['listLandSize'])
+                              : new Text('0')
+                        ],
+                      )),
+                ),
+              ],
+            ),
             new Container(
-              margin: EdgeInsets.all(15.0),
+              margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
               child: new Row(
                 children: <Widget>[
-                  new Text("Provinsi: ", style: new TextStyle(fontSize: 20.0),),
+                  new Text(
+                    "Kota: ",
+                    style: new TextStyle(fontSize: 15.0),
+                  ),
                   new FutureBuilder<String>(
-                    future: getDataProv(),
+                    future: getDataKota(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) print(snapshot.error);
                       return snapshot.hasData
-                          ? new Text(
-                        snapshot.data,
-                        style: new TextStyle(fontSize: 20.0)
-                      )
-                          : new Text(
-                          "Loading....",
-                          style: new TextStyle(fontSize: 20.0,color: const Color(0xff767472))
-                      );
+                          ? new Text(snapshot.data,
+                              style: new TextStyle(fontSize: 15.0))
+                          : new Text("Loading....",
+                              style: new TextStyle(
+                                  fontSize: 15.0,
+                                  color: const Color(0xff767472)));
                     },
                   ),
                 ],
               ),
             ),
-
+            new Container(
+              margin: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: new Row(
+                children: <Widget>[
+                  new Text(
+                    "Provinsi: ",
+                    style: new TextStyle(fontSize: 15.0),
+                  ),
+                  new FutureBuilder<String>(
+                    future: getDataProv(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) print(snapshot.error);
+                      return snapshot.hasData
+                          ? new Text(snapshot.data,
+                              style: new TextStyle(fontSize: 15.0))
+                          : new Text("Loading....",
+                              style: new TextStyle(
+                                  fontSize: 15.0,
+                                  color: const Color(0xff767472)));
+                    },
+                  ),
+                ],
+              ),
+            ),
+            new Container(
+              margin: EdgeInsets.only(left: 15.0, right: 15.0),
+              child: new Row(
+                children: <Widget>[
+                  new Text(
+                    "Negara: ",
+                    style: new TextStyle(fontSize: 15.0),
+                  ),
+                  new FutureBuilder<String>(
+                    future: getDataNegara(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) print(snapshot.error);
+                      return snapshot.hasData
+                          ? new Text(snapshot.data,
+                              style: new TextStyle(fontSize: 15.0))
+                          : new Text("Loading....",
+                              style: new TextStyle(
+                                  fontSize: 15.0,
+                                  color: const Color(0xff767472)));
+                    },
+                  ),
+                ],
+              ),
+            ),
             new Container(
               margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 30.0),
               child: new Align(
@@ -167,10 +308,68 @@ class _DetailPageState extends State<DetailPage> {
               margin: EdgeInsets.only(left: 15.0, right: 15.0),
               child: new Align(
                 alignment: Alignment.centerLeft,
-                child: Html(data:widget.list[widget.index]['listDescription']),
+                child: Html(data: widget.list[widget.index]['listDescription']),
               ),
             ),
-
+            new Card(
+              child: Column(
+                children: <Widget>[
+//                  Container(
+//                      margin: EdgeInsets.all(10),
+//                      width: 80.0,
+//                      height: 80.0,
+//                      decoration: new BoxDecoration(
+//                          shape: BoxShape.circle,
+//                          image: new DecorationImage(
+//                              fit: BoxFit.cover,
+//                              image: NetworkImage(
+//                                  'https://genius.remax.co.id/papi/Membership/crud/1285/links/MembershipFile/229895?size=256,256')))),
+                  new FutureBuilder<List<dynamic>>(
+                    future: getDataMemberFoto(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) print(snapshot.error);
+                      return snapshot.hasData
+                          ? Container(
+                              margin: EdgeInsets.all(10),
+                              width: 80.0,
+                              height: 80.0,
+                              decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                          'https://genius.remax.co.id/papi/Membership/crud/${widget.list[widget.index]['links']['listMmbsId']}/links/MembershipFile/${snapshot.data[0]}?size=256,256'))))
+                          : Container(
+                              margin: EdgeInsets.all(10),
+                              width: 80.0,
+                              height: 80.0,
+                              decoration: new BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: new DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: NetworkImage(
+                                          'https://remax.co.id/images/baloon.png?size=256,256'))));
+                    },
+                  ),
+                  new FutureBuilder<String>(
+                    future: getDataMemberNama(),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) print(snapshot.error);
+                      return snapshot.hasData
+                          ? ListTile(
+                              title: new Text(snapshot.data),
+                            )
+                          : ListTile(
+                            title: new Text("Loading....",
+                                style: new TextStyle(
+                                    fontSize: 15.0,
+                                    color: const Color(0xff767472))),
+                          );
+                    },
+                  ),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -189,9 +388,8 @@ class ImageDialog extends StatelessWidget {
       child: Container(
         width: double.infinity,
         height: 300,
-        decoration: BoxDecoration(
-            image:
-                DecorationImage(image: NetworkImage(url))),
+        decoration:
+            BoxDecoration(image: DecorationImage(image: NetworkImage(url))),
       ),
     );
   }
