@@ -107,12 +107,12 @@ class ItemList extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.all(10.0),
+                    margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 5.0),
                     child: new Text(
                       list[i]['listTitle'],
                       overflow: TextOverflow.ellipsis,
                       style: new TextStyle(
-                        fontSize: 21.0,
+                        fontSize: 16.0,
                         color: const Color(0xff767472),
                         fontWeight: FontWeight.bold,
                       ),
@@ -128,10 +128,18 @@ class ItemList extends StatelessWidget {
                             child: Column(
                               children: <Widget>[
                                 new Image.asset('assets/images/bed.png',
-                                    width: 20, height: 20),
+                                    width: 15, height: 15),
                                 list[i]['listBedroom'] != null
-                                    ? new Text(list[i]['listBedroom'])
-                                    : new Text('-')
+                                    ? new Text(list[i]['listBedroom'],
+                                  style: new TextStyle(
+                                    fontSize: 10.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),)
+                                    : new Text('-',
+                                    style: new TextStyle(
+                                      fontSize: 10.0,
+                                      fontWeight: FontWeight.bold,
+                                    ))
                               ],
                             )),
                       ),
@@ -143,10 +151,18 @@ class ItemList extends StatelessWidget {
                             child: Column(
                               children: <Widget>[
                                 new Image.asset('assets/images/bathtub.png',
-                                    width: 20, height: 20),
+                                    width: 15, height: 15),
                                 list[i]['listBathroom'] != null
-                                    ? new Text(list[i]['listBathroom'])
-                                    : new Text('-')
+                                    ? new Text(list[i]['listBathroom'],
+                                  style: new TextStyle(
+                                    fontSize: 10.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),)
+                                    : new Text('-',
+                                    style: new TextStyle(
+                                      fontSize: 10.0,
+                                      fontWeight: FontWeight.bold,
+                                    ))
                               ],
                             )),
                       ),
@@ -158,10 +174,18 @@ class ItemList extends StatelessWidget {
                             child: Column(
                               children: <Widget>[
                                 new Image.asset('assets/images/home.png',
-                                    width: 20, height: 20),
+                                    width: 15, height: 15),
                                 list[i]['listBuildingSize'] != null
-                                    ? new Text(list[i]['listBuildingSize'])
-                                    : new Text('-')
+                                    ? new Text(list[i]['listBuildingSize'],
+                                  style: new TextStyle(
+                                    fontSize: 10.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),)
+                                    : new Text('-',
+                                    style: new TextStyle(
+                                      fontSize: 10.0,
+                                      fontWeight: FontWeight.bold,
+                                    ))
                               ],
                             )),
                       ),
@@ -173,10 +197,18 @@ class ItemList extends StatelessWidget {
                             child: Column(
                               children: <Widget>[
                                 new Image.asset('assets/images/area.png',
-                                    width: 20, height: 20),
+                                    width: 15, height: 15),
                                 list[i]['listLandSize'] != null
-                                    ? new Text(list[i]['listLandSize'])
-                                    : new Text('-')
+                                    ? new Text(list[i]['listLandSize'],
+                                  style: new TextStyle(
+                                    fontSize: 10.0,
+                                    fontWeight: FontWeight.bold,
+                                  ),)
+                                    : new Text('-',
+                                    style: new TextStyle(
+                                      fontSize: 10.0,
+                                      fontWeight: FontWeight.bold,
+                                    ))
                               ],
                             )),
                       ),

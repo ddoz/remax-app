@@ -7,9 +7,9 @@ class GalleryPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xff1A3668),
         title: Text('Gallery Page'),
       ),
-      drawer: MainDrawer(),
       body: Center(
         child: Text('Gallery Page'),
       ),

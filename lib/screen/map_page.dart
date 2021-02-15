@@ -7,9 +7,9 @@ class MapPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xff1A3668),
         title: Text('Map Page'),
       ),
-      drawer: MainDrawer(),
       body: Center(
         child: Text('Map Page'),
       ),

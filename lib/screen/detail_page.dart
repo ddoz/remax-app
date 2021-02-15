@@ -16,7 +16,6 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-
   List<dynamic> imgSlider() {
     List<dynamic> data = widget.list[widget.index]['links']['listFile'];
     return data;
@@ -46,7 +45,8 @@ class _DetailPageState extends State<DetailPage> {
   Future<List<dynamic>> getDataMemberFoto() async {
     final response = await http.get(
         "https://genius.remax.co.id/papi/Membership/${widget.list[widget.index]['links']['listMmbsId']}");
-    List<dynamic> data = json.decode(response.body)['data']['links']['mmbsFile'];
+    List<dynamic> data =
+        json.decode(response.body)['data']['links']['mmbsFile'];
     return data;
   }
 
@@ -155,72 +155,94 @@ class _DetailPageState extends State<DetailPage> {
                 ),
               ),
             ),
-            Row(
-              children: <Widget>[
-                new Container(
-                  margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
-                  child: new Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        children: <Widget>[
-                          new Image.asset('assets/images/bed.png',
-                              width: 40, height: 40),
-                          widget.list[widget.index]['listBedroom'] != null
-                              ? new Text(
-                                  widget.list[widget.index]['listBedroom'])
-                              : new Text('0')
-                        ],
-                      )),
-                ),
-                new Container(
-                  margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
-                  child: new Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        children: <Widget>[
-                          new Image.asset('assets/images/bathtub.png',
-                              width: 40, height: 40),
-                          widget.list[widget.index]['listBathroom'] != null
-                              ? new Text(
-                                  widget.list[widget.index]['listBathroom'])
-                              : new Text('0')
-                        ],
-                      )),
-                ),
-                new Container(
-                  margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
-                  child: new Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        children: <Widget>[
-                          new Image.asset('assets/images/home.png',
-                              width: 40, height: 40),
-                          widget.list[widget.index]['listBuildingSize'] != null
-                              ? new Text(
-                                  widget.list[widget.index]['listBuildingSize'])
-                              : new Text('0')
-                        ],
-                      )),
-                ),
-                new Container(
-                  margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
-                  child: new Align(
-                      alignment: Alignment.centerLeft,
-                      child: Column(
-                        children: <Widget>[
-                          new Image.asset('assets/images/area.png',
-                              width: 40, height: 40),
-                          widget.list[widget.index]['listLandSize'] != null
-                              ? new Text(
-                                  widget.list[widget.index]['listLandSize'])
-                              : new Text('0')
-                        ],
-                      )),
-                ),
-              ],
+            Container(
+              margin: EdgeInsets.all(15.0),
+              decoration: BoxDecoration(
+                border: Border.all(width: 3, color: const Color(0xff1A3668)),
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                //Center Row contents horizontally,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                //Center Row contents vertically,
+                children: <Widget>[
+                  new Container(
+                    margin: EdgeInsets.all(10.0),
+                    child: new Align(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          children: <Widget>[
+                            new Image.asset(
+                              'assets/images/bed.png',
+                              width: 40,
+                              height: 40,
+                              color: const Color(0xff1A3668),
+                            ),
+                            widget.list[widget.index]['listBedroom'] != null
+                                ? new Text(
+                                    widget.list[widget.index]['listBedroom'])
+                                : new Text('0')
+                          ],
+                        )),
+                  ),
+                  new Container(
+                    margin: EdgeInsets.all(10.0),
+                    child: new Align(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          children: <Widget>[
+                            new Image.asset('assets/images/bathtub.png',
+                                width: 40,
+                                height: 40,
+                                color: const Color(0xff1A3668)),
+                            widget.list[widget.index]['listBathroom'] != null
+                                ? new Text(
+                                    widget.list[widget.index]['listBathroom'])
+                                : new Text('0')
+                          ],
+                        )),
+                  ),
+                  new Container(
+                    margin: EdgeInsets.all(10.0),
+                    child: new Align(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          children: <Widget>[
+                            new Image.asset('assets/images/home.png',
+                                width: 40,
+                                height: 40,
+                                color: const Color(0xff1A3668)),
+                            widget.list[widget.index]['listBuildingSize'] !=
+                                    null
+                                ? new Text(widget.list[widget.index]
+                                    ['listBuildingSize'])
+                                : new Text('0')
+                          ],
+                        )),
+                  ),
+                  new Container(
+                    margin: EdgeInsets.all(10.0),
+                    child: new Align(
+                        alignment: Alignment.centerLeft,
+                        child: Column(
+                          children: <Widget>[
+                            new Image.asset('assets/images/area.png',
+                                width: 40,
+                                height: 40,
+                                color: const Color(0xff1A3668)),
+                            widget.list[widget.index]['listLandSize'] != null
+                                ? new Text(
+                                    widget.list[widget.index]['listLandSize'])
+                                : new Text('0')
+                          ],
+                        )),
+                  ),
+                ],
+              ),
             ),
             new Container(
-              margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
+              margin: EdgeInsets.only(left: 15.0, right: 15.0),
               child: new Row(
                 children: <Widget>[
                   new Text(
@@ -311,19 +333,18 @@ class _DetailPageState extends State<DetailPage> {
                 child: Html(data: widget.list[widget.index]['listDescription']),
               ),
             ),
-            new Card(
+            new Container(
+              margin: EdgeInsets.all(15.0),
+              decoration: BoxDecoration(
+                border: Border.all(width: 3, color: const Color(0xff1A3668)),
+                borderRadius: BorderRadius.all(Radius.circular(10.0)),
+              ),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                //Center Column contents vertically,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                //Center Column contents horizontally,
                 children: <Widget>[
-//                  Container(
-//                      margin: EdgeInsets.all(10),
-//                      width: 80.0,
-//                      height: 80.0,
-//                      decoration: new BoxDecoration(
-//                          shape: BoxShape.circle,
-//                          image: new DecorationImage(
-//                              fit: BoxFit.cover,
-//                              image: NetworkImage(
-//                                  'https://genius.remax.co.id/papi/Membership/crud/1285/links/MembershipFile/229895?size=256,256')))),
                   new FutureBuilder<List<dynamic>>(
                     future: getDataMemberFoto(),
                     builder: (context, snapshot) {
@@ -357,14 +378,16 @@ class _DetailPageState extends State<DetailPage> {
                       if (snapshot.hasError) print(snapshot.error);
                       return snapshot.hasData
                           ? ListTile(
-                              title: new Text(snapshot.data),
+                              title: new Text(snapshot.data,
+                                  textAlign: TextAlign.center),
                             )
                           : ListTile(
-                            title: new Text("Loading....",
-                                style: new TextStyle(
-                                    fontSize: 15.0,
-                                    color: const Color(0xff767472))),
-                          );
+                              title: new Text("Loading....",
+                                  textAlign: TextAlign.center,
+                                  style: new TextStyle(
+                                      fontSize: 15.0,
+                                      color: const Color(0xff767472))),
+                            );
                     },
                   ),
                 ],

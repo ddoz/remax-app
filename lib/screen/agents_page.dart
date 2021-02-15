@@ -7,9 +7,9 @@ class AgentsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xff1A3668),
         title: Text('Agents Page'),
       ),
-      drawer: MainDrawer(),
       body: Center(
         child: Text('Agents Page'),
       ),

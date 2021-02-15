@@ -1,18 +1,32 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
-import 'main_drawer.dart';
+class AboutPage extends StatefulWidget {
+  @override
+  _AboutPageState createState() => _AboutPageState();
+}
 
-class AboutPage extends StatelessWidget {
+class _AboutPageState extends State<AboutPage> {
+
+  @override
+  void initState() {
+    super.initState();
+    // Enable hybrid composition.
+    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: const Color(0xff1A3668),
         title: Text('About Page'),
       ),
-      drawer: MainDrawer(),
-      body: Center(
-        child: Text('About Page'),
-      ),
+      body: WebView(
+        initialUrl: 'https://remax.co.id/about',
+      )
     );
   }
 }
+
