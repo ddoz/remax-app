@@ -4,6 +4,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
 
 class DetailPage extends StatefulWidget {
   List list;
@@ -50,12 +51,17 @@ class _DetailPageState extends State<DetailPage> {
     return data;
   }
 
-  Future<String> getDataMemberNama() async {
+  Future<Map<String, dynamic>> getDataMember() async {
     final response = await http.get(
         "https://genius.remax.co.id/papi/Membership/${widget.list[widget.index]['links']['listMmbsId']}");
-    String namadepan = json.decode(response.body)['data']['mmbsFirstName'];
-    String namabelakang = json.decode(response.body)['data']['mmbsLastName'];
-    return namadepan + ' ' + namabelakang;
+    Map<String, dynamic> data = json.decode(response.body)['data'];
+    return data;
+  }
+
+  int toInt(String str) {
+    var myInt = int.parse(str);
+    assert(myInt is int);
+    return myInt;
   }
 
   @override
@@ -334,10 +340,10 @@ class _DetailPageState extends State<DetailPage> {
               ),
             ),
             new Container(
+              width: double.infinity,
               margin: EdgeInsets.all(15.0),
               decoration: BoxDecoration(
                 border: Border.all(width: 3, color: const Color(0xff1A3668)),
-                borderRadius: BorderRadius.all(Radius.circular(10.0)),
               ),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -372,24 +378,59 @@ class _DetailPageState extends State<DetailPage> {
                                           'https://remax.co.id/images/baloon.png?size=256,256'))));
                     },
                   ),
-                  new FutureBuilder<String>(
-                    future: getDataMemberNama(),
+                  new FutureBuilder<Map<String, dynamic>>(
+                    future: getDataMember(),
                     builder: (context, snapshot) {
                       if (snapshot.hasError) print(snapshot.error);
                       return snapshot.hasData
-                          ? ListTile(
-                              title: new Text(snapshot.data,
-                                  textAlign: TextAlign.center),
-                            )
-                          : ListTile(
-                              title: new Text("Loading....",
+                          ? Container(
+                        margin: EdgeInsets.all(10.0),
+                            child: Column(
+                              children: <Widget>[
+                                new Text(snapshot.data['mmbsFirstName']+' '+snapshot.data['mmbsLastName'],
+                                    textAlign: TextAlign.center),
+                                new Text(snapshot.data['mmbsCellPhone1'],
+                                    textAlign: TextAlign.center),
+                                new Text(snapshot.data['mmbsEmail'],
+                                    textAlign: TextAlign.center),
+                              ]
+                            ),
+                          )
+
+                          : new Text("Loading....",
                                   textAlign: TextAlign.center,
                                   style: new TextStyle(
                                       fontSize: 15.0,
-                                      color: const Color(0xff767472))),
-                            );
+                                      color: const Color(0xff767472)));
+
                     },
                   ),
+                  Container(
+                    color: const Color(0xffDC1B2E),
+                    child: Container(
+                      margin: EdgeInsets.all(8.0),
+                      child: Row(
+                        children: <Widget>[
+                          widget.list[widget.index]['links']['listListingCategoryId'] == "1"
+                          ?  Text("DIJUAL", style: TextStyle(color: Colors.white),)
+                          :  Text("DISEWAKAN", style: TextStyle(color: Colors.white),),
+
+                          Spacer(),
+                          new Text(
+                            NumberFormat.compactCurrency(
+                                locale: 'id',
+                                symbol: 'Rp ',
+                                decimalDigits: 0)
+                                .format(toInt(widget.list[widget.index]['listListingPrice'])),
+                            style: new TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
                 ],
               ),
             ),
