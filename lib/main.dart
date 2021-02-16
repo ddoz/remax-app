@@ -3,7 +3,9 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:remax_app/screen/contact_us_page.dart';
 import 'package:remax_app/screen/detail_page.dart';
+import 'package:remax_app/screen/gallery_page.dart';
 import 'package:remax_app/screen/main_drawer.dart';
 
 void main() {
@@ -17,18 +19,20 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Home',
+      routes: <String, WidgetBuilder>{
+        '/GalleryPage' : (BuildContext context) => new GalleryPage(),
+        '/HomePage' : (BuildContext context) => new MyHomePage(),
+      },
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Home'),
+      home: MyHomePage(),
     );
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
-  final String title;
 
   @override
   _MyHomePageState createState() => _MyHomePageState();
@@ -47,7 +51,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff1A3668),
-        title: Text(widget.title),
+        title: Text('Home'),
       ),
       drawer: MainDrawer(),
       body: new FutureBuilder<List>(
@@ -93,12 +97,17 @@ class ItemList extends StatelessWidget {
                       index: i,
                     ))),
             child: new Card(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10.0),
+              ),
               child: Column(
                 children: <Widget>[
                   Container(
                     width: double.infinity,
                     padding: EdgeInsets.all(100),
                     decoration: BoxDecoration(
+                        borderRadius: new BorderRadius.all( const Radius.circular(10.0)
+                        ),
                       image: DecorationImage(
                           image: NetworkImage(
                               'https://genius.remax.co.id/papi/' +
@@ -108,13 +117,16 @@ class ItemList extends StatelessWidget {
                   ),
                   Container(
                     margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 5.0),
-                    child: new Text(
-                      list[i]['listTitle'],
-                      overflow: TextOverflow.ellipsis,
-                      style: new TextStyle(
-                        fontSize: 16.0,
-                        color: const Color(0xff767472),
-                        fontWeight: FontWeight.bold,
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: new Text(
+                        list[i]['listTitle'],
+                        overflow: TextOverflow.ellipsis,
+                        style: new TextStyle(
+                          fontSize: 16.0,
+                          color: const Color(0xff767472),
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),

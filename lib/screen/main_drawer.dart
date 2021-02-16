@@ -38,15 +38,17 @@ class MainDrawer extends StatelessWidget {
           ListTile(
             leading: Icon(Icons.home),
             title: Text('Home'),
-            onTap: null,
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.pushReplacementNamed(context, '/HomePage');
+            },
           ),
           ListTile(
             leading: Icon(Icons.image),
             title: Text('Gallery'),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (BuildContext context) => new GalleryPage()));
+              Navigator.pushReplacementNamed(context, '/GalleryPage');
             },
           ),
           ListTile(

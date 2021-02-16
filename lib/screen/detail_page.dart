@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:pinch_zoom/pinch_zoom.dart';
 
 class DetailPage extends StatefulWidget {
   List list;
@@ -88,8 +89,8 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                         onTap: () async {
                           await showDialog(
-                            builder: (_) => ImageDialog(
-                                'https://genius.remax.co.id/papi/Listing/crud/${widget.list[widget.index]['id']}/links/ListingFile/${fileImage}'),
+                            builder: (_) => ImageDialog(imgSlider(),
+                                'https://genius.remax.co.id/papi/Listing/crud/${widget.list[widget.index]['id']}/links/ListingFile/'),
                             context: context,
                           );
                         },
@@ -384,25 +385,24 @@ class _DetailPageState extends State<DetailPage> {
                       if (snapshot.hasError) print(snapshot.error);
                       return snapshot.hasData
                           ? Container(
-                        margin: EdgeInsets.all(10.0),
-                            child: Column(
-                              children: <Widget>[
-                                new Text(snapshot.data['mmbsFirstName']+' '+snapshot.data['mmbsLastName'],
+                              margin: EdgeInsets.all(10.0),
+                              child: Column(children: <Widget>[
+                                new Text(
+                                    snapshot.data['mmbsFirstName'] +
+                                        ' ' +
+                                        snapshot.data['mmbsLastName'],
                                     textAlign: TextAlign.center),
                                 new Text(snapshot.data['mmbsCellPhone1'],
                                     textAlign: TextAlign.center),
                                 new Text(snapshot.data['mmbsEmail'],
                                     textAlign: TextAlign.center),
-                              ]
-                            ),
-                          )
-
+                              ]),
+                            )
                           : new Text("Loading....",
-                                  textAlign: TextAlign.center,
-                                  style: new TextStyle(
-                                      fontSize: 15.0,
-                                      color: const Color(0xff767472)));
-
+                              textAlign: TextAlign.center,
+                              style: new TextStyle(
+                                  fontSize: 15.0,
+                                  color: const Color(0xff767472)));
                     },
                   ),
                   Container(
@@ -411,17 +411,25 @@ class _DetailPageState extends State<DetailPage> {
                       margin: EdgeInsets.all(8.0),
                       child: Row(
                         children: <Widget>[
-                          widget.list[widget.index]['links']['listListingCategoryId'] == "1"
-                          ?  Text("DIJUAL", style: TextStyle(color: Colors.white),)
-                          :  Text("DISEWAKAN", style: TextStyle(color: Colors.white),),
-
+                          widget.list[widget.index]['links']
+                                      ['listListingCategoryId'] ==
+                                  "1"
+                              ? Text(
+                                  "DIJUAL",
+                                  style: TextStyle(color: Colors.white),
+                                )
+                              : Text(
+                                  "DISEWAKAN",
+                                  style: TextStyle(color: Colors.white),
+                                ),
                           Spacer(),
                           new Text(
                             NumberFormat.compactCurrency(
-                                locale: 'id',
-                                symbol: 'Rp ',
-                                decimalDigits: 0)
-                                .format(toInt(widget.list[widget.index]['listListingPrice'])),
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
+                                .format(toInt(widget.list[widget.index]
+                                    ['listListingPrice'])),
                             style: new TextStyle(
                               color: Colors.white,
                               fontWeight: FontWeight.bold,
@@ -441,20 +449,62 @@ class _DetailPageState extends State<DetailPage> {
   }
 }
 
+//class ImageDialog extends StatelessWidget {
+//  final String url;
+//
+//  ImageDialog(this.url);
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return Dialog(
+//      child: Container(
+//        width: double.infinity,
+//        height: 300,
+//        decoration:
+//            BoxDecoration(image: DecorationImage(image: NetworkImage(url))),
+//      ),
+//    );
+//  }
+//}
+
 class ImageDialog extends StatelessWidget {
+  final List list;
   final String url;
 
-  ImageDialog(this.url);
+  ImageDialog(this.list, this.url);
 
   @override
   Widget build(BuildContext context) {
-    return Dialog(
-      child: Container(
-        width: double.infinity,
-        height: 300,
-        decoration:
-            BoxDecoration(image: DecorationImage(image: NetworkImage(url))),
-      ),
+    return CarouselSlider(
+      height: 400.0,
+      items: list.map((i) {
+        return Builder(
+          builder: (BuildContext context) {
+            return Container(
+              width: MediaQuery.of(context).size.width,
+              margin: EdgeInsets.symmetric(horizontal: 5.0),
+              //decoration: BoxDecoration(color: Colors.white),
+              child: ClipRRect(
+                child: PinchZoom(
+                  image: Container(
+                    child: ClipRRect(
+                        borderRadius: BorderRadius.all(Radius.circular(20)),
+                        child: Image.network(url + i, fit: BoxFit.cover)),
+                  ),
+                  zoomedBackgroundColor: Colors.black.withOpacity(0.1),
+                  resetDuration: const Duration(milliseconds: 100),
+                  maxScale: 2.5,
+                ),
+              ),
+//                child: GestureDetector(
+//                    child: Image.network(url+i,
+//                        //fit: BoxFit.fill
+//                    ),
+//                )
+            );
+          },
+        );
+      }).toList(),
     );
   }
 }

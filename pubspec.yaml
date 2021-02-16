@@ -33,6 +33,7 @@ dependencies:
   flutter_html: ^0.8.2
   intl: ^0.16.1
   webview_flutter: ^1.0.7
+  pinch_zoom: ^0.0.4
 
 dev_dependencies:
   flutter_test:
