@@ -6,6 +6,9 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:pinch_zoom/pinch_zoom.dart';
+import 'package:remax_app/model/todo_item.dart';
+import 'package:remax_app/util/database_client.dart';
+import 'package:remax_app/util/date_formatter.dart';
 
 class DetailPage extends StatefulWidget {
   List list;
@@ -18,6 +21,8 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
+  var db = DatabaseHelper();
+
   List<dynamic> imgSlider() {
     List<dynamic> data = widget.list[widget.index]['links']['listFile'];
     return data;
@@ -65,12 +70,71 @@ class _DetailPageState extends State<DetailPage> {
     return myInt;
   }
 
+  void _handleSubmitted(int id, String title, String thumbnail, String price,
+      String category) async {
+    TodoItem noDoItem =
+        TodoItem(id, title, thumbnail, price, category, dateFormatted());
+    int savedItemId = await db.saveItem(noDoItem);
+
+    TodoItem addedItem = await db.getItem(savedItemId);
+
+    print("Item saved id: $savedItemId");
+  }
+
+  Future<bool> checkfav(int id) async {
+    bool cek = await db.getItemFav(id);
+    return cek;
+  }
+
+  _deletefav(int id) async {
+    debugPrint("Deleted Todo!");
+    await db.deleteItem(id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xff1A3668),
         title: Text('Detail Page'),
+        actions: <Widget>[
+          FutureBuilder(
+              future: checkfav(toInt(widget.list[widget.index]['id'])),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) print(snapshot.error);
+                if (snapshot.data) {
+                  return IconButton(
+                    icon: Icon(
+                      Icons.favorite,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      _deletefav(toInt(widget.list[widget.index]['id']));
+                      // do something
+                      setState(() {});
+                    },
+                  );
+                } else {
+                  return IconButton(
+                    icon: Icon(
+                      Icons.favorite_border,
+                      color: Colors.white,
+                    ),
+                    onPressed: () {
+                      _handleSubmitted(
+                          toInt(widget.list[widget.index]['id']),
+                          widget.list[widget.index]['listTitle'],
+                          widget.list[widget.index]['listThumbnail'],
+                          widget.list[widget.index]['listListingPrice'],
+                          widget.list[widget.index]['links']
+                              ['listListingCategoryId']);
+                      // do something
+                      setState(() {});
+                    },
+                  );
+                }
+              })
+        ],
       ),
       body: SingleChildScrollView(
         child: Column(

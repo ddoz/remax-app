@@ -57,7 +57,7 @@ class MainDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context).pop();
               Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (BuildContext context) => new FavouritePage()));
+                  builder: (BuildContext context) => new FavoritePage()));
             },
           ),
           ListTile(

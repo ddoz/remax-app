@@ -1,8 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:remax_app/sidebar/navigation_bloc.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
-class AboutPage extends StatefulWidget {
+class AboutPage extends StatefulWidget  with NavigationStates {
   @override
   _AboutPageState createState() => _AboutPageState();
 }
@@ -19,12 +20,10 @@ class _AboutPageState extends State<AboutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: const Color(0xff1A3668),
-        title: Text('About Page'),
-      ),
-      body: WebView(
-        initialUrl: 'https://remax.co.id/about',
+      body: SafeArea(
+        child: WebView(
+          initialUrl: 'https://remax.co.id/about',
+        ),
       )
     );
   }
