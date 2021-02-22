@@ -1,12 +1,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:remax_app/screen/login_page.dart';
+import 'package:http/http.dart' as http;
+import 'package:intl/intl.dart';
+import 'package:remax_app/screen/member/my_customer_page.dart';
 import 'package:remax_app/sidebar/navigation_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
-import 'main_drawer.dart';
+import 'detail_page.dart';
+import 'member/my_listing_page.dart';
 
 class SignInPage extends StatefulWidget with NavigationStates {
   @override
@@ -15,12 +17,21 @@ class SignInPage extends StatefulWidget with NavigationStates {
 
 enum LoginStatus { notSignIn, signIn }
 
-
 class _SignInPageState extends State<SignInPage> {
-
   LoginStatus _loginStatus = LoginStatus.notSignIn;
   String email, password;
   final _key = new GlobalKey<FormState>();
+
+  Map<String, String> headers = {};
+
+  void updateCookie(http.Response response) {
+    String rawCookie = response.headers['set-cookie'];
+    if (rawCookie != null) {
+      int index = rawCookie.indexOf(';');
+      headers['cookie'] =
+          (index == -1) ? rawCookie : rawCookie.substring(0, index);
+    }
+  }
 
   bool _secureText = true;
 
@@ -46,55 +57,48 @@ class _SignInPageState extends State<SignInPage> {
     var body = json.encode(dataLogin);
 
     final response = await http.post("https://genius.remax.co.id/session/login",
-        headers: {"Content-Type": "application/json"},
-        body: body);
+        headers: {"Content-Type": "application/json"}, body: body);
+    updateCookie(response);
     final data = jsonDecode(response.body);
     String message = 'kosong';
-    if (data['status'].containsKey('error')){
+    if (data['status'].containsKey('error')) {
       message = data['status']['error']['message'];
       print(message);
     } else {
+      value = 1;
       message = data['status']['message'];
-      //print(getData());
-      //message = getData();
-//      Map<String, dynamic> datas = getData();
-//      //String id = datas['profile']['id'];
-    print(await getData());
-
-//      String pesan = data['message'];
-//      String emailAPI = data['email'];
-//      String namaAPI = data['nama'];
-//      String id = data['id'];
-//      if (value == 1) {
-//        setState(() {
-//          _loginStatus = LoginStatus.signIn;
-//          //savePref(value, emailAPI, namaAPI, id);
-//        });
-//        print(pesan);
-//      } else {
-//        print(pesan);
-//      }
+      Map<String, dynamic> datas = await getData();
+      String name = datas['profile']['name'];
+      String member = datas['profile']['member'];
+      String office = datas['profile']['office'];
+      print(name + member + office);
+      setState(() {
+        _loginStatus = LoginStatus.signIn;
+        savePref(value, name, member, office);
+      });
     }
   }
 
   Future<Map<String, dynamic>> getData() async {
-    final response = await http.get("https://genius.remax.co.id/json/user");
-    Map<String, dynamic> data =  json.decode(response.body);
+    final response = await http.get("https://genius.remax.co.id/json/user",
+        headers: headers);
+    Map<String, dynamic> data = json.decode(response.body);
     return data;
   }
 
-  savePref(int value, String email, String nama, String id) async {
+  savePref(int value, String name, String member, String office) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setInt("value", value);
-      preferences.setString("nama", nama);
-      preferences.setString("email", email);
-      preferences.setString("id", id);
+      preferences.setString("name", name);
+      preferences.setString("member", member);
+      preferences.setString("office", office);
       preferences.commit();
     });
   }
 
   var value;
+
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
@@ -136,12 +140,12 @@ class _SignInPageState extends State<SignInPage> {
                 TextFormField(
                   validator: (e) {
                     if (e.isEmpty) {
-                      return "Please insert email";
+                      return "Please insert username";
                     }
                   },
                   onSaved: (e) => email = e,
                   decoration: InputDecoration(
-                    labelText: "email",
+                    labelText: "username",
                   ),
                 ),
                 TextFormField(
@@ -163,14 +167,13 @@ class _SignInPageState extends State<SignInPage> {
                   },
                   child: Text("Login"),
                 ),
-
               ],
             ),
           ),
         );
         break;
       case LoginStatus.signIn:
-        return MainMenu(signOut);
+        return MainMenu(signOut, headers);
         break;
     }
   }
@@ -178,7 +181,10 @@ class _SignInPageState extends State<SignInPage> {
 
 class MainMenu extends StatefulWidget {
   final VoidCallback signOut;
-  MainMenu(this.signOut);
+  final Map<String, String> headers;
+
+  MainMenu(this.signOut, this.headers);
+
   @override
   _MainMenuState createState() => _MainMenuState();
 }
@@ -190,14 +196,21 @@ class _MainMenuState extends State<MainMenu> {
     });
   }
 
-//  String email = "", nama = "";
+  String name = "", member = "";
+
 //  TabController tabController;
+
+  Future<List> getData() async {
+    final response = await http.get("https://genius.remax.co.id/api/listing/crud?sort=-listId", headers: widget.headers);
+    List list = json.decode(response.body)['data'];
+    return list;
+  }
 
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-//      email = preferences.getString("email");
-//      nama = preferences.getString("nama");
+      name = preferences.getString("name");
+      member = preferences.getString("member");
     });
   }
 
@@ -214,7 +227,7 @@ class _MainMenuState extends State<MainMenu> {
       length: 4,
       child: Scaffold(
           appBar: AppBar(
-            title: Text("Halaman Dashboard"),
+            title: Text(""),
             actions: <Widget>[
               IconButton(
                 onPressed: () {
@@ -223,14 +236,47 @@ class _MainMenuState extends State<MainMenu> {
                 icon: Icon(Icons.lock_open),
               )
             ],
-
           ),
           body: Center(
-            child: Text(
-                "Dashboard"
+            child: new Column(
+              children: <Widget>[
+                new InkWell(
+                  onTap: () =>   Navigator.of(context).push(new MaterialPageRoute(
+                      builder: (BuildContext context) => new MyListingPage(
+                        signOut, widget.headers
+                      ))),
+                  child: new Container(
+                    //width: 100.0,
+                    height: 50.0,
+                    decoration: new BoxDecoration(
+                      color: Colors.blueAccent,
+                      border: new Border.all(color: Colors.white, width: 2.0),
+                      borderRadius: new BorderRadius.circular(10.0),
+                    ),
+                    child: new Center(child: new Text('My Listing', style: new TextStyle(fontSize: 18.0, color: Colors.white),),),
+                  ),
+                ),
+                new InkWell(
+                  onTap: () =>  Navigator.of(context).push(new MaterialPageRoute(
+                      builder: (BuildContext context) => new MyCustomerPage(
+                          signOut, widget.headers
+                      ))),
+                  child: new Container(
+                    //width: 100.0,
+                    height: 50.0,
+                    decoration: new BoxDecoration(
+                      color: Colors.blueAccent,
+                      border: new Border.all(color: Colors.white, width: 2.0),
+                      borderRadius: new BorderRadius.circular(10.0),
+                    ),
+                    child: new Center(child: new Text('My Customer', style: new TextStyle(fontSize: 18.0, color: Colors.white),),),
+                  ),
+                ),
+              ],
             ),
           )
       ),
     );
   }
 }
+
