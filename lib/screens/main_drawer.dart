@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:remax_app/screen/about_page.dart';
-import 'package:remax_app/screen/agents_page.dart';
-import 'package:remax_app/screen/contact_us_page.dart';
-import 'package:remax_app/screen/favourite_page.dart';
-import 'package:remax_app/screen/gallery_page.dart';
-import 'package:remax_app/screen/map_page.dart';
-import 'package:remax_app/screen/sign_in_page.dart';
+import 'package:remax_app/screens/about_page.dart';
+import 'package:remax_app/screens/agents_page.dart';
+import 'package:remax_app/screens/contact_us_page.dart';
+import 'package:remax_app/screens/favourite_page.dart';
+import 'package:remax_app/screens/gallery_page.dart';
+import 'package:remax_app/screens/map_page.dart';
+import 'package:remax_app/screens/sign_in_page.dart';
 
 class MainDrawer extends StatelessWidget {
   @override

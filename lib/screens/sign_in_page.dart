@@ -2,12 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'package:intl/intl.dart';
-import 'package:remax_app/screen/member/my_customer_page.dart';
+import 'package:remax_app/screens/member/create_listing_page.dart';
+import 'package:remax_app/screens/member/my_customer_page.dart';
 import 'package:remax_app/sidebar/navigation_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'detail_page.dart';
 import 'member/my_listing_page.dart';
 
 class SignInPage extends StatefulWidget with NavigationStates {
@@ -201,7 +200,9 @@ class _MainMenuState extends State<MainMenu> {
 //  TabController tabController;
 
   Future<List> getData() async {
-    final response = await http.get("https://genius.remax.co.id/api/listing/crud?sort=-listId", headers: widget.headers);
+    final response = await http.get(
+        "https://genius.remax.co.id/api/listing/crud?sort=-listId",
+        headers: widget.headers);
     List list = json.decode(response.body)['data'];
     return list;
   }
@@ -240,43 +241,108 @@ class _MainMenuState extends State<MainMenu> {
           body: Center(
             child: new Column(
               children: <Widget>[
-                new InkWell(
-                  onTap: () =>   Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (BuildContext context) => new MyListingPage(
-                        signOut, widget.headers
-                      ))),
-                  child: new Container(
-                    //width: 100.0,
-                    height: 50.0,
-                    decoration: new BoxDecoration(
-                      color: Colors.blueAccent,
-                      border: new Border.all(color: Colors.white, width: 2.0),
-                      borderRadius: new BorderRadius.circular(10.0),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).push(
+                          new MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  new MyListingPage(signOut, widget.headers))),
+                      child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Container(
+                            width: 120.0,
+                            height: 120.0,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(Icons.list,
+                                    size: 50.0, color: Colors.pink),
+                                Text('My Listing')
+                              ],
+                            ),
+                          )),
                     ),
-                    child: new Center(child: new Text('My Listing', style: new TextStyle(fontSize: 18.0, color: Colors.white),),),
-                  ),
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).push(
+                          new MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  new MyCustomerPage(signOut, widget.headers))),
+                      child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Container(
+                            width: 120.0,
+                            height: 120.0,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(Icons.person,
+                                    size: 50.0, color: Colors.pink),
+                                Text('My Customer')
+                              ],
+                            ),
+                          )),
+                    ),
+                  ],
                 ),
-                new InkWell(
-                  onTap: () =>  Navigator.of(context).push(new MaterialPageRoute(
-                      builder: (BuildContext context) => new MyCustomerPage(
-                          signOut, widget.headers
-                      ))),
-                  child: new Container(
-                    //width: 100.0,
-                    height: 50.0,
-                    decoration: new BoxDecoration(
-                      color: Colors.blueAccent,
-                      border: new Border.all(color: Colors.white, width: 2.0),
-                      borderRadius: new BorderRadius.circular(10.0),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    GestureDetector(
+                      onTap: () => Navigator.of(context).push(
+                          new MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  new CreateListing())),
+                      child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Container(
+                            width: 120.0,
+                            height: 120.0,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(Icons.format_list_bulleted,
+                                    size: 50.0, color: Colors.pink),
+                                Text('Create Listing')
+                              ],
+                            ),
+                          )),
                     ),
-                    child: new Center(child: new Text('My Customer', style: new TextStyle(fontSize: 18.0, color: Colors.white),),),
-                  ),
+                    GestureDetector(
+                      onTap: () {
+                        signOut();
+                      },
+                      child: Card(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Container(
+                            width: 120.0,
+                            height: 120.0,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: <Widget>[
+                                Icon(Icons.logout,
+                                    size: 50.0, color: Colors.pink),
+                                Text('Logout')
+                              ],
+                            ),
+                          )),
+                    ),
+                  ],
                 ),
               ],
             ),
-          )
-      ),
+          )),
     );
   }
 }
-

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:rxdart/rxdart.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../sidebar/menu_item.dart';
 import 'navigation_bloc.dart';
@@ -12,17 +13,27 @@ class SideBar extends StatefulWidget {
   _SideBarState createState() => _SideBarState();
 }
 
-class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<SideBar> {
+class _SideBarState extends State<SideBar>
+    with SingleTickerProviderStateMixin<SideBar> {
   AnimationController _animationController;
   StreamController<bool> isSidebarOpenedStreamController;
   Stream<bool> isSidebarOpenedStream;
   StreamSink<bool> isSidebarOpenedSink;
   final _animationDuration = const Duration(milliseconds: 500);
 
+  Future<int> _getPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    int value = preferences.getInt("value");
+    setState(() {
+      return value;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
-    _animationController = AnimationController(vsync: this, duration: _animationDuration);
+    _animationController =
+        AnimationController(vsync: this, duration: _animationDuration);
     isSidebarOpenedStreamController = PublishSubject<bool>();
     isSidebarOpenedStream = isSidebarOpenedStreamController.stream;
     isSidebarOpenedSink = isSidebarOpenedStreamController.sink;
@@ -78,7 +89,10 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                         ListTile(
                           title: Text(
                             "REMAX INDONESIA",
-                            style: TextStyle(color: Colors.white, fontSize: 30, fontWeight: FontWeight.w800),
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 30,
+                                fontWeight: FontWeight.w800),
                           ),
                           subtitle: Text(
                             "www.remax.co.id",
@@ -100,7 +114,8 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                           title: "Home",
                           onTap: () {
                             onIconPressed();
-                            BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.HomePageClickedEvent);
+                            BlocProvider.of<NavigationBloc>(context)
+                                .add(NavigationEvents.HomePageClickedEvent);
                           },
                         ),
                         MenuItem(
@@ -108,7 +123,8 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                           title: "Favorite",
                           onTap: () {
                             onIconPressed();
-                            BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.FavoritePageClickedEvent);
+                            BlocProvider.of<NavigationBloc>(context)
+                                .add(NavigationEvents.FavoritePageClickedEvent);
                           },
                         ),
                         MenuItem(
@@ -116,7 +132,8 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                           title: "Gallery",
                           onTap: () {
                             onIconPressed();
-                            BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.GalleryPageClickedEvent);
+                            BlocProvider.of<NavigationBloc>(context)
+                                .add(NavigationEvents.GalleryPageClickedEvent);
                           },
                         ),
                         MenuItem(
@@ -124,7 +141,8 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                           title: "About",
                           onTap: () {
                             onIconPressed();
-                            BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.AboutPageClickedEvent);
+                            BlocProvider.of<NavigationBloc>(context)
+                                .add(NavigationEvents.AboutPageClickedEvent);
                           },
                         ),
                         MenuItem(
@@ -132,7 +150,8 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                           title: "Contact Us",
                           onTap: () {
                             onIconPressed();
-                            BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.ContactUsPageClickedEvent);
+                            BlocProvider.of<NavigationBloc>(context).add(
+                                NavigationEvents.ContactUsPageClickedEvent);
                           },
                         ),
                         MenuItem(
@@ -140,7 +159,8 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                           title: "Agents",
                           onTap: () {
                             onIconPressed();
-                            BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.AgentsPageClickedEvent);
+                            BlocProvider.of<NavigationBloc>(context)
+                                .add(NavigationEvents.AgentsPageClickedEvent);
                           },
                         ),
                         MenuItem(
@@ -148,7 +168,8 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                           title: "Map",
                           onTap: () {
                             onIconPressed();
-                            BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.MapPageClickedEvent);
+                            BlocProvider.of<NavigationBloc>(context)
+                                .add(NavigationEvents.MapPageClickedEvent);
                           },
                         ),
                         Divider(
@@ -167,9 +188,10 @@ class _SideBarState extends State<SideBar> with SingleTickerProviderStateMixin<S
                           title: "Sign In",
                           onTap: () {
                             onIconPressed();
-                            BlocProvider.of<NavigationBloc>(context).add(NavigationEvents.SignInPageClickedEvent);
+                            BlocProvider.of<NavigationBloc>(context)
+                                .add(NavigationEvents.SignInPageClickedEvent);
                           },
-                        ),
+                        )
                       ],
                     ),
                   ),

@@ -3,11 +3,12 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:remax_app/screen/contact_us_page.dart';
-import 'package:remax_app/screen/detail_page.dart';
-import 'package:remax_app/screen/gallery_page.dart';
-import 'package:remax_app/screen/home_page.dart';
-import 'package:remax_app/screen/main_drawer.dart';
+import 'package:remax_app/screens/contact_us_page.dart';
+import 'package:remax_app/screens/detail_page.dart';
+import 'package:remax_app/screens/gallery_page.dart';
+import 'package:remax_app/screens/home/home_screen.dart';
+import 'package:remax_app/screens/home_page.dart';
+import 'package:remax_app/screens/main_drawer.dart';
 import 'package:remax_app/sidebar/sidebar.dart';
 import 'package:remax_app/sidebar/sidebar_layout.dart';
 
@@ -30,7 +31,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SideBarLayout(),
+      home: HomeScreen(),
     );
   }
 }
