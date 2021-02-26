@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'package:remax_app/screens/detail_page.dart';
+import 'file:///D:/ITERA/Project/Flutter/remax_app/lib/screens/detail/detail_page.dart';
 
 class Listing extends StatelessWidget {
   Future<List> getData() async {

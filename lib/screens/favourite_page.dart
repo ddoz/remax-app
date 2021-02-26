@@ -6,7 +6,7 @@ import 'package:remax_app/util/database_client.dart';
 import 'package:remax_app/util/date_formatter.dart';
 
 import '../main.dart';
-import 'detail_page.dart';
+import 'detail/detail_page.dart';
 import 'main_drawer.dart';
 
 import 'package:flutter/material.dart';

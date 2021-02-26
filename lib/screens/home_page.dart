@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:remax_app/sidebar/navigation_bloc.dart';
 
-import 'detail_page.dart';
+import 'detail/detail_page.dart';
 import 'main_drawer.dart';
 
 class MyHomePage extends StatefulWidget with NavigationStates {

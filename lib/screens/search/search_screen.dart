@@ -21,15 +21,4 @@ class SearchScreen extends StatelessWidget {
       //bottomNavigationBar: MyBottomNavBar(),
     );
   }
-//
-//  AppBar buildAppBar() {
-//    return AppBar(
-//      backgroundColor: kPrimaryColor,
-//      elevation: 0,
-//      leading: IconButton(
-//        icon: SvgPicture.asset("assets/icons/menu.svg"),
-//        onPressed: () {},
-//      ),
-//    );
-//  }
 }
