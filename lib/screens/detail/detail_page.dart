@@ -98,9 +98,9 @@ class _DetailPageState extends State<DetailPage> {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: kPrimaryColor, //change your color here
+          color: kAppBarColorTheme, //change your color here
         ),
-        title: Text("Detail", style: TextStyle(color: kPrimaryColor),),
+        title: Text("Detail", style: TextStyle( color: kAppBarColorTheme),),
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: <Widget>[
@@ -112,7 +112,7 @@ class _DetailPageState extends State<DetailPage> {
                   return IconButton(
                     icon: Icon(
                       Icons.favorite,
-                      color: kPrimaryColor,
+                      color: kAppBarColorTheme,
                     ),
                     onPressed: () {
                       _deletefav(toInt(widget.list[widget.index]['id']));
@@ -145,33 +145,6 @@ class _DetailPageState extends State<DetailPage> {
       body: SingleChildScrollView(
         child: Stack(
           children: <Widget>[
-//            CarouselSlider(
-//                items: imgSlider().map((fileImage) {
-//                  return Container(
-//                    margin: EdgeInsets.all(5.0),
-//                    child: ClipRRect(
-//                      borderRadius: BorderRadius.all(Radius.circular(10)),
-//                      child: GestureDetector(
-//                        child: Image.network(
-//                          'https://genius.remax.co.id/papi/Listing/crud/${widget.list[widget.index]['id']}/links/ListingFile/${fileImage}',
-//                          width: 10000,
-//                          fit: BoxFit.cover,
-//                        ),
-//                        onTap: () async {
-//                          await showDialog(
-//                            builder: (_) => ImageDialog(imgSlider(),
-//                                'https://genius.remax.co.id/papi/Listing/crud/${widget.list[widget.index]['id']}/links/ListingFile/'),
-//                            context: context,
-//                          );
-//                        },
-//                      ),
-//                    ),
-//                  );
-//                }).toList(),
-//                height: 150,
-//                autoPlay: true,
-//                enlargeCenterPage: true,
-//                aspectRatio: 2.0),
             Container(
               width: double.infinity,
               //height: 300,
@@ -219,7 +192,7 @@ class _DetailPageState extends State<DetailPage> {
                       child: new Align(
                         alignment: Alignment.centerLeft,
                         child: new Text(
-                          "Informasi Detail",
+                          "Detail Informasi",
                           style: new TextStyle(
                               fontSize: 25.0, color: const Color(0xff1A3668)),
                         ),

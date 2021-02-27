@@ -2,9 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:remax_app/screens/detail/detail_page.dart';
 import 'package:remax_app/screens/gallery_page.dart';
 import 'package:remax_app/screens/home/home_screen.dart';
 import 'package:remax_app/screens/home_page.dart';
+import 'package:remax_app/screens/search/search_screen.dart';
 
 
 void main() {
@@ -23,10 +25,11 @@ class MyApp extends StatelessWidget {
         '/HomePage' : (BuildContext context) => new MyHomePage(),
       },
       theme: ThemeData(
+        fontFamily: 'Poppins',
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: HomeScreen(),
+      home: SearchScreen(),
     );
   }
 }

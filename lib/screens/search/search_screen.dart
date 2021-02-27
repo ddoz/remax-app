@@ -10,9 +10,9 @@ class SearchScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         iconTheme: IconThemeData(
-          color: kPrimaryColor, //change your color here
+          color: kAppBarColorTheme, //change your color here
         ),
-        title: Text("Search Properties", style: TextStyle(color: kPrimaryColor),),
+        title: Text("Search Properties", style: TextStyle(color: kAppBarColorTheme),),
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
