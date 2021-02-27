@@ -4,6 +4,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:pinch_zoom/pinch_zoom.dart';
@@ -100,7 +101,10 @@ class _DetailPageState extends State<DetailPage> {
         iconTheme: IconThemeData(
           color: kAppBarColorTheme, //change your color here
         ),
-        title: Text("Detail", style: TextStyle( color: kAppBarColorTheme),),
+        title: Text(
+          "Detail",
+          style: TextStyle(color: kAppBarColorTheme),
+        ),
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: <Widget>[
@@ -154,8 +158,7 @@ class _DetailPageState extends State<DetailPage> {
                 dotSize: 4.0,
                 dotSpacing: 10.0,
                 dotVerticalPadding: 50,
-                images:
-                imgSlider().map((fileImage) {
+                images: imgSlider().map((fileImage) {
                   return Container(
                     child: ClipRRect(
                       child: GestureDetector(
@@ -182,19 +185,371 @@ class _DetailPageState extends State<DetailPage> {
                   top: MediaQuery.of(context).size.height * .58),
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30.0),
-                  color: Colors.white
-                ),
+                    borderRadius: BorderRadius.circular(40.0),
+                    color: Colors.white),
                 child: Column(
                   children: [
+                    // new Container(
+                    //   margin: EdgeInsets.all(15.0),
+                    //   child: new Align(
+                    //     alignment: Alignment.centerLeft,
+                    //     child: new Text(
+                    //       "Detail Informasi",
+                    //       style: new TextStyle(
+                    //           fontSize: 25.0, color: const Color(0xff1A3668)),
+                    //     ),
+                    //   ),
+                    // ),
+                    // new Align(
+                    //   alignment: Alignment.centerLeft,
+                    //   child: Container(
+                    //     margin: EdgeInsets.only(left: 15.0),
+                    //     width: 40,
+                    //     height: 2,
+                    //     color: const Color(0xffDC1B2E),
+                    //   ),
+                    // ),
                     new Container(
-                      margin: EdgeInsets.all(15.0),
+                      margin: EdgeInsets.only(top: 25.0, left: 15.0),
+                      child: new Row(
+                        children: <Widget>[
+                          new Text(
+                            "ID ",
+                            style: new TextStyle(
+                                fontSize: 12.0, fontWeight: FontWeight.bold),
+                          ),
+                          new Text(
+                            "#${widget.list[widget.index]['listIdListing']}",
+                            style: new TextStyle(
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold,
+                                color: const Color(0xffDC1B2E)),
+                          ),
+                        ],
+                      ),
+                    ),
+                    new Container(
+                      margin: EdgeInsets.only(top: 10.0, left: 15.0),
+                      child: new Row(
+                        children: <Widget>[
+                          new Container(
+                              child: SvgPicture.asset(
+                            "assets/icons/domisili.svg",
+                            color: kRedColor,
+                          )),
+                          new SizedBox(
+                            width: 4.0,
+                          ),
+                          new FutureBuilder<String>(
+                            future: getDataKota(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) print(snapshot.error);
+                              return snapshot.hasData
+                                  ? new Text(snapshot.data,
+                                      style: new TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.bold))
+                                  : new Text("Loading....",
+                                      style: new TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xff767472)));
+                            },
+                          ),
+                          new FutureBuilder<String>(
+                            future: getDataProv(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) print(snapshot.error);
+                              return snapshot.hasData
+                                  ? new Text(', ' + snapshot.data,
+                                      style: new TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.bold))
+                                  : new Text("Loading....",
+                                      style: new TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xff767472)));
+                            },
+                          ),
+                          new FutureBuilder<String>(
+                            future: getDataNegara(),
+                            builder: (context, snapshot) {
+                              if (snapshot.hasError) print(snapshot.error);
+                              return snapshot.hasData
+                                  ? new Text(', ' + snapshot.data,
+                                      style: new TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.bold))
+                                  : new Text("Loading....",
+                                      style: new TextStyle(
+                                          fontSize: 12.0,
+                                          fontWeight: FontWeight.bold,
+                                          color: const Color(0xff767472)));
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    new Container(
+                      margin:
+                          EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
                       child: new Align(
                         alignment: Alignment.centerLeft,
                         child: new Text(
-                          "Detail Informasi",
+                          widget.list[widget.index]['listTitle'],
                           style: new TextStyle(
-                              fontSize: 25.0, color: const Color(0xff1A3668)),
+                            fontSize: 23.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ),
+                    // new Container(
+                    //   margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
+                    //   child: new Align(
+                    //     alignment: Alignment.centerLeft,
+                    //     child: new Text(
+                    //       widget.list[widget.index]['listStreetName'],
+                    //       style: new TextStyle(
+                    //           fontSize: 18.0, color: const Color(0xff767472)),
+                    //     ),
+                    //   ),
+                    // ),
+                    Container(
+                      margin: EdgeInsets.all(15.0),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        //Center Row contents horizontally,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        //Center Row contents vertically,
+                        children: <Widget>[
+                          new Container(
+                            margin: EdgeInsets.all(10.0),
+                            child: new Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  children: <Widget>[
+                                    SvgPicture.asset(
+                                      "assets/icons/sofa.svg",
+                                      height: 20.0,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    widget.list[widget.index]['listBedroom'] !=
+                                            null
+                                        ? new Text(
+                                            widget.list[widget.index]
+                                                ['listBedroom'],
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        : new Text('-',
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.bold))
+                                  ],
+                                )),
+                          ),
+                          new Container(
+                            margin: EdgeInsets.all(10.0),
+                            child: new Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  children: <Widget>[
+                                    SvgPicture.asset(
+                                      "assets/icons/bathub.svg",
+                                      height: 20.0,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    widget.list[widget.index]['listBathroom'] !=
+                                            null
+                                        ? new Text(
+                                            widget.list[widget.index]
+                                                ['listBathroom'],
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        : new Text('-',
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.bold))
+                                  ],
+                                )),
+                          ),
+                          new Container(
+                            margin: EdgeInsets.all(10.0),
+                            child: new Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  children: <Widget>[
+                                    SvgPicture.asset(
+                                      "assets/icons/home.svg",
+                                      height: 20.0,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    widget.list[widget.index]
+                                                ['listBuildingSize'] !=
+                                            null
+                                        ? new Text(
+                                            widget.list[widget.index]
+                                                    ['listBuildingSize'] +
+                                                '(m2)',
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        : new Text('-',
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.bold))
+                                  ],
+                                )),
+                          ),
+                          new Container(
+                            margin: EdgeInsets.all(10.0),
+                            child: new Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  children: <Widget>[
+                                    SvgPicture.asset(
+                                      "assets/icons/size.svg",
+                                      height: 20.0,
+                                    ),
+                                    SizedBox(
+                                      width: 5,
+                                    ),
+                                    widget.list[widget.index]['listLandSize'] !=
+                                            null
+                                        ? new Text(
+                                            widget.list[widget.index]
+                                                    ['listLandSize'] +
+                                                '(m2)',
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        : new Text('-',
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.bold))
+                                  ],
+                                )),
+                          ),
+                        ],
+                      ),
+                    ),
+                    // new Container(
+                    //   margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                    //   child: new Row(
+                    //     children: <Widget>[
+                    //       new Text(
+                    //         "Kota: ",
+                    //         style: new TextStyle(fontSize: 15.0),
+                    //       ),
+                    //       new FutureBuilder<String>(
+                    //         future: getDataKota(),
+                    //         builder: (context, snapshot) {
+                    //           if (snapshot.hasError) print(snapshot.error);
+                    //           return snapshot.hasData
+                    //               ? new Text(snapshot.data,
+                    //               style: new TextStyle(fontSize: 15.0))
+                    //               : new Text("Loading....",
+                    //               style: new TextStyle(
+                    //                   fontSize: 15.0,
+                    //                   color: const Color(0xff767472)));
+                    //         },
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    // new Container(
+                    //   margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                    //   child: new Row(
+                    //     children: <Widget>[
+                    //       new Text(
+                    //         "Provinsi: ",
+                    //         style: new TextStyle(fontSize: 15.0),
+                    //       ),
+                    //       new FutureBuilder<String>(
+                    //         future: getDataProv(),
+                    //         builder: (context, snapshot) {
+                    //           if (snapshot.hasError) print(snapshot.error);
+                    //           return snapshot.hasData
+                    //               ? new Text(snapshot.data,
+                    //               style: new TextStyle(fontSize: 15.0))
+                    //               : new Text("Loading....",
+                    //               style: new TextStyle(
+                    //                   fontSize: 15.0,
+                    //                   color: const Color(0xff767472)));
+                    //         },
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    // new Container(
+                    //   margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                    //   child: new Row(
+                    //     children: <Widget>[
+                    //       new Text(
+                    //         "Negara: ",
+                    //         style: new TextStyle(fontSize: 15.0),
+                    //       ),
+                    //       new FutureBuilder<String>(
+                    //         future: getDataNegara(),
+                    //         builder: (context, snapshot) {
+                    //           if (snapshot.hasError) print(snapshot.error);
+                    //           return snapshot.hasData
+                    //               ? new Text(snapshot.data,
+                    //               style: new TextStyle(fontSize: 15.0))
+                    //               : new Text("Loading....",
+                    //               style: new TextStyle(
+                    //                   fontSize: 15.0,
+                    //                   color: const Color(0xff767472)));
+                    //         },
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
+                    // new Container(
+                    //   margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 30.0),
+                    //   child: new Align(
+                    //     alignment: Alignment.centerLeft,
+                    //     child: new Text(
+                    //       "Deskripsi",
+                    //       style: new TextStyle(
+                    //         fontSize: 23.0,
+                    //         fontWeight: FontWeight.bold,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    new Container(
+                      margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: new Align(
+                        alignment: Alignment.centerLeft,
+                        child: Html(
+                            data: widget.list[widget.index]['listDescription']),
+                      ),
+                    ),
+                    new Container(
+                      margin:
+                          EdgeInsets.only(top: 15.0, left: 15.0, bottom: 10.0),
+                      child: new Align(
+                        alignment: Alignment.centerLeft,
+                        child: new Text(
+                          "Property Specification",
+                          style: new TextStyle(
+                              fontSize: 18.0,
+                              color: kPrimaryColor,
+                              fontWeight: FontWeight.bold),
                         ),
                       ),
                     ),
@@ -209,332 +564,212 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                     new Container(
                       margin: EdgeInsets.all(15.0),
-                      child: new Row(
-                        children: <Widget>[
-                          new Text(
-                            "Listing ID ",
-                            style: new TextStyle(fontSize: 20.0),
-                          ),
-                          new Text(
-                            "#${widget.list[widget.index]['listIdListing']}",
-                            style: new TextStyle(
-                                fontSize: 20.0, color: const Color(0xffDC1B2E)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    new Container(
-                      margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
-                      child: new Align(
-                        alignment: Alignment.centerLeft,
-                        child: new Text(
-                          widget.list[widget.index]['listTitle'],
-                          style: new TextStyle(
-                            fontSize: 23.0,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    new Container(
-                      margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
-                      child: new Align(
-                        alignment: Alignment.centerLeft,
-                        child: new Text(
-                          widget.list[widget.index]['listStreetName'],
-                          style: new TextStyle(
-                              fontSize: 18.0, color: const Color(0xff767472)),
-                        ),
-                      ),
-                    ),
-                    Container(
-                      margin: EdgeInsets.all(15.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 3, color: const Color(0xff1A3668)),
-                        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        //Center Row contents horizontally,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        //Center Row contents vertically,
-                        children: <Widget>[
-                          new Container(
-                            margin: EdgeInsets.all(10.0),
-                            child: new Align(
-                                alignment: Alignment.centerLeft,
-                                child: Column(
-                                  children: <Widget>[
-                                    new Image.asset(
-                                      'assets/images/bed.png',
-                                      width: 40,
-                                      height: 40,
-                                      color: const Color(0xff1A3668),
-                                    ),
-                                    widget.list[widget.index]['listBedroom'] != null
-                                        ? new Text(
-                                        widget.list[widget.index]['listBedroom'])
-                                        : new Text('0')
-                                  ],
-                                )),
-                          ),
-                          new Container(
-                            margin: EdgeInsets.all(10.0),
-                            child: new Align(
-                                alignment: Alignment.centerLeft,
-                                child: Column(
-                                  children: <Widget>[
-                                    new Image.asset('assets/images/bathtub.png',
-                                        width: 40,
-                                        height: 40,
-                                        color: const Color(0xff1A3668)),
-                                    widget.list[widget.index]['listBathroom'] != null
-                                        ? new Text(
-                                        widget.list[widget.index]['listBathroom'])
-                                        : new Text('0')
-                                  ],
-                                )),
-                          ),
-                          new Container(
-                            margin: EdgeInsets.all(10.0),
-                            child: new Align(
-                                alignment: Alignment.centerLeft,
-                                child: Column(
-                                  children: <Widget>[
-                                    new Image.asset('assets/images/home.png',
-                                        width: 40,
-                                        height: 40,
-                                        color: const Color(0xff1A3668)),
-                                    widget.list[widget.index]['listBuildingSize'] !=
-                                        null
-                                        ? new Text(widget.list[widget.index]
-                                    ['listBuildingSize'])
-                                        : new Text('0')
-                                  ],
-                                )),
-                          ),
-                          new Container(
-                            margin: EdgeInsets.all(10.0),
-                            child: new Align(
-                                alignment: Alignment.centerLeft,
-                                child: Column(
-                                  children: <Widget>[
-                                    new Image.asset('assets/images/area.png',
-                                        width: 40,
-                                        height: 40,
-                                        color: const Color(0xff1A3668)),
-                                    widget.list[widget.index]['listLandSize'] != null
-                                        ? new Text(
-                                        widget.list[widget.index]['listLandSize'])
-                                        : new Text('0')
-                                  ],
-                                )),
-                          ),
-                        ],
-                      ),
-                    ),
-                    new Container(
-                      margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                      child: new Row(
-                        children: <Widget>[
-                          new Text(
-                            "Kota: ",
-                            style: new TextStyle(fontSize: 15.0),
-                          ),
-                          new FutureBuilder<String>(
-                            future: getDataKota(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasError) print(snapshot.error);
-                              return snapshot.hasData
-                                  ? new Text(snapshot.data,
-                                  style: new TextStyle(fontSize: 15.0))
-                                  : new Text("Loading....",
-                                  style: new TextStyle(
-                                      fontSize: 15.0,
-                                      color: const Color(0xff767472)));
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    new Container(
-                      margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                      child: new Row(
-                        children: <Widget>[
-                          new Text(
-                            "Provinsi: ",
-                            style: new TextStyle(fontSize: 15.0),
-                          ),
-                          new FutureBuilder<String>(
-                            future: getDataProv(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasError) print(snapshot.error);
-                              return snapshot.hasData
-                                  ? new Text(snapshot.data,
-                                  style: new TextStyle(fontSize: 15.0))
-                                  : new Text("Loading....",
-                                  style: new TextStyle(
-                                      fontSize: 15.0,
-                                      color: const Color(0xff767472)));
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    new Container(
-                      margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                      child: new Row(
-                        children: <Widget>[
-                          new Text(
-                            "Negara: ",
-                            style: new TextStyle(fontSize: 15.0),
-                          ),
-                          new FutureBuilder<String>(
-                            future: getDataNegara(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasError) print(snapshot.error);
-                              return snapshot.hasData
-                                  ? new Text(snapshot.data,
-                                  style: new TextStyle(fontSize: 15.0))
-                                  : new Text("Loading....",
-                                  style: new TextStyle(
-                                      fontSize: 15.0,
-                                      color: const Color(0xff767472)));
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                    new Container(
-                      margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 30.0),
-                      child: new Align(
-                        alignment: Alignment.centerLeft,
-                        child: new Text(
-                          "Deskripsi",
-                          style: new TextStyle(
-                            fontSize: 23.0,
-                            fontWeight: FontWeight.bold,
+                      child: Card(
+                        child: Container(
+                          margin: EdgeInsets.all(15.0),
+                          child: Table(
+                            // textDirection: TextDirection.rtl,
+                            // defaultVerticalAlignment: TableCellVerticalAlignment.bottom,
+                            // border:TableBorder.all(width: 2.0,color: Colors.red),
+                            children: [
+                              TableRow(children: [
+                                Container(
+                                    margin: EdgeInsets.all(8),
+                                    child: Text("Property Type")),
+                                Container(
+                                    margin: EdgeInsets.all(8),
+                                    child: Text("House")),
+                              ]),
+                              TableRow(
+                                  decoration:
+                                      BoxDecoration(color: kTableRowColor),
+                                  children: [
+                                    Container(
+                                        margin: EdgeInsets.all(8),
+                                        child: Text("Ownership Rights")),
+                                    Container(
+                                        margin: EdgeInsets.all(8),
+                                        child: Text("Building Rights")),
+                                  ]),
+                              TableRow(children: [
+                                Container(
+                                    margin: EdgeInsets.all(8),
+                                    child: Text("Bedroom")),
+                                Container(
+                                    margin: EdgeInsets.all(8),
+                                    child: Text("3")),
+                              ]),
+                              TableRow(
+                                  decoration:
+                                      BoxDecoration(color: kTableRowColor),
+                                  children: [
+                                    Container(
+                                        margin: EdgeInsets.all(8),
+                                        child: Text("Bathroom")),
+                                    Container(
+                                        margin: EdgeInsets.all(8),
+                                        child: Text("2")),
+                                  ]),
+                            ],
                           ),
                         ),
-                      ),
-                    ),
-                    new Container(
-                      margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                      child: new Align(
-                        alignment: Alignment.centerLeft,
-                        child: Html(data: widget.list[widget.index]['listDescription']),
                       ),
                     ),
                     new Container(
                       width: double.infinity,
                       margin: EdgeInsets.all(15.0),
-                      decoration: BoxDecoration(
-                        border: Border.all(width: 3, color: const Color(0xff1A3668)),
-                      ),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        //Center Column contents vertically,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        //Center Column contents horizontally,
-                        children: <Widget>[
-                          new FutureBuilder<List<dynamic>>(
-                            future: getDataMemberFoto(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasError) print(snapshot.error);
-                              return snapshot.hasData
-                                  ? Container(
-                                  margin: EdgeInsets.all(10),
-                                  width: 80.0,
-                                  height: 80.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: NetworkImage(
-                                              'https://genius.remax.co.id/papi/Membership/crud/${widget.list[widget.index]['links']['listMmbsId']}/links/MembershipFile/${snapshot.data[0]}?size=256,256'))))
-                                  : Container(
-                                  margin: EdgeInsets.all(10),
-                                  width: 80.0,
-                                  height: 80.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: NetworkImage(
-                                              'https://remax.co.id/images/baloon.png?size=256,256'))));
-                            },
-                          ),
-                          new FutureBuilder<Map<String, dynamic>>(
-                            future: getDataMember(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasError) print(snapshot.error);
-                              return snapshot.hasData
-                                  ? Container(
-                                margin: EdgeInsets.all(10.0),
-                                child: Column(children: <Widget>[
-                                  new Text(
-                                      snapshot.data['mmbsFirstName'] +
-                                          ' ' +
-                                          snapshot.data['mmbsLastName'],
-                                      textAlign: TextAlign.center),
-                                  new Text(snapshot.data['mmbsCellPhone1'],
-                                      textAlign: TextAlign.center),
-                                  new Text(snapshot.data['mmbsEmail'],
-                                      textAlign: TextAlign.center),
-                                ]),
-                              )
-                                  : new Text("Loading....",
-                                  textAlign: TextAlign.center,
-                                  style: new TextStyle(
-                                      fontSize: 15.0,
-                                      color: const Color(0xff767472)));
-                            },
-                          ),
-                          Container(
-                            color: const Color(0xffDC1B2E),
-                            child: Container(
+                      child: Card(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          //Center Column contents vertically,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          //Center Column contents horizontally,
+                          children: <Widget>[
+                            Container(
+                                margin: EdgeInsets.all(15.0),
+                                child: Text('Listing By:')),
+                            Row(
+                              children: <Widget>[
+                                new FutureBuilder<List<dynamic>>(
+                                  future: getDataMemberFoto(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError)
+                                      print(snapshot.error);
+                                    return snapshot.hasData
+                                        ? Container(
+                                            margin: EdgeInsets.all(10),
+                                            width: 80.0,
+                                            height: 80.0,
+                                            decoration: new BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: new DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: NetworkImage(
+                                                        'https://genius.remax.co.id/papi/Membership/crud/${widget.list[widget.index]['links']['listMmbsId']}/links/MembershipFile/${snapshot.data[0]}?size=256,256'))))
+                                        : Container(
+                                            margin: EdgeInsets.all(10),
+                                            width: 80.0,
+                                            height: 80.0,
+                                            decoration: new BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                image: new DecorationImage(
+                                                    fit: BoxFit.cover,
+                                                    image: NetworkImage(
+                                                        'https://remax.co.id/images/baloon.png?size=256,256'))));
+                                  },
+                                ),
+                                new FutureBuilder<Map<String, dynamic>>(
+                                  future: getDataMember(),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError)
+                                      print(snapshot.error);
+                                    return snapshot.hasData
+                                        ? Container(
+                                            margin: EdgeInsets.all(10.0),
+                                            child: Column(children: <Widget>[
+                                              new Text(
+                                                  snapshot.data[
+                                                          'mmbsFirstName'] +
+                                                      ' ' +
+                                                      snapshot
+                                                          .data['mmbsLastName'],
+                                                  textAlign: TextAlign.center),
+                                            ]),
+                                          )
+                                        : new Text("Loading....",
+                                            textAlign: TextAlign.center,
+                                            style: new TextStyle(
+                                                fontSize: 15.0,
+                                                color:
+                                                    const Color(0xff767472)));
+                                  },
+                                ),
+                              ],
+                            ),
+                            new FutureBuilder<Map<String, dynamic>>(
+                              future: getDataMember(),
+                              builder: (context, snapshot) {
+                                if (snapshot.hasError) print(snapshot.error);
+                                return snapshot.hasData
+                                    ? Container(
+                                        margin: EdgeInsets.all(10.0),
+                                        child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.start,
+                                            //Center Column contents vertically,
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            //Center Column contents horizontally,
+                                            children: <Widget>[
+                                              new Text(snapshot
+                                                  .data['mmbsCellPhone1']),
+                                              new Text(
+                                                  snapshot.data['mmbsEmail']),
+                                            ]),
+                                      )
+                                    : new Text("Loading....",
+                                        style: new TextStyle(
+                                            fontSize: 15.0,
+                                            color: const Color(0xff767472)));
+                              },
+                            ),
+                            Container(
                               margin: EdgeInsets.all(8.0),
-                              child: Row(
-                                children: <Widget>[
-                                  widget.list[widget.index]['links']
-                                  ['listListingCategoryId'] ==
-                                      "1"
-                                      ? Text(
-                                    "DIJUAL",
-                                    style: TextStyle(color: Colors.white),
-                                  )
-                                      : Text(
-                                    "DISEWAKAN",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  Spacer(),
-                                  new Text(
-                                    NumberFormat.compactCurrency(
-                                        locale: 'id',
-                                        symbol: 'Rp ',
-                                        decimalDigits: 0)
-                                        .format(toInt(widget.list[widget.index]
-                                    ['listListingPrice'])),
-                                    style: new TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.bold,
-                                    ),
-                                  ),
-                                ],
+                              child: Card(
+                                color: kBtnWa,
+                                child: Row(
+                                  children: <Widget>[
+                                    Image.asset('assets/images/whatsapp.png'),
+                                    Text('Whatsapp')
+                                  ],
+                                ),
                               ),
                             ),
-                          )
-                        ],
+                            Container(
+                              color: const Color(0xffDC1B2E),
+                              child: Container(
+                                margin: EdgeInsets.all(8.0),
+                                child: Row(
+                                  children: <Widget>[
+                                    widget.list[widget.index]['links']
+                                                ['listListingCategoryId'] ==
+                                            "1"
+                                        ? Text(
+                                            "DIJUAL",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )
+                                        : Text(
+                                            "DISEWAKAN",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          ),
+                                    Spacer(),
+                                    new Text(
+                                      NumberFormat.compactCurrency(
+                                              locale: 'id',
+                                              symbol: 'Rp ',
+                                              decimalDigits: 0)
+                                          .format(toInt(
+                                              widget.list[widget.index]
+                                                  ['listListingPrice'])),
+                                      style: new TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            )
+                          ],
+                        ),
                       ),
                     ),
                   ],
                 ),
               ),
             ),
-
-
-
-
           ],
         ),
       ),
