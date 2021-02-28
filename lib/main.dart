@@ -7,6 +7,7 @@ import 'package:remax_app/screens/gallery_page.dart';
 import 'package:remax_app/screens/home/home_screen.dart';
 import 'package:remax_app/screens/home_page.dart';
 import 'package:remax_app/screens/search/search_screen.dart';
+import 'package:remax_app/slider_try.dart';
 
 
 void main() {
@@ -29,7 +30,7 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SearchScreen(),
+      home: HomeScreen(),
     );
   }
 }

@@ -539,6 +539,42 @@ class _DetailPageState extends State<DetailPage> {
                             data: widget.list[widget.index]['listDescription']),
                       ),
                     ),
+                    Container(
+                      margin: EdgeInsets.all(15.0),
+                      child: Card(
+                        child: Container(
+                          margin: EdgeInsets.all(8.0),
+                          child: Row(
+                            children: <Widget>[
+                              new Text(
+                                NumberFormat.compactCurrency(
+                                        locale: 'id',
+                                        symbol: 'Rp ',
+                                        decimalDigits: 0)
+                                    .format(toInt(widget.list[widget.index]
+                                        ['listListingPrice'])),
+                                style: new TextStyle(
+                                  color: kRedColor,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              Spacer(),
+                              widget.list[widget.index]['links']
+                                          ['listListingCategoryId'] ==
+                                      "1"
+                                  ? Text(
+                                      "(DIJUAL)",
+                                      style: TextStyle(color: kRedColor),
+                                    )
+                                  : Text(
+                                      "(DISEWAKAN)",
+                                      style: TextStyle(color: kPrimaryColor),
+                                    ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
                     new Container(
                       margin:
                           EdgeInsets.only(top: 15.0, left: 15.0, bottom: 10.0),
@@ -615,162 +651,190 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                       ),
                     ),
-                    new Container(
-                      width: double.infinity,
+                    ListingByProfil(),
+                    BtnListingByAgent(),
+
+                    Container(
                       margin: EdgeInsets.all(15.0),
-                      child: Card(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          //Center Column contents vertically,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          //Center Column contents horizontally,
-                          children: <Widget>[
-                            Container(
-                                margin: EdgeInsets.all(15.0),
-                                child: Text('Listing By:')),
-                            Row(
-                              children: <Widget>[
-                                new FutureBuilder<List<dynamic>>(
-                                  future: getDataMemberFoto(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasError)
-                                      print(snapshot.error);
-                                    return snapshot.hasData
-                                        ? Container(
-                                            margin: EdgeInsets.all(10),
-                                            width: 80.0,
-                                            height: 80.0,
-                                            decoration: new BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                image: new DecorationImage(
-                                                    fit: BoxFit.cover,
-                                                    image: NetworkImage(
-                                                        'https://genius.remax.co.id/papi/Membership/crud/${widget.list[widget.index]['links']['listMmbsId']}/links/MembershipFile/${snapshot.data[0]}?size=256,256'))))
-                                        : Container(
-                                            margin: EdgeInsets.all(10),
-                                            width: 80.0,
-                                            height: 80.0,
-                                            decoration: new BoxDecoration(
-                                                shape: BoxShape.circle,
-                                                image: new DecorationImage(
-                                                    fit: BoxFit.cover,
-                                                    image: NetworkImage(
-                                                        'https://remax.co.id/images/baloon.png?size=256,256'))));
-                                  },
-                                ),
-                                new FutureBuilder<Map<String, dynamic>>(
-                                  future: getDataMember(),
-                                  builder: (context, snapshot) {
-                                    if (snapshot.hasError)
-                                      print(snapshot.error);
-                                    return snapshot.hasData
-                                        ? Container(
-                                            margin: EdgeInsets.all(10.0),
-                                            child: Column(children: <Widget>[
-                                              new Text(
-                                                  snapshot.data[
-                                                          'mmbsFirstName'] +
-                                                      ' ' +
-                                                      snapshot
-                                                          .data['mmbsLastName'],
-                                                  textAlign: TextAlign.center),
-                                            ]),
-                                          )
-                                        : new Text("Loading....",
-                                            textAlign: TextAlign.center,
-                                            style: new TextStyle(
-                                                fontSize: 15.0,
-                                                color:
-                                                    const Color(0xff767472)));
-                                  },
-                                ),
-                              ],
-                            ),
-                            new FutureBuilder<Map<String, dynamic>>(
-                              future: getDataMember(),
-                              builder: (context, snapshot) {
-                                if (snapshot.hasError) print(snapshot.error);
-                                return snapshot.hasData
-                                    ? Container(
-                                        margin: EdgeInsets.all(10.0),
-                                        child: Column(
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.start,
-                                            //Center Column contents vertically,
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.start,
-                                            //Center Column contents horizontally,
-                                            children: <Widget>[
-                                              new Text(snapshot
-                                                  .data['mmbsCellPhone1']),
-                                              new Text(
-                                                  snapshot.data['mmbsEmail']),
-                                            ]),
-                                      )
-                                    : new Text("Loading....",
-                                        style: new TextStyle(
-                                            fontSize: 15.0,
-                                            color: const Color(0xff767472)));
-                              },
-                            ),
-                            Container(
-                              margin: EdgeInsets.all(8.0),
-                              child: Card(
-                                color: kBtnWa,
-                                child: Row(
-                                  children: <Widget>[
-                                    Image.asset('assets/images/whatsapp.png'),
-                                    Text('Whatsapp')
-                                  ],
-                                ),
-                              ),
-                            ),
-                            Container(
-                              color: const Color(0xffDC1B2E),
-                              child: Container(
-                                margin: EdgeInsets.all(8.0),
-                                child: Row(
-                                  children: <Widget>[
-                                    widget.list[widget.index]['links']
-                                                ['listListingCategoryId'] ==
-                                            "1"
-                                        ? Text(
-                                            "DIJUAL",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          )
-                                        : Text(
-                                            "DISEWAKAN",
-                                            style:
-                                                TextStyle(color: Colors.white),
-                                          ),
-                                    Spacer(),
-                                    new Text(
-                                      NumberFormat.compactCurrency(
-                                              locale: 'id',
-                                              symbol: 'Rp ',
-                                              decimalDigits: 0)
-                                          .format(toInt(
-                                              widget.list[widget.index]
-                                                  ['listListingPrice'])),
-                                      style: new TextStyle(
-                                        color: Colors.white,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            )
-                          ],
-                        ),
+                      child: Column(
+                        children: <Widget>[
+                          Row(
+                            children: <Widget>[
+                              Text('Other Listings By Office')
+                            ],
+                          ),
+
+                        ],
                       ),
                     ),
+
+
                   ],
                 ),
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Container ListingByProfil() {
+    return new Container(
+      width: double.infinity,
+      margin: EdgeInsets.all(15.0),
+      child: Card(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          //Center Column contents vertically,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          //Center Column contents horizontally,
+          children: <Widget>[
+            Container(margin: EdgeInsets.all(15.0), child: Text('Listing By:')),
+            Row(
+              children: <Widget>[
+                new FutureBuilder<List<dynamic>>(
+                  future: getDataMemberFoto(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) print(snapshot.error);
+                    return snapshot.hasData
+                        ? Container(
+                            margin: EdgeInsets.all(10),
+                            width: 80.0,
+                            height: 80.0,
+                            decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: new DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                        'https://genius.remax.co.id/papi/Membership/crud/${widget.list[widget.index]['links']['listMmbsId']}/links/MembershipFile/${snapshot.data[0]}?size=256,256'))))
+                        : Container(
+                            margin: EdgeInsets.all(10),
+                            width: 80.0,
+                            height: 80.0,
+                            decoration: new BoxDecoration(
+                                shape: BoxShape.circle,
+                                image: new DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: NetworkImage(
+                                        'https://remax.co.id/images/baloon.png?size=256,256'))));
+                  },
+                ),
+                new FutureBuilder<Map<String, dynamic>>(
+                  future: getDataMember(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) print(snapshot.error);
+                    return snapshot.hasData
+                        ? Container(
+                            margin: EdgeInsets.all(10.0),
+                            child: Column(children: <Widget>[
+                              new Text(
+                                  snapshot.data['mmbsFirstName'] +
+                                      ' ' +
+                                      snapshot.data['mmbsLastName'],
+                                  textAlign: TextAlign.center),
+                            ]),
+                          )
+                        : new Text("Loading....",
+                            textAlign: TextAlign.center,
+                            style: new TextStyle(
+                                fontSize: 15.0,
+                                color: const Color(0xff767472)));
+                  },
+                ),
+              ],
+            ),
+            new FutureBuilder<Map<String, dynamic>>(
+              future: getDataMember(),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) print(snapshot.error);
+                return snapshot.hasData
+                    ? Container(
+                        margin: EdgeInsets.all(10.0),
+                        child: Column(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            //Center Column contents vertically,
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            //Center Column contents horizontally,
+                            children: <Widget>[
+                              Row(children: <Widget>[
+                                SvgPicture.asset("assets/icons/call.svg"),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                new Text(snapshot.data['mmbsCellPhone1']),
+                              ]),
+                              Row(children: <Widget>[
+                                SvgPicture.asset("assets/icons/mail.svg"),
+                                SizedBox(
+                                  width: 10.0,
+                                ),
+                                new Text(snapshot.data['mmbsEmail']),
+                              ]),
+                            ]),
+                      )
+                    : new Text("Loading....",
+                        style: new TextStyle(
+                            fontSize: 15.0, color: const Color(0xff767472)));
+              },
+            ),
+            Container(
+              margin: EdgeInsets.all(8.0),
+              child: Card(
+                color: kBtnWa,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: <Widget>[
+                    Image.asset(
+                      'assets/images/whatsapp.png',
+                      height: 40.0,
+                      width: 40.0,
+                    ),
+                    Text(
+                      'Whatsapp',
+                      style: TextStyle(
+                          color: Colors.white, fontWeight: FontWeight.bold),
+                    )
+                  ],
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class BtnListingByAgent extends StatelessWidget {
+  const BtnListingByAgent({
+    Key key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.all(8.0),
+      child: Card(
+        color: kRedColor,
+        child: Padding(
+          padding: EdgeInsets.all(10.0),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                'Listing By Agent',
+                style:
+                    TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+              ),
+              Icon(
+                Icons.navigate_next,
+                color: Colors.white,
+              ),
+            ],
+          ),
         ),
       ),
     );
