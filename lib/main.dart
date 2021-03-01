@@ -8,7 +8,6 @@ import 'package:remax_app/screens/home/home_screen.dart';
 import 'package:remax_app/screens/home_page.dart';
 import 'package:remax_app/screens/search/search_screen.dart';
 
-
 void main() {
   runApp(MyApp());
 }
@@ -21,15 +20,15 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Home',
       routes: <String, WidgetBuilder>{
-        '/GalleryPage' : (BuildContext context) => new GalleryPage(),
-        '/HomePage' : (BuildContext context) => new MyHomePage(),
+        '/GalleryPage': (BuildContext context) => new GalleryPage(),
+        '/HomePage': (BuildContext context) => new MyHomePage(),
       },
       theme: ThemeData(
         fontFamily: 'Poppins',
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SearchScreen(),
+      home: HomeScreen(),
     );
   }
 }

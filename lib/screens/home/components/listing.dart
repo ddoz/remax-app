@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'file:///D:/ITERA/Project/Flutter/remax_app/lib/screens/detail/detail_page.dart';
+import '../../detail/detail_page.dart';
 
 class Listing extends StatelessWidget {
   Future<List> getData() async {
@@ -21,8 +21,8 @@ class Listing extends StatelessWidget {
         if (snapshot.hasError) print(snapshot.error);
         return snapshot.hasData
             ? new ItemList(
-                    list: snapshot.data,
-                  )
+                list: snapshot.data,
+              )
             : new Center(
                 child: new CircularProgressIndicator(),
               );

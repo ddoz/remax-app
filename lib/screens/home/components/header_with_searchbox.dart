@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:remax_app/util/constants.dart';
 
-
 class HeaderWithSearchBox extends StatelessWidget {
   const HeaderWithSearchBox({
     Key key,
@@ -25,28 +24,33 @@ class HeaderWithSearchBox extends StatelessWidget {
               right: kDefaultPadding,
               bottom: 36 + kDefaultPadding,
             ),
-            height: size.height * 0.2 - 27,
+            height: 400,
             decoration: BoxDecoration(
-              color: kPrimaryColor,
-              borderRadius: BorderRadius.only(
-                bottomLeft: Radius.circular(36),
-                bottomRight: Radius.circular(36),
+                image: DecorationImage(
+              image: new AssetImage(
+                "assets/icons/bg_header.png",
               ),
-            ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Container(
-                  width: 150,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                        image: NetworkImage(
-                            'https://genius.remax.co.id/papi/company/crud/1/links/compFileId/122390'),
-                        fit: BoxFit.fill),
+              fit: BoxFit.cover,
+            )),
+            child: SafeArea(
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  IconButton(
+                    icon: Image.asset("assets/icons/menu_bar.png"),
+                    onPressed: () {},
                   ),
-                )
-              ],
+                  Container(
+                    width: 151,
+                    height: 56,
+                    child: Image.asset("assets/logo/logo_remax.png"),
+                  ),
+                  IconButton(
+                    icon: Image.asset("assets/icons/language_choose.png"),
+                    onPressed: () {},
+                  ),
+                ],
+              ),
             ),
           ),
           Positioned(

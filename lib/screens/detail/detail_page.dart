@@ -100,7 +100,10 @@ class _DetailPageState extends State<DetailPage> {
         iconTheme: IconThemeData(
           color: kAppBarColorTheme, //change your color here
         ),
-        title: Text("Detail", style: TextStyle( color: kAppBarColorTheme),),
+        title: Text(
+          "Detail",
+          style: TextStyle(color: kAppBarColorTheme),
+        ),
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: <Widget>[
@@ -154,8 +157,7 @@ class _DetailPageState extends State<DetailPage> {
                 dotSize: 4.0,
                 dotSpacing: 10.0,
                 dotVerticalPadding: 50,
-                images:
-                imgSlider().map((fileImage) {
+                images: imgSlider().map((fileImage) {
                   return Container(
                     child: ClipRRect(
                       child: GestureDetector(
@@ -182,9 +184,8 @@ class _DetailPageState extends State<DetailPage> {
                   top: MediaQuery.of(context).size.height * .58),
               child: Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(30.0),
-                  color: Colors.white
-                ),
+                    borderRadius: BorderRadius.circular(30.0),
+                    color: Colors.white),
                 child: Column(
                   children: [
                     new Container(
@@ -224,7 +225,8 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
                     new Container(
-                      margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
+                      margin:
+                          EdgeInsets.only(left: 15.0, right: 15.0, top: 15.0),
                       child: new Align(
                         alignment: Alignment.centerLeft,
                         child: new Text(
@@ -237,7 +239,8 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
                     new Container(
-                      margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
+                      margin:
+                          EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
                       child: new Align(
                         alignment: Alignment.centerLeft,
                         child: new Text(
@@ -250,7 +253,8 @@ class _DetailPageState extends State<DetailPage> {
                     Container(
                       margin: EdgeInsets.all(15.0),
                       decoration: BoxDecoration(
-                        border: Border.all(width: 3, color: const Color(0xff1A3668)),
+                        border: Border.all(
+                            width: 3, color: const Color(0xff1A3668)),
                         borderRadius: BorderRadius.all(Radius.circular(10.0)),
                       ),
                       child: Row(
@@ -271,9 +275,10 @@ class _DetailPageState extends State<DetailPage> {
                                       height: 40,
                                       color: const Color(0xff1A3668),
                                     ),
-                                    widget.list[widget.index]['listBedroom'] != null
-                                        ? new Text(
-                                        widget.list[widget.index]['listBedroom'])
+                                    widget.list[widget.index]['listBedroom'] !=
+                                            null
+                                        ? new Text(widget.list[widget.index]
+                                            ['listBedroom'])
                                         : new Text('0')
                                   ],
                                 )),
@@ -288,9 +293,10 @@ class _DetailPageState extends State<DetailPage> {
                                         width: 40,
                                         height: 40,
                                         color: const Color(0xff1A3668)),
-                                    widget.list[widget.index]['listBathroom'] != null
-                                        ? new Text(
-                                        widget.list[widget.index]['listBathroom'])
+                                    widget.list[widget.index]['listBathroom'] !=
+                                            null
+                                        ? new Text(widget.list[widget.index]
+                                            ['listBathroom'])
                                         : new Text('0')
                                   ],
                                 )),
@@ -305,10 +311,11 @@ class _DetailPageState extends State<DetailPage> {
                                         width: 40,
                                         height: 40,
                                         color: const Color(0xff1A3668)),
-                                    widget.list[widget.index]['listBuildingSize'] !=
-                                        null
+                                    widget.list[widget.index]
+                                                ['listBuildingSize'] !=
+                                            null
                                         ? new Text(widget.list[widget.index]
-                                    ['listBuildingSize'])
+                                            ['listBuildingSize'])
                                         : new Text('0')
                                   ],
                                 )),
@@ -323,9 +330,10 @@ class _DetailPageState extends State<DetailPage> {
                                         width: 40,
                                         height: 40,
                                         color: const Color(0xff1A3668)),
-                                    widget.list[widget.index]['listLandSize'] != null
-                                        ? new Text(
-                                        widget.list[widget.index]['listLandSize'])
+                                    widget.list[widget.index]['listLandSize'] !=
+                                            null
+                                        ? new Text(widget.list[widget.index]
+                                            ['listLandSize'])
                                         : new Text('0')
                                   ],
                                 )),
@@ -347,11 +355,11 @@ class _DetailPageState extends State<DetailPage> {
                               if (snapshot.hasError) print(snapshot.error);
                               return snapshot.hasData
                                   ? new Text(snapshot.data,
-                                  style: new TextStyle(fontSize: 15.0))
+                                      style: new TextStyle(fontSize: 15.0))
                                   : new Text("Loading....",
-                                  style: new TextStyle(
-                                      fontSize: 15.0,
-                                      color: const Color(0xff767472)));
+                                      style: new TextStyle(
+                                          fontSize: 15.0,
+                                          color: const Color(0xff767472)));
                             },
                           ),
                         ],
@@ -371,11 +379,11 @@ class _DetailPageState extends State<DetailPage> {
                               if (snapshot.hasError) print(snapshot.error);
                               return snapshot.hasData
                                   ? new Text(snapshot.data,
-                                  style: new TextStyle(fontSize: 15.0))
+                                      style: new TextStyle(fontSize: 15.0))
                                   : new Text("Loading....",
-                                  style: new TextStyle(
-                                      fontSize: 15.0,
-                                      color: const Color(0xff767472)));
+                                      style: new TextStyle(
+                                          fontSize: 15.0,
+                                          color: const Color(0xff767472)));
                             },
                           ),
                         ],
@@ -395,18 +403,19 @@ class _DetailPageState extends State<DetailPage> {
                               if (snapshot.hasError) print(snapshot.error);
                               return snapshot.hasData
                                   ? new Text(snapshot.data,
-                                  style: new TextStyle(fontSize: 15.0))
+                                      style: new TextStyle(fontSize: 15.0))
                                   : new Text("Loading....",
-                                  style: new TextStyle(
-                                      fontSize: 15.0,
-                                      color: const Color(0xff767472)));
+                                      style: new TextStyle(
+                                          fontSize: 15.0,
+                                          color: const Color(0xff767472)));
                             },
                           ),
                         ],
                       ),
                     ),
                     new Container(
-                      margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 30.0),
+                      margin:
+                          EdgeInsets.only(left: 15.0, right: 15.0, top: 30.0),
                       child: new Align(
                         alignment: Alignment.centerLeft,
                         child: new Text(
@@ -422,14 +431,16 @@ class _DetailPageState extends State<DetailPage> {
                       margin: EdgeInsets.only(left: 15.0, right: 15.0),
                       child: new Align(
                         alignment: Alignment.centerLeft,
-                        child: Html(data: widget.list[widget.index]['listDescription']),
+                        child: Html(
+                            data: widget.list[widget.index]['listDescription']),
                       ),
                     ),
                     new Container(
                       width: double.infinity,
                       margin: EdgeInsets.all(15.0),
                       decoration: BoxDecoration(
-                        border: Border.all(width: 3, color: const Color(0xff1A3668)),
+                        border: Border.all(
+                            width: 3, color: const Color(0xff1A3668)),
                       ),
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -443,25 +454,25 @@ class _DetailPageState extends State<DetailPage> {
                               if (snapshot.hasError) print(snapshot.error);
                               return snapshot.hasData
                                   ? Container(
-                                  margin: EdgeInsets.all(10),
-                                  width: 80.0,
-                                  height: 80.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: NetworkImage(
-                                              'https://genius.remax.co.id/papi/Membership/crud/${widget.list[widget.index]['links']['listMmbsId']}/links/MembershipFile/${snapshot.data[0]}?size=256,256'))))
+                                      margin: EdgeInsets.all(10),
+                                      width: 80.0,
+                                      height: 80.0,
+                                      decoration: new BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: new DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                  'https://genius.remax.co.id/papi/Membership/crud/${widget.list[widget.index]['links']['listMmbsId']}/links/MembershipFile/${snapshot.data[0]}?size=256,256'))))
                                   : Container(
-                                  margin: EdgeInsets.all(10),
-                                  width: 80.0,
-                                  height: 80.0,
-                                  decoration: new BoxDecoration(
-                                      shape: BoxShape.circle,
-                                      image: new DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: NetworkImage(
-                                              'https://remax.co.id/images/baloon.png?size=256,256'))));
+                                      margin: EdgeInsets.all(10),
+                                      width: 80.0,
+                                      height: 80.0,
+                                      decoration: new BoxDecoration(
+                                          shape: BoxShape.circle,
+                                          image: new DecorationImage(
+                                              fit: BoxFit.cover,
+                                              image: NetworkImage(
+                                                  'https://remax.co.id/images/baloon.png?size=256,256'))));
                             },
                           ),
                           new FutureBuilder<Map<String, dynamic>>(
@@ -470,24 +481,25 @@ class _DetailPageState extends State<DetailPage> {
                               if (snapshot.hasError) print(snapshot.error);
                               return snapshot.hasData
                                   ? Container(
-                                margin: EdgeInsets.all(10.0),
-                                child: Column(children: <Widget>[
-                                  new Text(
-                                      snapshot.data['mmbsFirstName'] +
-                                          ' ' +
-                                          snapshot.data['mmbsLastName'],
-                                      textAlign: TextAlign.center),
-                                  new Text(snapshot.data['mmbsCellPhone1'],
-                                      textAlign: TextAlign.center),
-                                  new Text(snapshot.data['mmbsEmail'],
-                                      textAlign: TextAlign.center),
-                                ]),
-                              )
+                                      margin: EdgeInsets.all(10.0),
+                                      child: Column(children: <Widget>[
+                                        new Text(
+                                            snapshot.data['mmbsFirstName'] +
+                                                ' ' +
+                                                snapshot.data['mmbsLastName'],
+                                            textAlign: TextAlign.center),
+                                        new Text(
+                                            snapshot.data['mmbsCellPhone1'],
+                                            textAlign: TextAlign.center),
+                                        new Text(snapshot.data['mmbsEmail'],
+                                            textAlign: TextAlign.center),
+                                      ]),
+                                    )
                                   : new Text("Loading....",
-                                  textAlign: TextAlign.center,
-                                  style: new TextStyle(
-                                      fontSize: 15.0,
-                                      color: const Color(0xff767472)));
+                                      textAlign: TextAlign.center,
+                                      style: new TextStyle(
+                                          fontSize: 15.0,
+                                          color: const Color(0xff767472)));
                             },
                           ),
                           Container(
@@ -497,24 +509,24 @@ class _DetailPageState extends State<DetailPage> {
                               child: Row(
                                 children: <Widget>[
                                   widget.list[widget.index]['links']
-                                  ['listListingCategoryId'] ==
-                                      "1"
+                                              ['listListingCategoryId'] ==
+                                          "1"
                                       ? Text(
-                                    "DIJUAL",
-                                    style: TextStyle(color: Colors.white),
-                                  )
+                                          "DIJUAL",
+                                          style: TextStyle(color: Colors.white),
+                                        )
                                       : Text(
-                                    "DISEWAKAN",
-                                    style: TextStyle(color: Colors.white),
-                                  ),
+                                          "DISEWAKAN",
+                                          style: TextStyle(color: Colors.white),
+                                        ),
                                   Spacer(),
                                   new Text(
                                     NumberFormat.compactCurrency(
-                                        locale: 'id',
-                                        symbol: 'Rp ',
-                                        decimalDigits: 0)
+                                            locale: 'id',
+                                            symbol: 'Rp ',
+                                            decimalDigits: 0)
                                         .format(toInt(widget.list[widget.index]
-                                    ['listListingPrice'])),
+                                            ['listListingPrice'])),
                                     style: new TextStyle(
                                       color: Colors.white,
                                       fontWeight: FontWeight.bold,
@@ -531,10 +543,6 @@ class _DetailPageState extends State<DetailPage> {
                 ),
               ),
             ),
-
-
-
-
           ],
         ),
       ),

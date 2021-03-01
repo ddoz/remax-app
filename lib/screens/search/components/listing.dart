@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
-import 'file:///D:/ITERA/Project/Flutter/remax_app/lib/screens/detail/detail_page.dart';
+import '../..//detail/detail_page.dart';
 
 class Listing extends StatelessWidget {
   Future<List> getData() async {
@@ -96,7 +96,6 @@ class ItemList extends StatelessWidget {
                             ),
                           ),
                         ),
-
                         list[i]['links']['listListingCategoryId'] == "1"
                             ? Row(children: <Widget>[
                                 Container(
@@ -108,8 +107,8 @@ class ItemList extends StatelessWidget {
                                               locale: 'id',
                                               symbol: 'Rp ',
                                               decimalDigits: 0)
-                                          .format(
-                                              toInt(list[i]['listListingPrice'])),
+                                          .format(toInt(
+                                              list[i]['listListingPrice'])),
                                       style: new TextStyle(
                                         fontSize: 21.0,
                                         color: const Color(0xffDC1B2E),
@@ -135,8 +134,8 @@ class ItemList extends StatelessWidget {
                                               locale: 'id',
                                               symbol: 'Rp ',
                                               decimalDigits: 0)
-                                          .format(
-                                              toInt(list[i]['listListingPrice'])),
+                                          .format(toInt(
+                                              list[i]['listListingPrice'])),
                                       style: new TextStyle(
                                         fontSize: 21.0,
                                         color: const Color(0xff1A3668),
@@ -165,17 +164,17 @@ class ItemList extends StatelessWidget {
                                           width: 15, height: 15),
                                       list[i]['listBedroom'] != null
                                           ? new Text(
-                                        list[i]['listBedroom'],
-                                        style: new TextStyle(
-                                          fontSize: 10.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )
+                                              list[i]['listBedroom'],
+                                              style: new TextStyle(
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )
                                           : new Text('-',
-                                          style: new TextStyle(
-                                            fontSize: 10.0,
-                                            fontWeight: FontWeight.bold,
-                                          ))
+                                              style: new TextStyle(
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.bold,
+                                              ))
                                     ],
                                   )),
                             ),
@@ -186,21 +185,23 @@ class ItemList extends StatelessWidget {
                                   alignment: Alignment.centerLeft,
                                   child: Column(
                                     children: <Widget>[
-                                      new Image.asset('assets/images/bathtub.png',
-                                          width: 15, height: 15),
+                                      new Image.asset(
+                                          'assets/images/bathtub.png',
+                                          width: 15,
+                                          height: 15),
                                       list[i]['listBathroom'] != null
                                           ? new Text(
-                                        list[i]['listBathroom'],
-                                        style: new TextStyle(
-                                          fontSize: 10.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )
+                                              list[i]['listBathroom'],
+                                              style: new TextStyle(
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )
                                           : new Text('-',
-                                          style: new TextStyle(
-                                            fontSize: 10.0,
-                                            fontWeight: FontWeight.bold,
-                                          ))
+                                              style: new TextStyle(
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.bold,
+                                              ))
                                     ],
                                   )),
                             ),
@@ -215,17 +216,17 @@ class ItemList extends StatelessWidget {
                                           width: 15, height: 15),
                                       list[i]['listBuildingSize'] != null
                                           ? new Text(
-                                        list[i]['listBuildingSize'],
-                                        style: new TextStyle(
-                                          fontSize: 10.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )
+                                              list[i]['listBuildingSize'],
+                                              style: new TextStyle(
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )
                                           : new Text('-',
-                                          style: new TextStyle(
-                                            fontSize: 10.0,
-                                            fontWeight: FontWeight.bold,
-                                          ))
+                                              style: new TextStyle(
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.bold,
+                                              ))
                                     ],
                                   )),
                             ),
@@ -240,17 +241,17 @@ class ItemList extends StatelessWidget {
                                           width: 15, height: 15),
                                       list[i]['listLandSize'] != null
                                           ? new Text(
-                                        list[i]['listLandSize'],
-                                        style: new TextStyle(
-                                          fontSize: 10.0,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      )
+                                              list[i]['listLandSize'],
+                                              style: new TextStyle(
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            )
                                           : new Text('-',
-                                          style: new TextStyle(
-                                            fontSize: 10.0,
-                                            fontWeight: FontWeight.bold,
-                                          ))
+                                              style: new TextStyle(
+                                                fontSize: 10.0,
+                                                fontWeight: FontWeight.bold,
+                                              ))
                                     ],
                                   )),
                             ),
