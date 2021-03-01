@@ -6,12 +6,44 @@ import 'package:remax_app/screens/home/components/partners.dart';
 import 'package:remax_app/screens/home/components/title_only.dart';
 import 'package:remax_app/screens/home/components/title_with_link.dart';
 
-class Body extends StatelessWidget {
+import '../../../slider_try.dart';
+import 'near_listing.dart';
+
+//class Body extends StatelessWidget {
+//  @override
+//  Widget build(BuildContext context) {
+//    // It will provie us total height  and width of our screen
+//    Size size = MediaQuery.of(context).size;
+//    // it enable scrolling on small device
+//    return SingleChildScrollView(
+//      child: Column(
+//        crossAxisAlignment: CrossAxisAlignment.start,
+//        children: <Widget>[
+//          HeaderWithSearchBox(size: size),
+//          TitleWithMoreBtn(title: "Our Approved Partner", press: () {}),
+//          Partner(),
+//          SizedBox(height: 20.0),
+//          TitleWithMoreBtn(title: "Near From You", press: () {}),
+//          NearMeListing(),
+//          SizedBox(height: 20.0),
+//          TitleWithLink(title: "Listing Properties", press: () {}),
+//          FeaturedPlants(),
+//        ],
+//      ),
+//    );
+//  }
+//}
+
+
+class Body extends StatefulWidget {
+  @override
+  _BodyState createState() => _BodyState();
+}
+
+class _BodyState extends State<Body> {
   @override
   Widget build(BuildContext context) {
-    // It will provie us total height  and width of our screen
     Size size = MediaQuery.of(context).size;
-    // it enable scrolling on small device
     return SingleChildScrollView(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -21,7 +53,7 @@ class Body extends StatelessWidget {
           Partner(),
           SizedBox(height: 20.0),
           TitleWithMoreBtn(title: "Near From You", press: () {}),
-          FeaturedPlants(),
+          NearMeListing(),
           SizedBox(height: 20.0),
           TitleWithLink(title: "Listing Properties", press: () {}),
           FeaturedPlants(),
@@ -30,3 +62,4 @@ class Body extends StatelessWidget {
     );
   }
 }
+

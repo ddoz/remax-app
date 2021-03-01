@@ -5,130 +5,23 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:remax_app/screens/detail/detail_page.dart';
-import 'package:remax_app/util/constants.dart';
 
-class CarouselDemo extends StatefulWidget {
-  CarouselDemo() : super();
+import '../../../util/constants.dart';
 
-  final String title = "Carousel Demo";
-
+class NearMeListing extends StatefulWidget {
   @override
-  CarouselDemoState createState() => CarouselDemoState();
+  _NearMeListingState createState() => _NearMeListingState();
 }
 
-class CarouselDemoState extends State<CarouselDemo> {
-  //
+class _NearMeListingState extends State<NearMeListing> {
   CarouselSlider carouselSlider;
   int _current = 0;
-  List imgList = [
-    'https://images.unsplash.com/photo-1502117859338-fd9daa518a9a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1554321586-92083ba0a115?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1536679545597-c2e5e1946495?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1543922596-b3bbaba80649?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=800&q=60',
-    'https://images.unsplash.com/photo-1502943693086-33b5b1cfdf2f?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=668&q=80'
-  ];
-
-  List<T> map<T>(List list, Function handler) {
-    List<T> result = [];
-    for (var i = 0; i < list.length; i++) {
-      result.add(handler(i, list[i]));
-    }
-    return result;
-  }
 
   Future<List> getData() async {
     final response = await http.get("https://genius.remax.co.id/papi/listing");
 
     List list = json.decode(response.body)['data'];
     return list;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Container(
-        child: FutureBuilder<List>(
-          future: getData(),
-          builder: (context, snapshot) {
-            if (snapshot.hasError) print(snapshot.error);
-            return snapshot.hasData
-                ? new Stack(
-                    alignment: Alignment.center,
-                    children: <Widget>[
-                      carouselSlider = CarouselSlider(
-                        initialPage: 0,
-                        enlargeCenterPage: true,
-                        autoPlay: false,
-                        reverse: false,
-                        viewportFraction: 1.0,
-                        enableInfiniteScroll: true,
-                        autoPlayInterval: Duration(seconds: 5),
-                        autoPlayAnimationDuration: Duration(milliseconds: 300),
-                        pauseAutoPlayOnTouch: Duration(seconds: 10),
-                        scrollDirection: Axis.horizontal,
-                        onPageChanged: (index) {
-                          setState(() {
-                            _current = index;
-                          });
-                        },
-                        items: snapshot.data.map((data) {
-                          return ItemList(
-                            data: data,
-                            index: _current,
-                            list: snapshot.data,
-                          );
-                        }).toList(),
-                      ),
-                      Container(
-                        margin: EdgeInsets.all(5.0),
-                        child: Row(
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: goToPrevious,
-                              child: Material(
-                                elevation: 2.0,
-                                shape: CircleBorder(),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Icon(
-                                    Icons.navigate_before,
-                                    color: kPrimaryColor,
-                                    size: 25.0,
-                                  ),
-                                ),
-                              ),
-                            ),
-                            Spacer(),
-                            GestureDetector(
-                              onTap: goToNext,
-                              child: Material(
-                                elevation: 2.0,
-                                shape: CircleBorder(),
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Icon(
-                                    Icons.navigate_next,
-                                    color: kPrimaryColor,
-                                    size: 25.0,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  )
-                : new Center(
-                    child: new CircularProgressIndicator(),
-                  );
-          },
-        ),
-      ),
-    );
   }
 
   goToPrevious() {
@@ -139,6 +32,89 @@ class CarouselDemoState extends State<CarouselDemo> {
   goToNext() {
     carouselSlider.nextPage(
         duration: Duration(milliseconds: 300), curve: Curves.decelerate);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      child: FutureBuilder<List>(
+        future: getData(),
+        builder: (context, snapshot) {
+          if (snapshot.hasError) print(snapshot.error);
+          return snapshot.hasData
+              ? new Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    carouselSlider = CarouselSlider(
+                      initialPage: 0,
+                      enlargeCenterPage: true,
+                      autoPlay: false,
+                      reverse: false,
+                      viewportFraction: 1.0,
+                      enableInfiniteScroll: true,
+                      autoPlayInterval: Duration(seconds: 5),
+                      autoPlayAnimationDuration: Duration(milliseconds: 300),
+                      pauseAutoPlayOnTouch: Duration(seconds: 10),
+                      scrollDirection: Axis.horizontal,
+//                      onPageChanged: (index) {
+//                        setState(() {
+//                          _current = index;
+//                        });
+//                      },
+                      items: snapshot.data.map((data) {
+                        return ItemList(
+                          data: data,
+                          index: _current,
+                          list: snapshot.data,
+                        );
+                      }).toList(),
+                    ),
+                    Container(
+                      margin: EdgeInsets.all(5.0),
+                      child: Row(
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: goToPrevious,
+                            child: Material(
+                              elevation: 2.0,
+                              shape: CircleBorder(),
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.navigate_before,
+                                  color: kPrimaryColor,
+                                  size: 25.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                          Spacer(),
+                          GestureDetector(
+                            onTap: goToNext,
+                            child: Material(
+                              elevation: 2.0,
+                              shape: CircleBorder(),
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.navigate_next,
+                                  color: kPrimaryColor,
+                                  size: 25.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                )
+              : new Center(
+                  child: new CircularProgressIndicator(),
+                );
+        },
+      ),
+    );
   }
 }
 

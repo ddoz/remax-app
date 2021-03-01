@@ -2,12 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:remax_app/model/todo_item.dart';
 import 'package:remax_app/sidebar/navigation_bloc.dart';
+import 'package:remax_app/util/constants.dart';
 import 'package:remax_app/util/database_client.dart';
 import 'package:remax_app/util/date_formatter.dart';
 
-import '../main.dart';
-import 'detail/detail_page.dart';
-import 'main_drawer.dart';
+import '../../main.dart';
+import '../detail/detail_page.dart';
+import '../main_drawer.dart';
 
 import 'package:flutter/material.dart';
 
@@ -47,6 +48,14 @@ class _FavoritePageState extends State<FavoritePage> {
   Widget build(BuildContext context) {
     return new Scaffold(
       backgroundColor: Colors.white,
+      appBar: AppBar(
+        iconTheme: IconThemeData(
+          color: kAppBarColorTheme, //change your color here
+        ),
+        title: Text("Favourite", style: TextStyle(color: kAppBarColorTheme),),
+        centerTitle: true,
+        backgroundColor: Colors.white,
+      ),
       body: SafeArea(
         child: Column(
           children: <Widget>[

@@ -9,6 +9,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:pinch_zoom/pinch_zoom.dart';
 import 'package:remax_app/model/todo_item.dart';
+import 'package:remax_app/screens/detail/components/listing_by_office.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:remax_app/util/database_client.dart';
 import 'package:remax_app/util/date_formatter.dart';
@@ -653,7 +654,6 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                     ListingByProfil(),
                     BtnListingByAgent(),
-
                     Container(
                       margin: EdgeInsets.all(15.0),
                       child: Column(
@@ -666,6 +666,7 @@ class _DetailPageState extends State<DetailPage> {
                         ],
                       ),
                     ),
+                    ListingByOffice()
                   ],
                 ),
               ),

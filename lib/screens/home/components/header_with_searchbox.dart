@@ -15,7 +15,7 @@ class HeaderWithSearchBox extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: kDefaultPadding * 2.5),
       // It will cover 20% of our total height
-      height: size.height * 0.2,
+      height: size.height * 0.3,
       child: Stack(
         children: <Widget>[
           Container(
@@ -38,7 +38,7 @@ class HeaderWithSearchBox extends StatelessWidget {
                 children: <Widget>[
                   IconButton(
                     icon: Image.asset("assets/icons/menu_bar.png"),
-                    onPressed: () {},
+                    onPressed: () => Scaffold.of(context).openDrawer(),
                   ),
                   Container(
                     width: 151,
