@@ -7,6 +7,7 @@ import 'package:remax_app/screens/gallery_page.dart';
 import 'package:remax_app/screens/home/home_screen.dart';
 import 'package:remax_app/screens/home_page.dart';
 import 'package:remax_app/screens/search/search_screen.dart';
+import 'package:remax_app/slider_try.dart';
 
 void main() {
   runApp(MyApp());
