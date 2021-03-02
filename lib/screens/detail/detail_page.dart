@@ -4,6 +4,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -585,7 +586,8 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                     new Container(
                       width: MediaQuery.of(context).size.width,
-                      margin: EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0),
+                      margin:
+                          EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0),
                       child: Image.asset('assets/images/banner.jpg'),
                       // decoration: BoxDecoration(
                       //   image: DecorationImage(
@@ -858,34 +860,39 @@ class _DetailPageState extends State<DetailPage> {
                                 ),
                                 new Text(snapshot.data['mmbsEmail']),
                               ]),
+                              SizedBox(height: 10),
+                              GestureDetector(
+                                onTap: () {
+                                  FlutterOpenWhatsapp.sendSingleMessage(snapshot.data['mmbsCellPhone1'], "");
+                                },
+                                child: Card(
+                                  color: kBtnWa,
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    children: <Widget>[
+                                      Image.asset(
+                                        'assets/images/whatsapp.png',
+                                        height: 40.0,
+                                        width: 40.0,
+                                      ),
+                                      Text(
+                                        'Whatsapp',
+                                        style: TextStyle(
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold),
+                                      )
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              SizedBox(height: 10),
                             ]),
                       )
                     : new Text("Loading....",
                         style: new TextStyle(
                             fontSize: 15.0, color: const Color(0xff767472)));
               },
-            ),
-            Container(
-              margin: EdgeInsets.all(8.0),
-              child: Card(
-                color: kBtnWa,
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Image.asset(
-                      'assets/images/whatsapp.png',
-                      height: 40.0,
-                      width: 40.0,
-                    ),
-                    Text(
-                      'Whatsapp',
-                      style: TextStyle(
-                          color: Colors.white, fontWeight: FontWeight.bold),
-                    )
-                  ],
-                ),
-              ),
             ),
           ],
         ),
