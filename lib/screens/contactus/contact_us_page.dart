@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:remax_app/screens/contactus/components/body.dart';
 import 'package:remax_app/sidebar/navigation_bloc.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:webview_flutter/webview_flutter.dart';
@@ -29,10 +30,14 @@ class _ContactUsPageState extends State<ContactUsPage> {
           title: Text("Contact Us", style: TextStyle(color: kAppBarColorTheme),),
           centerTitle: true,
           backgroundColor: Colors.white,
+          actions: <Widget>[
+            IconButton(
+              icon: Image.asset("assets/icons/language_choose.png", color: kAppBarColorTheme,),
+              onPressed: () {},
+            ),
+          ],
         ),
-        body: WebView(
-          initialUrl: 'https://remax.co.id/contact',
-        )
+        body: Body(),
     );
   }
 }

@@ -11,6 +11,8 @@ class HeaderAbout extends StatelessWidget {
   final Size size;
   List<String> imgSlider() {
     List<String> data = [];
+
+    data.add("https://remax.co.id/images/banner/slide-about1.jpg");
     data.add("https://genius.remax.co.id/papi/Webabout/crud/1/links/wbabFileId/121685");
     data.add("https://genius.remax.co.id/papi/Webabout/crud/2/links/wbabFileId/123250");
     return data;
