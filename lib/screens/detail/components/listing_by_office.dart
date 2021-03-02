@@ -43,75 +43,75 @@ class _ListingByOfficeState extends State<ListingByOffice> {
           if (snapshot.hasError) print(snapshot.error);
           return snapshot.hasData
               ? new Stack(
-            alignment: Alignment.center,
-            children: <Widget>[
-              carouselSlider = CarouselSlider(
-                initialPage: 0,
-                enlargeCenterPage: true,
-                autoPlay: false,
-                reverse: false,
-                viewportFraction: 1.0,
-                enableInfiniteScroll: true,
-                autoPlayInterval: Duration(seconds: 5),
-                autoPlayAnimationDuration: Duration(milliseconds: 300),
-                pauseAutoPlayOnTouch: Duration(seconds: 10),
-                scrollDirection: Axis.horizontal,
-//                      onPageChanged: (index) {
-//                        setState(() {
-//                          _current = index;
-//                        });
-//                      },
-                items: snapshot.data.map((data) {
-                  return ItemList(
-                    data: data,
-                    index: _current,
-                    list: snapshot.data,
-                  );
-                }).toList(),
-              ),
-              Container(
-                margin: EdgeInsets.all(5.0),
-                child: Row(
+                  alignment: Alignment.center,
                   children: <Widget>[
-                    GestureDetector(
-                      onTap: goToPrevious,
-                      child: Material(
-                        elevation: 2.0,
-                        shape: CircleBorder(),
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Icon(
-                            Icons.navigate_before,
-                            color: kPrimaryColor,
-                            size: 25.0,
-                          ),
-                        ),
-                      ),
+                    carouselSlider = CarouselSlider(
+                      initialPage: 0,
+                      enlargeCenterPage: true,
+                      autoPlay: false,
+                      reverse: false,
+                      viewportFraction: 1.0,
+                      enableInfiniteScroll: true,
+                      autoPlayInterval: Duration(seconds: 5),
+                      autoPlayAnimationDuration: Duration(milliseconds: 300),
+                      pauseAutoPlayOnTouch: Duration(seconds: 10),
+                      scrollDirection: Axis.horizontal,
+                      onPageChanged: (index) {
+                        setState(() {
+                          _current = index;
+                        });
+                      },
+                      items: snapshot.data.map((data) {
+                        return ItemList(
+                          data: data,
+                          index: _current,
+                          list: snapshot.data,
+                        );
+                      }).toList(),
                     ),
-                    Spacer(),
-                    GestureDetector(
-                      onTap: goToNext,
-                      child: Material(
-                        elevation: 2.0,
-                        shape: CircleBorder(),
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Icon(
-                            Icons.navigate_next,
-                            color: kPrimaryColor,
-                            size: 25.0,
+                    Container(
+                      margin: EdgeInsets.all(5.0),
+                      child: Row(
+                        children: <Widget>[
+                          GestureDetector(
+                            onTap: goToPrevious,
+                            child: Material(
+                              elevation: 2.0,
+                              shape: CircleBorder(),
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.navigate_before,
+                                  color: kPrimaryColor,
+                                  size: 25.0,
+                                ),
+                              ),
+                            ),
                           ),
-                        ),
+                          Spacer(),
+                          GestureDetector(
+                            onTap: goToNext,
+                            child: Material(
+                              elevation: 2.0,
+                              shape: CircleBorder(),
+                              child: Padding(
+                                padding: EdgeInsets.all(8.0),
+                                child: Icon(
+                                  Icons.navigate_next,
+                                  color: kPrimaryColor,
+                                  size: 25.0,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
                   ],
-                ),
-              ),
-            ],
-          )
+                )
               : new Center(
-            child: new CircularProgressIndicator(),
-          );
+                  child: new CircularProgressIndicator(),
+                );
         },
       ),
     );
@@ -142,9 +142,9 @@ class ItemList extends StatelessWidget {
         child: new GestureDetector(
           onTap: () => Navigator.of(context).push(new MaterialPageRoute(
               builder: (BuildContext context) => new DetailPage(
-                list: list,
-                index: index,
-              ))),
+                    list: list,
+                    index: index,
+                  ))),
           child: new Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -156,7 +156,7 @@ class ItemList extends StatelessWidget {
                   height: 120,
                   decoration: BoxDecoration(
                     borderRadius:
-                    new BorderRadius.all(const Radius.circular(10.0)),
+                        new BorderRadius.all(const Radius.circular(10.0)),
                     image: DecorationImage(
                         image: NetworkImage('https://genius.remax.co.id/papi/' +
                             data['listThumbnail']),
@@ -187,66 +187,66 @@ class ItemList extends StatelessWidget {
                           ),
                           data['links']['listListingCategoryId'] == "1"
                               ? Row(children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(
-                                  left: 10.0, right: 10.0),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: new Text(
-                                  NumberFormat.compactCurrency(
-                                      locale: 'id',
-                                      symbol: 'Rp ',
-                                      decimalDigits: 0)
-                                      .format(toInt(
-                                      data['listListingPrice'])),
-                                  style: new TextStyle(
-                                    fontSize: 21.0,
-                                    color: const Color(0xffDC1B2E),
-                                    fontWeight: FontWeight.bold,
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        left: 10.0, right: 10.0),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: new Text(
+                                        NumberFormat.compactCurrency(
+                                                locale: 'id',
+                                                symbol: 'Rp ',
+                                                decimalDigits: 0)
+                                            .format(toInt(
+                                                data['listListingPrice'])),
+                                        style: new TextStyle(
+                                          fontSize: 21.0,
+                                          color: const Color(0xffDC1B2E),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            new Text(
-                              "DIJUAL",
-                              style: new TextStyle(
-                                  fontSize: 12.0,
-                                  color: const Color(0xffDC1B2E)),
-                            )
-                          ])
+                                  new Text(
+                                    "DIJUAL",
+                                    style: new TextStyle(
+                                        fontSize: 12.0,
+                                        color: const Color(0xffDC1B2E)),
+                                  )
+                                ])
                               : Row(children: <Widget>[
-                            Container(
-                              margin: EdgeInsets.only(
-                                  left: 10.0, right: 10.0),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: new Text(
-                                  NumberFormat.compactCurrency(
-                                      locale: 'id',
-                                      symbol: 'Rp ',
-                                      decimalDigits: 0)
-                                      .format(toInt(
-                                      data['listListingPrice'])),
-                                  style: new TextStyle(
-                                    fontSize: 21.0,
-                                    color: const Color(0xff1A3668),
-                                    fontWeight: FontWeight.bold,
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        left: 10.0, right: 10.0),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: new Text(
+                                        NumberFormat.compactCurrency(
+                                                locale: 'id',
+                                                symbol: 'Rp ',
+                                                decimalDigits: 0)
+                                            .format(toInt(
+                                                data['listListingPrice'])),
+                                        style: new TextStyle(
+                                          fontSize: 21.0,
+                                          color: const Color(0xff1A3668),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            new Text(
-                              "DISEWAKAN",
-                              style: new TextStyle(
-                                  fontSize: 12.0,
-                                  color: const Color(0xff1A3668)),
-                            )
-                          ]),
+                                  new Text(
+                                    "DISEWAKAN",
+                                    style: new TextStyle(
+                                        fontSize: 12.0,
+                                        color: const Color(0xff1A3668)),
+                                  )
+                                ]),
                           Row(
                             children: <Widget>[
                               new Container(
                                 margin:
-                                EdgeInsets.only(left: 15.0, right: 15.0),
+                                    EdgeInsets.only(left: 15.0, right: 15.0),
                                 child: new Align(
                                     alignment: Alignment.centerLeft,
                                     child: Column(
@@ -255,17 +255,17 @@ class ItemList extends StatelessWidget {
                                             width: 15, height: 15),
                                         data['listBedroom'] != null
                                             ? new Text(
-                                          data['listBedroom'],
-                                          style: new TextStyle(
-                                            fontSize: 10.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
+                                                data['listBedroom'],
+                                                style: new TextStyle(
+                                                  fontSize: 10.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              )
                                             : new Text('-',
-                                            style: new TextStyle(
-                                              fontSize: 10.0,
-                                              fontWeight: FontWeight.bold,
-                                            ))
+                                                style: new TextStyle(
+                                                  fontSize: 10.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ))
                                       ],
                                     )),
                               ),
@@ -282,17 +282,17 @@ class ItemList extends StatelessWidget {
                                             height: 15),
                                         data['listBathroom'] != null
                                             ? new Text(
-                                          data['listBathroom'],
-                                          style: new TextStyle(
-                                            fontSize: 10.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
+                                                data['listBathroom'],
+                                                style: new TextStyle(
+                                                  fontSize: 10.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              )
                                             : new Text('-',
-                                            style: new TextStyle(
-                                              fontSize: 10.0,
-                                              fontWeight: FontWeight.bold,
-                                            ))
+                                                style: new TextStyle(
+                                                  fontSize: 10.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ))
                                       ],
                                     )),
                               ),
@@ -309,17 +309,17 @@ class ItemList extends StatelessWidget {
                                             height: 15),
                                         data['listBuildingSize'] != null
                                             ? new Text(
-                                          data['listBuildingSize'],
-                                          style: new TextStyle(
-                                            fontSize: 10.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
+                                                data['listBuildingSize'],
+                                                style: new TextStyle(
+                                                  fontSize: 10.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              )
                                             : new Text('-',
-                                            style: new TextStyle(
-                                              fontSize: 10.0,
-                                              fontWeight: FontWeight.bold,
-                                            ))
+                                                style: new TextStyle(
+                                                  fontSize: 10.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ))
                                       ],
                                     )),
                               ),
@@ -336,17 +336,17 @@ class ItemList extends StatelessWidget {
                                             height: 15),
                                         data['listLandSize'] != null
                                             ? new Text(
-                                          data['listLandSize'],
-                                          style: new TextStyle(
-                                            fontSize: 10.0,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        )
+                                                data['listLandSize'],
+                                                style: new TextStyle(
+                                                  fontSize: 10.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              )
                                             : new Text('-',
-                                            style: new TextStyle(
-                                              fontSize: 10.0,
-                                              fontWeight: FontWeight.bold,
-                                            ))
+                                                style: new TextStyle(
+                                                  fontSize: 10.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ))
                                       ],
                                     )),
                               ),
@@ -366,4 +366,3 @@ class ItemList extends StatelessWidget {
     );
   }
 }
-

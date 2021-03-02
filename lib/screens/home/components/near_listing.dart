@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:remax_app/screens/detail/detail_page.dart';
@@ -56,11 +57,11 @@ class _NearMeListingState extends State<NearMeListing> {
                       autoPlayAnimationDuration: Duration(milliseconds: 300),
                       pauseAutoPlayOnTouch: Duration(seconds: 10),
                       scrollDirection: Axis.horizontal,
-//                      onPageChanged: (index) {
-//                        setState(() {
-//                          _current = index;
-//                        });
-//                      },
+                      onPageChanged: (index) {
+                        setState(() {
+                          _current = index;
+                        });
+                      },
                       items: snapshot.data.map((data) {
                         return ItemList(
                           data: data,
@@ -243,112 +244,151 @@ class ItemList extends StatelessWidget {
                                   )
                                 ]),
                           Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: <Widget>[
-                              new Container(
-                                margin:
-                                    EdgeInsets.only(left: 15.0, right: 15.0),
-                                child: new Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Column(
-                                      children: <Widget>[
-                                        new Image.asset('assets/images/bed.png',
-                                            width: 15, height: 15),
-                                        data['listBedroom'] != null
-                                            ? new Text(
-                                                data['listBedroom'],
-                                                style: new TextStyle(
-                                                  fontSize: 10.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              )
-                                            : new Text('-',
-                                                style: new TextStyle(
-                                                  fontSize: 10.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ))
-                                      ],
-                                    )),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  new Container(
+                                    margin: EdgeInsets.only(
+                                        left: 15.0, right: 15.0, top: 5.0),
+                                    child: new Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Row(
+                                          children: <Widget>[
+                                            SvgPicture.asset(
+                                              "assets/icons/home.svg",
+                                              height: 15.0,
+                                            ),
+                                            SizedBox(
+                                              width: 5.0,
+                                            ),
+                                            data['listBuildingSize'] != null
+                                                ? new Text(
+                                                    data['listBuildingSize'] +
+                                                        '(m2)',
+                                                    style: new TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  )
+                                                : new Text('-',
+                                                    style: new TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ))
+                                          ],
+                                        )),
+                                  ),
+                                  SizedBox(height: 5.0,),
+                                  new Container(
+                                    margin: EdgeInsets.only(
+                                        left: 15.0, right: 15.0),
+                                    child: new Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Row(
+                                          children: <Widget>[
+                                            SvgPicture.asset(
+                                              "assets/icons/sofa.svg",
+                                              height: 15.0,
+                                            ),
+                                            SizedBox(
+                                              width: 5.0,
+                                            ),
+                                            data['listBedroom'] != null
+                                                ? new Text(
+                                                    data['listBedroom'],
+                                                    style: new TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  )
+                                                : new Text('-',
+                                                    style: new TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ))
+                                          ],
+                                        )),
+                                  ),
+                                ],
                               ),
-                              new Container(
-                                margin: EdgeInsets.only(
-                                    left: 15.0, right: 15.0, top: 5.0),
-                                child: new Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Column(
-                                      children: <Widget>[
-                                        new Image.asset(
-                                            'assets/images/bathtub.png',
-                                            width: 15,
-                                            height: 15),
-                                        data['listBathroom'] != null
-                                            ? new Text(
-                                                data['listBathroom'],
-                                                style: new TextStyle(
-                                                  fontSize: 10.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              )
-                                            : new Text('-',
-                                                style: new TextStyle(
-                                                  fontSize: 10.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ))
-                                      ],
-                                    )),
-                              ),
-                              new Container(
-                                margin: EdgeInsets.only(
-                                    left: 15.0, right: 15.0, top: 5.0),
-                                child: new Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Column(
-                                      children: <Widget>[
-                                        new Image.asset(
-                                            'assets/images/home.png',
-                                            width: 15,
-                                            height: 15),
-                                        data['listBuildingSize'] != null
-                                            ? new Text(
-                                                data['listBuildingSize'],
-                                                style: new TextStyle(
-                                                  fontSize: 10.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              )
-                                            : new Text('-',
-                                                style: new TextStyle(
-                                                  fontSize: 10.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ))
-                                      ],
-                                    )),
-                              ),
-                              new Container(
-                                margin: EdgeInsets.only(
-                                    left: 15.0, right: 15.0, top: 5.0),
-                                child: new Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Column(
-                                      children: <Widget>[
-                                        new Image.asset(
-                                            'assets/images/area.png',
-                                            width: 15,
-                                            height: 15),
-                                        data['listLandSize'] != null
-                                            ? new Text(
-                                                data['listLandSize'],
-                                                style: new TextStyle(
-                                                  fontSize: 10.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ),
-                                              )
-                                            : new Text('-',
-                                                style: new TextStyle(
-                                                  fontSize: 10.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ))
-                                      ],
-                                    )),
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  new Container(
+                                    margin: EdgeInsets.only(
+                                        left: 15.0, right: 15.0, top: 5.0),
+                                    child: new Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Row(
+                                          children: <Widget>[
+                                            SvgPicture.asset(
+                                              "assets/icons/size.svg",
+                                              height: 15.0,
+                                            ),
+                                            SizedBox(
+                                              width: 5.0,
+                                            ),
+                                            data['listLandSize'] != null
+                                                ? new Text(
+                                                    data['listLandSize'] +
+                                                        '(m2)',
+                                                    style: new TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  )
+                                                : new Text('-',
+                                                    style: new TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ))
+                                          ],
+                                        )),
+                                  ),
+                                  new Container(
+                                    margin: EdgeInsets.only(
+                                        left: 15.0, right: 15.0, top: 5.0),
+                                    child: new Align(
+                                        alignment: Alignment.centerLeft,
+                                        child: Row(
+                                          children: <Widget>[
+                                            SvgPicture.asset(
+                                              "assets/icons/bathub.svg",
+                                              height: 15.0,
+                                            ),
+                                            SizedBox(
+                                              width: 5.0,
+                                            ),
+                                            data['listBathroom'] != null
+                                                ? new Text(
+                                                    data['listBathroom'],
+                                                    style: new TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  )
+                                                : new Text('-',
+                                                    style: new TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ))
+                                          ],
+                                        )),
+                                  ),
+                                ],
                               ),
                             ],
                           ),
