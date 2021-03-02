@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import '../..//detail/detail_page.dart';
@@ -155,13 +156,16 @@ class ItemList extends StatelessWidget {
                           children: <Widget>[
                             new Container(
                               margin: EdgeInsets.only(
-                                  left: 15.0, right: 15.0, top: 5.0),
+                                  left: 10.0, top: 5.0),
                               child: new Align(
                                   alignment: Alignment.centerLeft,
-                                  child: Column(
+                                  child: Row(
                                     children: <Widget>[
-                                      new Image.asset('assets/images/bed.png',
-                                          width: 15, height: 15),
+                                      SvgPicture.asset(
+                                        "assets/icons/sofa.svg",
+                                        height: 10.0,
+                                      ),
+                                      SizedBox(width: 5.0,),
                                       list[i]['listBedroom'] != null
                                           ? new Text(
                                               list[i]['listBedroom'],
@@ -180,15 +184,16 @@ class ItemList extends StatelessWidget {
                             ),
                             new Container(
                               margin: EdgeInsets.only(
-                                  left: 15.0, right: 15.0, top: 5.0),
+                                  left: 5.0, top: 5.0),
                               child: new Align(
                                   alignment: Alignment.centerLeft,
-                                  child: Column(
+                                  child: Row(
                                     children: <Widget>[
-                                      new Image.asset(
-                                          'assets/images/bathtub.png',
-                                          width: 15,
-                                          height: 15),
+                                      SvgPicture.asset(
+                                        "assets/icons/bathub.svg",
+                                        height: 10.0,
+                                      ),
+                                      SizedBox(width: 5.0,),
                                       list[i]['listBathroom'] != null
                                           ? new Text(
                                               list[i]['listBathroom'],
@@ -207,16 +212,19 @@ class ItemList extends StatelessWidget {
                             ),
                             new Container(
                               margin: EdgeInsets.only(
-                                  left: 15.0, right: 15.0, top: 5.0),
+                                  left: 5.0, top: 5.0),
                               child: new Align(
                                   alignment: Alignment.centerLeft,
-                                  child: Column(
+                                  child: Row(
                                     children: <Widget>[
-                                      new Image.asset('assets/images/home.png',
-                                          width: 15, height: 15),
+                                      SvgPicture.asset(
+                                        "assets/icons/home.svg",
+                                        height: 10.0,
+                                      ),
+                                      SizedBox(width: 5.0,),
                                       list[i]['listBuildingSize'] != null
                                           ? new Text(
-                                              list[i]['listBuildingSize'],
+                                              list[i]['listBuildingSize']+'(m2)',
                                               style: new TextStyle(
                                                 fontSize: 10.0,
                                                 fontWeight: FontWeight.bold,
@@ -232,16 +240,19 @@ class ItemList extends StatelessWidget {
                             ),
                             new Container(
                               margin: EdgeInsets.only(
-                                  left: 15.0, right: 15.0, top: 5.0),
+                                  left: 5.0, top: 5.0),
                               child: new Align(
                                   alignment: Alignment.centerLeft,
-                                  child: Column(
+                                  child: Row(
                                     children: <Widget>[
-                                      new Image.asset('assets/images/area.png',
-                                          width: 15, height: 15),
+                                      SvgPicture.asset(
+                                        "assets/icons/size.svg",
+                                        height: 10.0,
+                                      ),
+                                      SizedBox(width: 5.0,),
                                       list[i]['listLandSize'] != null
                                           ? new Text(
-                                              list[i]['listLandSize'],
+                                              list[i]['listLandSize']+'(m2)',
                                               style: new TextStyle(
                                                 fontSize: 10.0,
                                                 fontWeight: FontWeight.bold,

@@ -53,6 +53,13 @@ class _DetailPageState extends State<DetailPage> {
     return prov;
   }
 
+  Future<String> getPropertyType() async {
+    final response = await http.get(
+        "https://genius.remax.co.id/papi/PropertyType/${widget.list[widget.index]['links']['listPropertyTypeId']}");
+    String type = json.decode(response.body)['data']['prtlName']['id_ID'];
+    return type;
+  }
+
   Future<List<dynamic>> getDataMemberFoto() async {
     final response = await http.get(
         "https://genius.remax.co.id/papi/Membership/${widget.list[widget.index]['links']['listMmbsId']}");
@@ -577,6 +584,42 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
                     new Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0),
+                      child: Image.asset('assets/images/banner.jpg'),
+                      // decoration: BoxDecoration(
+                      //   image: DecorationImage(
+                      //       image: Image.asset(
+                      //           'assets/asd/asd'),
+                      //       fit: BoxFit.fill),
+                      // ),
+                    ),
+                    new Container(
+                      margin: EdgeInsets.all(8.0),
+                      child: Card(
+                        color: kPrimaryColor,
+                        child: Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                'Apply KPR For This Listing',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Icon(
+                                Icons.navigate_next,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+                    new Container(
                       margin:
                           EdgeInsets.only(top: 15.0, left: 15.0, bottom: 10.0),
                       child: new Align(
@@ -615,7 +658,25 @@ class _DetailPageState extends State<DetailPage> {
                                     child: Text("Property Type")),
                                 Container(
                                     margin: EdgeInsets.all(8),
-                                    child: Text("House")),
+                                    child: new FutureBuilder<String>(
+                                      future: getPropertyType(),
+                                      builder: (context, snapshot) {
+                                        if (snapshot.hasError)
+                                          print(snapshot.error);
+                                        return snapshot.hasData
+                                            ? new Text(snapshot.data,
+                                                style: new TextStyle(
+                                                    fontSize: 12.0,
+                                                    fontWeight:
+                                                        FontWeight.bold))
+                                            : new Text("Loading....",
+                                                style: new TextStyle(
+                                                    fontSize: 12.0,
+                                                    fontWeight: FontWeight.bold,
+                                                    color: const Color(
+                                                        0xff767472)));
+                                      },
+                                    ))
                               ]),
                               TableRow(
                                   decoration:
@@ -634,7 +695,20 @@ class _DetailPageState extends State<DetailPage> {
                                     child: Text("Bedroom")),
                                 Container(
                                     margin: EdgeInsets.all(8),
-                                    child: Text("3")),
+                                    child: widget.list[widget.index]
+                                                ['listBedroom'] !=
+                                            null
+                                        ? new Text(
+                                            widget.list[widget.index]
+                                                ['listBedroom'],
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.bold),
+                                          )
+                                        : new Text('-',
+                                            style: TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.bold))),
                               ]),
                               TableRow(
                                   decoration:
@@ -645,7 +719,22 @@ class _DetailPageState extends State<DetailPage> {
                                         child: Text("Bathroom")),
                                     Container(
                                         margin: EdgeInsets.all(8),
-                                        child: Text("2")),
+                                        child: widget.list[widget.index]
+                                                    ['listBathroom'] !=
+                                                null
+                                            ? new Text(
+                                                widget.list[widget.index]
+                                                    ['listBathroom'],
+                                                style: TextStyle(
+                                                    fontSize: 12.0,
+                                                    fontWeight:
+                                                        FontWeight.bold),
+                                              )
+                                            : new Text('-',
+                                                style: TextStyle(
+                                                    fontSize: 12.0,
+                                                    fontWeight:
+                                                        FontWeight.bold))),
                                   ]),
                             ],
                           ),

@@ -1,8 +1,8 @@
 import 'package:bloc/bloc.dart';
-import 'file:///D:/ITERA/Project/Flutter/remax_app/lib/screens/about/about_page.dart';
+import 'package:remax_app/screens/about/about_page.dart';
 import 'package:remax_app/screens/agents_page.dart';
-import 'file:///D:/ITERA/Project/Flutter/remax_app/lib/screens/contactus/contact_us_page.dart';
-import 'file:///D:/ITERA/Project/Flutter/remax_app/lib/screens/favourite/favourite_page.dart';
+import 'package:remax_app/screens/contactus/contact_us_page.dart';
+import 'package:remax_app/screens/favourite/favourite_page.dart';
 import 'package:remax_app/screens/gallery_page.dart';
 import 'package:remax_app/screens/home_page.dart';
 import 'package:remax_app/screens/map_page.dart';
