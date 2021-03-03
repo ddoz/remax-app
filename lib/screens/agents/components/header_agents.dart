@@ -1,10 +1,9 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 
+class HeaderAgents extends StatelessWidget {
 
-class HeaderAbout extends StatelessWidget {
-
-  const HeaderAbout({
+  const HeaderAgents({
     Key key,
     @required this.size,
   }) : super(key: key);
@@ -12,9 +11,9 @@ class HeaderAbout extends StatelessWidget {
   List<String> imgSlider() {
     List<String> data = [];
 
-    data.add("https://remax.co.id/images/banner/slide-about1.jpg");
-    data.add("https://genius.remax.co.id/papi/Webabout/crud/1/links/wbabFileId/121685");
-    data.add("https://genius.remax.co.id/papi/Webabout/crud/2/links/wbabFileId/123250");
+    data.add("https://remax.co.id/images/become-agent.jpg");
+    // data.add("https://genius.remax.co.id/papi/Webabout/crud/1/links/wbabFileId/121685");
+    // data.add("https://genius.remax.co.id/papi/Webabout/crud/2/links/wbabFileId/123250");
     return data;
   }
 

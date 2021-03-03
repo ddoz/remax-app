@@ -8,6 +8,12 @@ const kAppBarColorTheme = Color(0xFF07439A);
 const kRedColor = Color(0xffDC1B2E);
 const kTableRowColor = Color(0xffE5F3FA);
 const kBtnWa = Color(0xff25D366);
+const kLightGrey = Color(0xffdddddd);
+const kIconColor = Color(0xffaeaeae);
+const kTxtReadMore = Color(0xff3DC5FF);
+const kRedGradient = Color(0xffdf222f);
+const kOrangeGradient = Color(0xfff24e1a);
+
 
 
 const double kDefaultPadding = 20.0;

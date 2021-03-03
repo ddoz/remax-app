@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:remax_app/screens/about/about_page.dart';
-import 'package:remax_app/screens/agents_page.dart';
+import 'package:remax_app/screens/agents/agents_page.dart';
 import 'package:remax_app/screens/contactus/contact_us_page.dart';
 import 'package:remax_app/screens/favourite/favourite_page.dart';
+import 'package:remax_app/screens/franchise/franchise_page.dart';
 import 'package:remax_app/screens/gallery_page.dart';
 import 'package:remax_app/screens/map_page.dart';
+import 'package:remax_app/screens/search/search_screen.dart';
 import 'package:remax_app/screens/sign_in_page.dart';
 
 class MainDrawer extends StatelessWidget {
@@ -58,7 +60,11 @@ class MainDrawer extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: (){},
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(new MaterialPageRoute(
+                      builder: (BuildContext context) => new SearchScreen()));
+                },
                 child: Container(
                   margin: EdgeInsets.only(left: 30.0, top: 15.0),
                   child: Row(
@@ -88,7 +94,11 @@ class MainDrawer extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: (){},
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(new MaterialPageRoute(
+                      builder: (BuildContext context) => new FranchisePage()));
+                },
                 child: Container(
                   margin: EdgeInsets.only(left: 30.0, top: 15.0),
                   child: Row(
@@ -101,7 +111,11 @@ class MainDrawer extends StatelessWidget {
                 ),
               ),
               GestureDetector(
-                onTap: (){},
+                onTap: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).push(new MaterialPageRoute(
+                      builder: (BuildContext context) => new AgentsPage()));
+                },
                 child: Container(
                   margin: EdgeInsets.only(left: 30.0, top: 15.0),
                   child: Row(

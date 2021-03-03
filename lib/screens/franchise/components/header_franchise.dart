@@ -1,20 +1,18 @@
 import 'package:carousel_pro/carousel_pro.dart';
 import 'package:flutter/material.dart';
 
+class HeaderFranchise extends StatelessWidget {
 
-class HeaderAbout extends StatelessWidget {
-
-  const HeaderAbout({
+  const HeaderFranchise({
     Key key,
     @required this.size,
   }) : super(key: key);
   final Size size;
+
+
   List<String> imgSlider() {
     List<String> data = [];
-
-    data.add("https://remax.co.id/images/banner/slide-about1.jpg");
-    data.add("https://genius.remax.co.id/papi/Webabout/crud/1/links/wbabFileId/121685");
-    data.add("https://genius.remax.co.id/papi/Webabout/crud/2/links/wbabFileId/123250");
+    data.add("assets/images/bg_franchise.png");
     return data;
   }
 
@@ -23,17 +21,17 @@ class HeaderAbout extends StatelessWidget {
     return Container(
       width: double.infinity,
       //height: 300,
-      height: size.height * .65,
+      height: size.height * .85,
       child: Carousel(
         dotBgColor: Colors.transparent,
-        dotSize: 4.0,
+        dotSize: 0.0,
         dotSpacing: 10.0,
         dotVerticalPadding: 50,
         images: imgSlider().map((fileImage) {
           return Container(
             child: ClipRRect(
               child: GestureDetector(
-                child: Image.network(
+                child: Image.asset(
                   fileImage,
                   width: 10000,
                   fit: BoxFit.cover,
