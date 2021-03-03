@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:remax_app/util/constants.dart';
 
@@ -11,11 +12,6 @@ class ContentContactUs extends StatefulWidget {
 }
 
 class _ContentContactUsState extends State<ContentContactUs> {
-  Future<List<dynamic>> getDataMemberFoto() async {
-    final response = await http.get("https://genius.remax.co.id/papi/webabout");
-    List<dynamic> data = json.decode(response.body)['data'];
-    return data;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -68,12 +64,12 @@ class _ContentContactUsState extends State<ContentContactUs> {
               ),
               Container(
                 margin: EdgeInsets.only(
-                    top: 20.0, left: 15.0, right: 15.0, bottom: 10.0),
+                    top: 20.0, left: 15.0, right: 15.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    Icon(Icons.location_on, color: kPrimaryColor,),
+                    SvgPicture.asset("assets/icons/location.svg"),
                     SizedBox(width: 5.0,),
                     Text(
                       'Jl. Jendral Sudirman Kav. 52 - 53 (SCBD) \nJakarta - 12190\nIndonesia',
@@ -83,7 +79,197 @@ class _ContentContactUsState extends State<ContentContactUs> {
                     ),
                   ],
                 ),
-              )
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                    top: 10.0, left: 15.0, right: 15.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SvgPicture.asset("assets/icons/call_sc.svg"),
+                    SizedBox(width: 5.0,),
+                    Text(
+                      '+62 21 5151 393',
+                      style: new TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(
+                    top: 10.0, left: 15.0, right: 15.0, bottom: 10.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SvgPicture.asset("assets/icons/mail.svg"),
+                    SizedBox(width: 5.0,),
+                    Text(
+                      'info@remax.co.id',
+                      style: new TextStyle(
+                          fontSize: 12.0,
+                          fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                color: Colors.grey,
+                child: SizedBox(height: 1,
+                    width: MediaQuery.of(context).size.width * 0.8),
+              ),
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(top: 10, left: 15.0, right: 15.0),
+                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                height: 45,
+                decoration: BoxDecoration(
+                  color: kLightGrey,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextField(
+                        onChanged: (value) {},
+                        decoration: InputDecoration(
+                          hintText: "Name",
+                          hintStyle: TextStyle(
+                            color: kPrimaryColor.withOpacity(0.5),
+                          ),
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          // surffix isn't working properly  with SVG
+                          // thats why we use row
+                          // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
+                        ),
+                      ),
+                    ),
+                    SvgPicture.asset("assets/icons/person.svg"),
+                  ],
+                ),
+              ),
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(top: 10, left: 15.0, right: 15.0),
+                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                height: 45,
+                decoration: BoxDecoration(
+                  color: kLightGrey,
+                  borderRadius: BorderRadius.circular(10),
+
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextField(
+                        onChanged: (value) {},
+                        decoration: InputDecoration(
+                          hintText: "Email",
+                          hintStyle: TextStyle(
+                            color: kPrimaryColor.withOpacity(0.5),
+                          ),
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          // surffix isn't working properly  with SVG
+                          // thats why we use row
+                          // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
+                        ),
+                      ),
+                    ),
+                    SvgPicture.asset("assets/icons/mail.svg", color: kIconColor,),
+                  ],
+                ),
+              ),
+              Container(
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(top: 10, left: 15.0, right: 15.0),
+                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                height: 45,
+                decoration: BoxDecoration(
+                  color: kLightGrey,
+                  borderRadius: BorderRadius.circular(10),
+
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextField(
+                        onChanged: (value) {},
+                        decoration: InputDecoration(
+                          hintText: "Phone",
+                          hintStyle: TextStyle(
+                            color: kPrimaryColor.withOpacity(0.5),
+                          ),
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          // surffix isn't working properly  with SVG
+                          // thats why we use row
+                          // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
+                        ),
+                      ),
+                    ),
+                    SvgPicture.asset("assets/icons/call_sc.svg", color: kIconColor),
+                  ],
+                ),
+              ),
+              Container(
+                alignment: Alignment.topCenter,
+                margin: EdgeInsets.only(top: 10, left: 15.0, right: 15.0),
+                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                height: 85,
+                decoration: BoxDecoration(
+                  color: kLightGrey,
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Row(
+                  children: <Widget>[
+                    Expanded(
+                      child: TextField(
+                        onChanged: (value) {},
+                        decoration: InputDecoration(
+                          hintText: "Message",
+                          hintStyle: TextStyle(
+                            color: kPrimaryColor.withOpacity(0.5),
+                          ),
+                          enabledBorder: InputBorder.none,
+                          focusedBorder: InputBorder.none,
+                          // surffix isn't working properly  with SVG
+                          // thats why we use row
+                          // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
+                        ),
+                      ),
+                    ),
+                    SvgPicture.asset("assets/icons/message.svg"),
+                  ],
+                ),
+              ),
+              new Container(
+                margin: EdgeInsets.all(10.0),
+                child: Card(
+                  color: kAppBarColorTheme,
+                  child: Padding(
+                    padding: EdgeInsets.all(10.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          'Submit',
+                          style: TextStyle(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+
             ],
           ),
         ),
