@@ -59,6 +59,158 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                 color: Colors.white,
               ),
             ),
+            new Container(
+              margin: EdgeInsets.only(
+                  top: 25.0),
+              child: new Align(
+                child: new Text(
+                  'Start Up Training',
+                  style: new TextStyle(
+                      fontSize: 20.0,
+                      color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            new Container(
+              margin: EdgeInsets.only(
+                  top: 10.0, left: 15.0, right: 15.0),
+              child: new Align(
+                child: new Text(
+                  'RE/MAX provides the best training program that is offered in the industry.',
+                  textAlign: TextAlign.center,
+                  style: new TextStyle(
+                      fontSize: 15.0,
+                      color: Colors.white,),
+                ),
+              ),
+            ),
+            Container(
+                margin:  EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0, bottom: 40.0),
+                child: new OutlineButton(
+                  shape: StadiumBorder(),
+                  textColor: Colors.white,
+                  child: Text('Read More'),
+                  borderSide: BorderSide(
+                      color: Colors.white, style: BorderStyle.solid,
+                      width: 1),
+                  onPressed: () {},
+                )
+            ),
+            new Container(
+              margin: EdgeInsets.only(
+                  top: 25.0),
+              child: new Align(
+                child: new Text(
+                  'On Going Training',
+                  style: new TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            new Container(
+              margin: EdgeInsets.only(
+                  top: 10.0, left: 15.0, right: 15.0),
+              child: new Align(
+                child: new Text(
+                  'The advantage that you will gain by owning a RE/MAX office is not limited to classroom trainings but unlimited access to training 24 hours a day, 365 days a year.',
+                  textAlign: TextAlign.center,
+                  style: new TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.white,),
+                ),
+              ),
+            ),
+            Container(
+                margin:  EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0, bottom: 40.0),
+                child: new OutlineButton(
+                  shape: StadiumBorder(),
+                  textColor: Colors.white,
+                  child: Text('Read More'),
+                  borderSide: BorderSide(
+                      color: Colors.white, style: BorderStyle.solid,
+                      width: 1),
+                  onPressed: () {},
+                )
+            ),
+            new Container(
+              margin: EdgeInsets.only(
+                  top: 25.0),
+              child: new Align(
+                child: new Text(
+                  'Momentum',
+                  style: new TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            new Container(
+              margin: EdgeInsets.only(
+                  top: 10.0, left: 15.0, right: 15.0),
+              child: new Align(
+                child: new Text(
+                  'A specialized training program created for business owners to understand the agency business on a deeper level.',
+                  textAlign: TextAlign.center,
+                  style: new TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.white,),
+                ),
+              ),
+            ),
+            Container(
+                margin:  EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0, bottom: 40.0),
+                child: new OutlineButton(
+                  shape: StadiumBorder(),
+                  textColor: Colors.white,
+                  child: Text('Read More'),
+                  borderSide: BorderSide(
+                      color: Colors.white, style: BorderStyle.solid,
+                      width: 1),
+                  onPressed: () {},
+                )
+            ),
+            new Container(
+              margin: EdgeInsets.only(
+                  top: 25.0),
+              child: new Align(
+                child: new Text(
+                  'Bootcamp',
+                  style: new TextStyle(
+                    fontSize: 20.0,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+            new Container(
+              margin: EdgeInsets.only(
+                  top: 10.0, left: 15.0, right: 15.0),
+              child: new Align(
+                child: new Text(
+                  'A specialized training for agents consisting of 12 modules is proven to increase productivity',
+                  textAlign: TextAlign.center,
+                  style: new TextStyle(
+                    fontSize: 15.0,
+                    color: Colors.white,),
+                ),
+              ),
+            ),
+            Container(
+                margin:  EdgeInsets.only(left: 15.0, right: 15.0, top: 10.0, bottom: 40.0),
+                child: new OutlineButton(
+                  shape: StadiumBorder(),
+                  textColor: Colors.white,
+                  child: Text('Read More'),
+                  borderSide: BorderSide(
+                      color: Colors.white, style: BorderStyle.solid,
+                      width: 1),
+                  onPressed: () {},
+                )
+            )
           ],
         )
       ),

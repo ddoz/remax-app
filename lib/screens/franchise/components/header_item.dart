@@ -34,13 +34,12 @@ class ItemHeaderFranchise extends StatelessWidget {
             ),
           ),
           Container(
-            alignment: Alignment.center,
             margin: EdgeInsets.all(5),
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
               children: <Widget>[
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Container(
                       height: 100,
@@ -96,6 +95,8 @@ class ItemHeaderFranchise extends StatelessWidget {
                   ],
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Container(
                       height: 100,
@@ -151,6 +152,8 @@ class ItemHeaderFranchise extends StatelessWidget {
                   ],
                 ),
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   children: <Widget>[
                     Container(
                       height: 110,

@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:remax_app/screens/about/about_page.dart';
-import 'file:///D:/TIK/Android/remax-app/lib/screens/agents/agents_page.dart';
+import 'package:remax_app/screens/agents/agents_page.dart';
 import 'package:remax_app/screens/contactus/contact_us_page.dart';
 import 'package:remax_app/screens/favourite/favourite_page.dart';
 import 'package:remax_app/screens/gallery_page.dart';
