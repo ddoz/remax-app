@@ -9,7 +9,8 @@ class TodoItem extends StatelessWidget {
   String _dateCreated;
   int _id;
 
-  TodoItem(this._id, this._itemTitle, this._itemThumbnail, this._itemPrice, this._itemCategory, this._dateCreated);
+  TodoItem(this._id, this._itemTitle, this._itemThumbnail, this._itemPrice,
+      this._itemCategory, this._dateCreated);
 
   TodoItem.map(dynamic obj) {
     this._itemTitle = obj["title"];
@@ -21,10 +22,15 @@ class TodoItem extends StatelessWidget {
   }
 
   String get itemTitle => _itemTitle;
+
   String get itemThumbnail => _itemThumbnail;
+
   String get itemPrice => _itemPrice;
+
   String get itemCategory => _itemCategory;
+
   String get dateCreated => _dateCreated;
+
   int get id => _id;
 
   Map<String, dynamic> toMap() {
@@ -59,235 +65,113 @@ class TodoItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-        return new Container(
-          padding: const EdgeInsets.all(10.0),
-          child: new GestureDetector(
+    return new Container(
+      padding: const EdgeInsets.all(10.0),
+      child: new GestureDetector(
 //            onTap: () => Navigator.of(context).push(new MaterialPageRoute(
 //                builder: (BuildContext context) => new DetailPage(
 //                  list: list,
 //                  index: i,
 //                ))),
-            child: new Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
+        child: new Card(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: 120.0,
+                height: 120.0,
+                //padding: EdgeInsets.all(100),
+                decoration: BoxDecoration(
+                  borderRadius:
+                      new BorderRadius.all(const Radius.circular(10.0)),
+                  image: DecorationImage(
+                      image: NetworkImage(
+                          'https://genius.remax.co.id/papi/' + _itemThumbnail),
+                      fit: BoxFit.cover),
+                ),
               ),
-              child: Column(
-                children: <Widget>[
+              Flexible(
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: <Widget>[
                   Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(100),
-                    decoration: BoxDecoration(
-                      borderRadius: new BorderRadius.all( const Radius.circular(10.0)
-                      ),
-                      image: DecorationImage(
-                          image: NetworkImage(
-                              'https://genius.remax.co.id/papi/' +
-                                  _itemThumbnail),
-                          fit: BoxFit.cover),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 5.0),
+                    margin: EdgeInsets.only(
+                        left: 10.0, right: 5.0, top: 10.0, bottom: 5.0),
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: new Text(
                         _itemTitle,
                         overflow: TextOverflow.ellipsis,
                         style: new TextStyle(
-                          fontSize: 16.0,
+                          fontSize: 12.0,
                           color: const Color(0xff767472),
                           fontWeight: FontWeight.bold,
                         ),
                       ),
                     ),
                   ),
-//                  Row(
-//                    children: <Widget>[
-//                      new Container(
-//                        margin:
-//                        EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
-//                        child: new Align(
-//                            alignment: Alignment.centerLeft,
-//                            child: Column(
-//                              children: <Widget>[
-//                                new Image.asset('assets/images/bed.png',
-//                                    width: 15, height: 15),
-//                                list[i]['listBedroom'] != null
-//                                    ? new Text(list[i]['listBedroom'],
-//                                  style: new TextStyle(
-//                                    fontSize: 10.0,
-//                                    fontWeight: FontWeight.bold,
-//                                  ),)
-//                                    : new Text('-',
-//                                    style: new TextStyle(
-//                                      fontSize: 10.0,
-//                                      fontWeight: FontWeight.bold,
-//                                    ))
-//                              ],
-//                            )),
-//                      ),
-//                      new Container(
-//                        margin:
-//                        EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
-//                        child: new Align(
-//                            alignment: Alignment.centerLeft,
-//                            child: Column(
-//                              children: <Widget>[
-//                                new Image.asset('assets/images/bathtub.png',
-//                                    width: 15, height: 15),
-//                                list[i]['listBathroom'] != null
-//                                    ? new Text(list[i]['listBathroom'],
-//                                  style: new TextStyle(
-//                                    fontSize: 10.0,
-//                                    fontWeight: FontWeight.bold,
-//                                  ),)
-//                                    : new Text('-',
-//                                    style: new TextStyle(
-//                                      fontSize: 10.0,
-//                                      fontWeight: FontWeight.bold,
-//                                    ))
-//                              ],
-//                            )),
-//                      ),
-//                      new Container(
-//                        margin:
-//                        EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
-//                        child: new Align(
-//                            alignment: Alignment.centerLeft,
-//                            child: Column(
-//                              children: <Widget>[
-//                                new Image.asset('assets/images/home.png',
-//                                    width: 15, height: 15),
-//                                list[i]['listBuildingSize'] != null
-//                                    ? new Text(list[i]['listBuildingSize'],
-//                                  style: new TextStyle(
-//                                    fontSize: 10.0,
-//                                    fontWeight: FontWeight.bold,
-//                                  ),)
-//                                    : new Text('-',
-//                                    style: new TextStyle(
-//                                      fontSize: 10.0,
-//                                      fontWeight: FontWeight.bold,
-//                                    ))
-//                              ],
-//                            )),
-//                      ),
-//                      new Container(
-//                        margin:
-//                        EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
-//                        child: new Align(
-//                            alignment: Alignment.centerLeft,
-//                            child: Column(
-//                              children: <Widget>[
-//                                new Image.asset('assets/images/area.png',
-//                                    width: 15, height: 15),
-//                                list[i]['listLandSize'] != null
-//                                    ? new Text(list[i]['listLandSize'],
-//                                  style: new TextStyle(
-//                                    fontSize: 10.0,
-//                                    fontWeight: FontWeight.bold,
-//                                  ),)
-//                                    : new Text('-',
-//                                    style: new TextStyle(
-//                                      fontSize: 10.0,
-//                                      fontWeight: FontWeight.bold,
-//                                    ))
-//                              ],
-//                            )),
-//                      ),
-//                    ],
-//                  ),
                   _itemCategory == "1"
                       ? Row(children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.all(10.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: new Text(
-                          NumberFormat.compactCurrency(
-                              locale: 'id',
-                              symbol: 'Rp ',
-                              decimalDigits: 0)
-                              .format(toInt(_itemPrice)),
-                          style: new TextStyle(
-                            fontSize: 21.0,
-                            color: const Color(0xffDC1B2E),
-                            fontWeight: FontWeight.bold,
+                          Container(
+                            margin: EdgeInsets.all(10.0),
+                            child: Align(
+                              alignment: Alignment.centerLeft,
+                              child: new Text(
+                                NumberFormat.compactCurrency(
+                                        locale: 'id',
+                                        symbol: 'Rp ',
+                                        decimalDigits: 0)
+                                    .format(toInt(_itemPrice)),
+                                style: new TextStyle(
+                                  fontSize: 21.0,
+                                  color: const Color(0xffDC1B2E),
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
                           ),
+                          new Text(
+                            "DIJUAL",
+                            style: new TextStyle(
+                                fontSize: 12.0, color: const Color(0xffDC1B2E)),
+                          )
+                        ])
+                      : Row(
+                          children: <Widget>[
+                            Container(
+                              margin: EdgeInsets.all(10.0),
+                              child: Align(
+                                alignment: Alignment.centerLeft,
+                                child: new Text(
+                                  NumberFormat.compactCurrency(
+                                          locale: 'id',
+                                          symbol: 'Rp ',
+                                          decimalDigits: 0)
+                                      .format(toInt(_itemPrice)),
+                                  style: new TextStyle(
+                                    fontSize: 21.0,
+                                    color: const Color(0xff1A3668),
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            new Text(
+                              "DISEWAKAN",
+                              style: new TextStyle(
+                                  fontSize: 12.0, color: const Color(0xff1A3668)),
+                            )
+                          ],
                         ),
-                      ),
-                    ),
-                    new Text(
-                      "DIJUAL",
-                      style: new TextStyle(
-                          fontSize: 12.0, color: const Color(0xffDC1B2E)),
-                    )
-                  ])
-                      : Row(children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.all(10.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: new Text(
-                          NumberFormat.compactCurrency(
-                              locale: 'id',
-                              symbol: 'Rp ',
-                              decimalDigits: 0)
-                              .format(toInt(_itemPrice)),
-                          style: new TextStyle(
-                            fontSize: 21.0,
-                            color: const Color(0xff1A3668),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    new Text(
-                      "DISEWAKAN",
-                      style: new TextStyle(
-                          fontSize: 12.0, color: const Color(0xff1A3668)),
-                    )
-                  ]),
-                ],
+                ]),
               ),
-            ),
+            ],
           ),
-        );
-//    return Container(
-//      margin: const EdgeInsets.all(8.0),
-//      child: Row(
-//        crossAxisAlignment: CrossAxisAlignment.start,
-//        children: <Widget>[
-//          //solve the overflow problem
-//          Expanded(
-//
-//            child: Column(
-//              crossAxisAlignment: CrossAxisAlignment.start,
-//              children: <Widget>[
-//                Text(
-//                  _itemTitle,
-//                  style: TextStyle(
-//                      color: Colors.black,
-//                      fontWeight: FontWeight.bold,
-//                      fontSize: 18.0),
-//                  maxLines: 1,
-//                  overflow: TextOverflow.ellipsis,
-//                ),
-//                Container(
-//                  margin: const EdgeInsets.only(top: 10.0),
-//                  child: Text(
-//                    "Created on: $_dateCreated",
-//                    style: TextStyle(
-//                        color: Colors.black,
-//                        fontSize: 12.0,
-//                        fontStyle: FontStyle.italic),
-//                  ),
-//                ),
-//              ],
-//            ),
-//          )
-//        ],
-//      ),
-//    );
+        ),
+      ),
+    );
   }
 }
