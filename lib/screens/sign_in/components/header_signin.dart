@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:remax_app/util/constants.dart';
 
-class HeaderContactUs extends StatelessWidget {
-  const HeaderContactUs({
+class HeaderSignIn extends StatelessWidget {
+  const HeaderSignIn({
     Key key,
     @required this.size,
   }) : super(key: key);
@@ -15,7 +14,7 @@ class HeaderContactUs extends StatelessWidget {
     return Container(
       margin: EdgeInsets.only(bottom: kDefaultPadding * 2.5),
       // It will cover 20% of our total height
-      height: size.height * 0.35,
+      height: size.height * 0.65,
       child: Stack(
         children: <Widget>[
           Container(
@@ -33,7 +32,7 @@ class HeaderContactUs extends StatelessWidget {
                   fit: BoxFit.cover,
                 )),
             child: SafeArea(
-              child: Column(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(

@@ -6,6 +6,7 @@ import 'package:remax_app/screens/contactus/contact_us_page.dart';
 import 'package:remax_app/screens/favourite/favourite_page.dart';
 import 'package:remax_app/screens/franchise/franchise_page.dart';
 import 'package:remax_app/screens/search/search_screen.dart';
+import 'package:remax_app/screens/sign_in/sign_in_page.dart';
 
 class MainDrawer extends StatelessWidget {
   @override
@@ -204,7 +205,11 @@ class MainDrawer extends StatelessWidget {
               ),
             ),
             GestureDetector(
-              onTap: () {},
+              onTap: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).push(new MaterialPageRoute(
+                    builder: (BuildContext context) => new SignInPage()));
+              },
               child: Container(
                 margin: EdgeInsets.only(left: 30.0, top: 15.0),
                 child: Row(children: <Widget>[
