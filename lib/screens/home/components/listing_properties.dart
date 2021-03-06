@@ -7,6 +7,7 @@ import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:remax_app/screens/detail/detail_page.dart';
 import 'package:remax_app/util/constants.dart';
+import 'package:shimmer/shimmer.dart';
 
 class ListingProperties extends StatefulWidget {
   @override
@@ -42,7 +43,8 @@ class _ListingPropertiesState extends State<ListingProperties> {
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
           return snapshot.hasData
-              ? new Stack(
+              ?
+          new Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
                     carouselSlider = CarouselSlider(
@@ -111,9 +113,81 @@ class _ListingPropertiesState extends State<ListingProperties> {
                   ],
                 )
               : new Center(
-                  child: new CircularProgressIndicator(),
+                  child: new LoadingShimmerEffect()
                 );
         },
+      ),
+    );
+  }
+}
+
+class LoadingShimmerEffect extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(left: 15.0, right: 15.0),
+      height: 300,
+      width: MediaQuery.of(context).size.width,
+      child: Card(
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300],
+              highlightColor: Colors.grey[100],
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius:
+                    new BorderRadius.all(const Radius.circular(10.0))),
+                height: 200,
+                width: MediaQuery.of(context).size.width,
+              ),
+            ),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300],
+              highlightColor: Colors.grey[100],
+              child: Container(
+                margin: EdgeInsets.only(top: 5.0, left: 10.0),
+                decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius:
+                    new BorderRadius.all(const Radius.circular(4.0))),
+                height: 20,
+                width: MediaQuery.of(context).size.width * 0.75,
+              ),
+            ),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300],
+              highlightColor: Colors.grey[100],
+              child: Container(
+                margin: EdgeInsets.only(top: 5.0, left: 10.0),
+                decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius:
+                    new BorderRadius.all(const Radius.circular(4.0))),
+                height: 20,
+                width: MediaQuery.of(context).size.width * 0.6,
+              ),
+            ),
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300],
+              highlightColor: Colors.grey[100],
+              child: Container(
+                margin: EdgeInsets.only(top: 5.0, left: 10.0),
+                decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius:
+                    new BorderRadius.all(const Radius.circular(4.0))),
+                height: 20,
+                width: MediaQuery.of(context).size.width * 0.4,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

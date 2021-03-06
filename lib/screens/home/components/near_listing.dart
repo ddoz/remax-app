@@ -6,8 +6,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:remax_app/screens/detail/detail_page.dart';
-
-import '../../../util/constants.dart';
+import 'package:remax_app/util/constants.dart';
+import 'package:shimmer/shimmer.dart';
 
 class NearMeListing extends StatefulWidget {
   @override
@@ -43,7 +43,8 @@ class _NearMeListingState extends State<NearMeListing> {
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
           return snapshot.hasData
-              ? new Stack(
+              ?
+          new Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
                     carouselSlider = CarouselSlider(
@@ -111,9 +112,82 @@ class _NearMeListingState extends State<NearMeListing> {
                   ],
                 )
               : new Center(
-                  child: new CircularProgressIndicator(),
+                  child: new LoadingShimmerEffect(),
                 );
         },
+      ),
+    );
+  }
+}
+
+class LoadingShimmerEffect extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(left: 15.0, right: 15.0),
+      height: 180,
+      child: Card(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: Row(
+          children: <Widget>[
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300],
+              highlightColor: Colors.grey[100],
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius:
+                        new BorderRadius.all(const Radius.circular(10.0))),
+                height: 180,
+                width: 120,
+              ),
+            ),
+            Column(
+              children: <Widget>[
+                Shimmer.fromColors(
+                  baseColor: Colors.grey[300],
+                  highlightColor: Colors.grey[100],
+                  child: Container(
+                    margin: EdgeInsets.only(top: 30.0, left: 10.0),
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius:
+                        new BorderRadius.all(const Radius.circular(4.0))),
+                    height: 30,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                  ),
+                ),
+                Shimmer.fromColors(
+                  baseColor: Colors.grey[300],
+                  highlightColor: Colors.grey[100],
+                  child: Container(
+                    margin: EdgeInsets.only(top: 10.0, left: 10.0),
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius:
+                        new BorderRadius.all(const Radius.circular(4.0))),
+                    height: 30,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                  ),
+                ),
+                Shimmer.fromColors(
+                  baseColor: Colors.grey[300],
+                  highlightColor: Colors.grey[100],
+                  child: Container(
+                    margin: EdgeInsets.only(top: 10.0, left: 10.0),
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius:
+                        new BorderRadius.all(const Radius.circular(4.0))),
+                    height: 50,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
       ),
     );
   }
@@ -142,8 +216,7 @@ class ItemList extends StatelessWidget {
                   list: list,
                   index: index,
                 ))),
-        child:
-        new Card(
+        child: new Card(
           margin: EdgeInsets.all(10),
           semanticContainer: true,
           clipBehavior: Clip.antiAliasWithSaveLayer,

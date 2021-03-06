@@ -16,14 +16,7 @@ class _BodyState extends State<Body> {
       child: Stack(
         children: <Widget>[
           HeaderSignIn(size: size),
-          // TitleWithMoreBtn(title: "Our Approved Partner", press: () {}),
           ContentSignIn(),
-          // SizedBox(height: 20.0),
-          // TitleWithMoreBtn(title: "Near From You", press: () {}),
-          // NearMeListing(),
-          // SizedBox(height: 20.0),
-          // TitleWithLink(title: "Listing Properties", press: () {}),
-          // ListingProperties(),
         ],
       ),
     );

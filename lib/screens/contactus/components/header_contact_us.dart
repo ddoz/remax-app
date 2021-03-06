@@ -33,7 +33,7 @@ class HeaderContactUs extends StatelessWidget {
                   fit: BoxFit.cover,
                 )),
             child: SafeArea(
-              child: Column(
+              child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
                   Container(

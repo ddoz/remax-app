@@ -819,14 +819,18 @@ class _DetailPageState extends State<DetailPage> {
                         lastname = "";
                       }
                       return Container(
-                            margin: EdgeInsets.all(10.0),
-                            child: Column(children: <Widget>[
 
-                              new Text(
-                                  snapshot.data['mmbsFirstName'] +
-                                      ' ' +
-                                      lastname,
-                                  textAlign: TextAlign.center),
+                            child: Column(children: <Widget>[
+                            new Text(
+                                    snapshot.data['mmbsFirstName'] +
+                                        ' ' +
+                                        lastname,
+                                    textAlign: TextAlign.center,
+                                  softWrap: true,
+                              overflow: TextOverflow.ellipsis,
+
+                                ),
+
                             ]),
                           );
                     } else {

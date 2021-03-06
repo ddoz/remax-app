@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:remax_app/util/constants.dart';
 
 class HeaderSignIn extends StatelessWidget {
@@ -26,21 +27,45 @@ class HeaderSignIn extends StatelessWidget {
             height: 400,
             decoration: BoxDecoration(
                 image: DecorationImage(
-                  image: new AssetImage(
-                    "assets/icons/bg_header.png",
-                  ),
-                  fit: BoxFit.cover,
-                )),
+              image: new AssetImage(
+                "assets/icons/bg_header.png",
+              ),
+              fit: BoxFit.cover,
+            )),
             child: SafeArea(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+              child: Column(
                 children: <Widget>[
                   Container(
+                    margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.05),
+                    child: Row(
+                      children: <Widget>[
+                        GestureDetector(
+                          onTap: (){
+                            Navigator.of(context).pop();
+                          },
+                          child: Container(
+                            height: 25.0,
+                            width: 25.0,
+                              child: SvgPicture.asset("assets/icons/home.svg",
+                                  color: Colors.white)),
+                        ),
+                        Spacer(),
+                        SvgPicture.asset("assets/icons/language-choose.svg"),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    margin: EdgeInsets.only(top:  MediaQuery.of(context).size.height * 0.08),
                     width: 151,
                     height: 56,
                     child: Image.asset("assets/logo/logo_remax.png"),
                   ),
-
+                  Container(
+                    margin: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 30.0, right: 30.0),
+                    child: Text('Welcome! Please fill the Usernmae and Password to Sign in into Genius System',
+                        style:
+                        TextStyle(fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.bold)),
+                  ),
                 ],
               ),
             ),

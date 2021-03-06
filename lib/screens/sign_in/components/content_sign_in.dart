@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:remax_app/screens/sign_up/sign_up_page.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -14,7 +15,6 @@ class ContentSignIn extends StatefulWidget {
 enum LoginStatus { notSignIn, signIn }
 
 class _ContentSignInState extends State<ContentSignIn> {
-
   LoginStatus _loginStatus = LoginStatus.notSignIn;
   String email, password;
   final _key = new GlobalKey<FormState>();
@@ -26,7 +26,7 @@ class _ContentSignInState extends State<ContentSignIn> {
     if (rawCookie != null) {
       int index = rawCookie.indexOf(';');
       headers['cookie'] =
-      (index == -1) ? rawCookie : rawCookie.substring(0, index);
+          (index == -1) ? rawCookie : rawCookie.substring(0, index);
     }
   }
 
@@ -121,14 +121,14 @@ class _ContentSignInState extends State<ContentSignIn> {
     getPref();
   }
 
-
   @override
   Widget build(BuildContext context) {
     switch (_loginStatus) {
       case LoginStatus.notSignIn:
         return Container(
-          padding:
-          new EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.45,),
+          padding: new EdgeInsets.only(
+            top: MediaQuery.of(context).size.height * 0.45,
+          ),
           margin: EdgeInsets.only(left: 30.0, right: 30.0),
           child: Column(
             children: <Widget>[
@@ -167,8 +167,10 @@ class _ContentSignInState extends State<ContentSignIn> {
                       // ),
                       Container(
                         alignment: Alignment.center,
-                        margin: EdgeInsets.only(top: 30, left: 15.0, right: 15.0),
-                        padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                        margin:
+                            EdgeInsets.only(top: 30, left: 15.0, right: 15.0),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: kDefaultPadding),
                         height: 45,
                         decoration: BoxDecoration(
                           color: kLightGrey,
@@ -187,6 +189,7 @@ class _ContentSignInState extends State<ContentSignIn> {
                                 decoration: InputDecoration(
                                   hintText: "Email",
                                   hintStyle: TextStyle(
+                                    fontSize: 13.0,
                                     color: kPrimaryColor.withOpacity(0.5),
                                   ),
                                   enabledBorder: InputBorder.none,
@@ -194,20 +197,27 @@ class _ContentSignInState extends State<ContentSignIn> {
                                 ),
                               ),
                             ),
-                            SvgPicture.asset("assets/icons/mail.svg", color: kIconColor,),
+                            SvgPicture.asset(
+                              "assets/icons/mail.svg",
+                              color: kIconColor,
+                            ),
                           ],
                         ),
                       ),
                       Container(
                         alignment: Alignment.center,
-                        margin: EdgeInsets.only(top: 20, left: 15.0, right: 15.0),
-                        padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                        margin:
+                            EdgeInsets.only(top: 20, left: 15.0, right: 15.0),
+                        padding:
+                            EdgeInsets.symmetric(horizontal: kDefaultPadding),
                         height: 45,
                         decoration: BoxDecoration(
                           color: kLightGrey,
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
                             Expanded(
                               child: TextFormField(
@@ -216,15 +226,18 @@ class _ContentSignInState extends State<ContentSignIn> {
                                 decoration: InputDecoration(
                                   hintText: "Password",
                                   hintStyle: TextStyle(
-                                    color: kPrimaryColor.withOpacity(0.5),
-                                  ),
+                                      color: kPrimaryColor.withOpacity(0.5),
+                                      fontSize: 13.0),
                                   enabledBorder: InputBorder.none,
                                   focusedBorder: InputBorder.none,
                                   suffixIcon: IconButton(
+                                    color: kIconColor,
                                     onPressed: showHide,
-                                    icon: Icon(_secureText
-                                        ? Icons.visibility_off
-                                        : Icons.visibility),
+                                    icon: Icon(
+                                        _secureText
+                                            ? Icons.visibility_off
+                                            : Icons.visibility,
+                                        size: 20.0),
                                   ),
                                 ),
                               ),
@@ -234,19 +247,22 @@ class _ContentSignInState extends State<ContentSignIn> {
                         ),
                       ),
                       Container(
-                        margin: EdgeInsets.only(right: 12.0, top: 10.0, bottom: 15.0),
+                        margin: EdgeInsets.only(
+                            right: 12.0, top: 10.0, bottom: 15.0),
                         child: Align(
                           alignment: Alignment.centerRight,
-                          child: Text('Forgot Password?', style: TextStyle(
-                              color: kAppBarColorTheme,
-                              fontSize: 12.0,
-                              fontWeight: FontWeight.bold
-                          ),),
+                          child: Text(
+                            'Forgot Password?',
+                            style: TextStyle(
+                                color: kAppBarColorTheme,
+                                fontSize: 12.0,
+                                fontWeight: FontWeight.bold),
+                          ),
                         ),
                       ),
                       GestureDetector(
-                        onTap: (){
-                          check();
+                        onTap: () {
+                          //check();
                         },
                         child: new Container(
                           margin: EdgeInsets.all(10.0),
@@ -278,16 +294,24 @@ class _ContentSignInState extends State<ContentSignIn> {
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: <Widget>[
-                            Text('Dont have an account?', style: TextStyle(
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.bold
-                            )),
-                            SizedBox(width: 2.0,),
-                            Text('Sign Up', style: TextStyle(
-                                fontSize: 12.0,
-                                color: kRedColor,
-                                fontWeight: FontWeight.bold
-                            )),
+                            Text('Dont have an account?',
+                                style: TextStyle(
+                                    fontSize: 12.0,
+                                    fontWeight: FontWeight.bold)),
+                            SizedBox(
+                              width: 2.0,
+                            ),
+                            GestureDetector(
+                              onTap: (){
+                                Navigator.of(context).push(new MaterialPageRoute(
+                                    builder: (BuildContext context) => new SignUpPage()));
+                              },
+                              child: Text('Sign Up',
+                                  style: TextStyle(
+                                      fontSize: 12.0,
+                                      color: kRedColor,
+                                      fontWeight: FontWeight.bold)),
+                            ),
                           ],
                         ),
                       )
@@ -301,17 +325,13 @@ class _ContentSignInState extends State<ContentSignIn> {
                   ),
                 ),
               ),
-
               Container(
                 margin: EdgeInsets.only(top: 20.0, bottom: 30.0),
-                child: Text('REMAX application v2.0', style: TextStyle(
-                    fontSize: 12.0,
-                    fontWeight: FontWeight.bold
-                )),
+                child: Text('REMAX application v2.0',
+                    style:
+                        TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
               ),
-
             ],
-
           ),
         );
         break;
@@ -368,7 +388,7 @@ class _MainMenuState extends State<MainMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return      Center(
+    return Center(
       child: new Column(
         children: <Widget>[
           Row(
@@ -390,8 +410,7 @@ class _MainMenuState extends State<MainMenu> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(Icons.list,
-                              size: 50.0, color: Colors.pink),
+                          Icon(Icons.list, size: 50.0, color: Colors.pink),
                           Text('My Listing')
                         ],
                       ),
@@ -412,8 +431,7 @@ class _MainMenuState extends State<MainMenu> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(Icons.person,
-                              size: 50.0, color: Colors.pink),
+                          Icon(Icons.person, size: 50.0, color: Colors.pink),
                           Text('My Customer')
                         ],
                       ),
@@ -461,8 +479,7 @@ class _MainMenuState extends State<MainMenu> {
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: <Widget>[
-                          Icon(Icons.logout,
-                              size: 50.0, color: Colors.pink),
+                          Icon(Icons.logout, size: 50.0, color: Colors.pink),
                           Text('Logout')
                         ],
                       ),
@@ -475,4 +492,3 @@ class _MainMenuState extends State<MainMenu> {
     );
   }
 }
-
