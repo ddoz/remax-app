@@ -6,6 +6,7 @@ import 'package:remax_app/screens/ajukan_kpr/ajukan_kpr_page.dart';
 import 'package:remax_app/screens/contactus/contact_us_page.dart';
 import 'package:remax_app/screens/favourite/favourite_page.dart';
 import 'package:remax_app/screens/franchise/franchise_page.dart';
+import 'package:remax_app/screens/istilahproperty/istilah_property.dart';
 import 'package:remax_app/screens/search/search_screen.dart';
 import 'package:remax_app/screens/sign_in/sign_in_page.dart';
 
@@ -153,9 +154,16 @@ class MainDrawer extends StatelessWidget {
                   alignment: Alignment(-1.5, 0),
                 ),
                 children: <Widget>[
-                  Container(
-                      margin : EdgeInsets.only(left: 50.0, bottom: 10.0),
-                      child: Text("Istilah Property")),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(new MaterialPageRoute(
+                          builder: (BuildContext context) => new IstilahPropertyPage()));
+                    },
+                    child: Container(
+                        margin : EdgeInsets.only(left: 50.0, bottom: 10.0),
+                        child: Text("Istilah Property")),
+                  ),
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
@@ -186,32 +194,32 @@ class MainDrawer extends StatelessWidget {
                 ]),
               ),
             ),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                margin: EdgeInsets.only(left: 30.0, top: 15.0),
-                child: Row(children: <Widget>[
-                  SvgPicture.asset("assets/icons/listings.svg"),
-                  SizedBox(
-                    width: 20.0,
-                  ),
-                  Text('My Listing'),
-                ]),
-              ),
-            ),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                margin: EdgeInsets.only(left: 30.0, top: 15.0),
-                child: Row(children: <Widget>[
-                  SvgPicture.asset("assets/icons/customers.svg"),
-                  SizedBox(
-                    width: 20.0,
-                  ),
-                  Text('My Customers'),
-                ]),
-              ),
-            ),
+//            GestureDetector(
+//              onTap: () {},
+//              child: Container(
+//                margin: EdgeInsets.only(left: 30.0, top: 15.0),
+//                child: Row(children: <Widget>[
+//                  SvgPicture.asset("assets/icons/listings.svg"),
+//                  SizedBox(
+//                    width: 20.0,
+//                  ),
+//                  Text('My Listing'),
+//                ]),
+//              ),
+//            ),
+//            GestureDetector(
+//              onTap: () {},
+//              child: Container(
+//                margin: EdgeInsets.only(left: 30.0, top: 15.0),
+//                child: Row(children: <Widget>[
+//                  SvgPicture.asset("assets/icons/customers.svg"),
+//                  SizedBox(
+//                    width: 20.0,
+//                  ),
+//                  Text('My Customers'),
+//                ]),
+//              ),
+//            ),
             GestureDetector(
               onTap: () {
                 Navigator.of(context).pop();
@@ -235,19 +243,19 @@ class MainDrawer extends StatelessWidget {
               child: SizedBox(
                   height: 1, width: MediaQuery.of(context).size.width * 0.7),
             ),
-            GestureDetector(
-              onTap: () {},
-              child: Container(
-                margin: EdgeInsets.only(left: 30.0, top: 15.0, bottom: 30.0),
-                child: Row(children: <Widget>[
-                  SvgPicture.asset("assets/icons/logout.svg"),
-                  SizedBox(
-                    width: 20.0,
-                  ),
-                  Text('Log Out'),
-                ]),
-              ),
-            ),
+//            GestureDetector(
+//              onTap: () {},
+//              child: Container(
+//                margin: EdgeInsets.only(left: 30.0, top: 15.0, bottom: 30.0),
+//                child: Row(children: <Widget>[
+//                  SvgPicture.asset("assets/icons/logout.svg"),
+//                  SizedBox(
+//                    width: 20.0,
+//                  ),
+//                  Text('Log Out'),
+//                ]),
+//              ),
+//            ),
           ],
         ),
       ),
