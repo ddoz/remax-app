@@ -14,7 +14,7 @@ class MyBottomNavBar extends StatelessWidget {
         left: kDefaultPadding * 2,
         right: kDefaultPadding * 2,
       ),
-      height: 80,
+      height: 60,
       decoration: BoxDecoration(
         color: Colors.white,
         boxShadow: [
@@ -26,24 +26,34 @@ class MyBottomNavBar extends StatelessWidget {
         ],
       ),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: <Widget>[
-          Column(children: <Widget>[
-            Container(
-              child: IconButton(
-                icon: SvgPicture.asset("assets/icons/home.svg"),
-                onPressed: () {},
+          Container(
+            margin: EdgeInsets.all(10.0),
+            child: Column(children: <Widget>[
+              Container(
+                child: SvgPicture.asset("assets/icons/home.svg"),
               ),
-            ),
-            Text('Home')
-          ]),
-          Column(children: <Widget>[
-            IconButton(
-              icon: SvgPicture.asset("assets/icons/home.svg"),
-              onPressed: () {},
-            ),
-            Text('Home')
-          ]),
+              Text(
+                'Home',
+                style: TextStyle(fontSize: 13.0),
+              )
+            ]),
+          ),
+          Spacer(),
+          Container(
+            margin: EdgeInsets.all(10.0),
+            child: Column(children: <Widget>[
+              SizedBox(
+                  height: 16.0,
+                  child: SvgPicture.asset("assets/icons/map.svg")),
+              Text(
+                'Map',
+                style: TextStyle(fontSize: 13.0),
+              )
+            ]),
+          ),
         ],
       ),
     );

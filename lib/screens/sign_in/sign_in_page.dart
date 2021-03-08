@@ -4,10 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:remax_app/screens/member/create_listing_page.dart';
 import 'package:remax_app/screens/member/my_customer_page.dart';
+import 'package:remax_app/screens/sign_in/components/body.dart';
 import 'package:remax_app/sidebar/navigation_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import 'member/my_listing_page.dart';
+import '../member/my_listing_page.dart';
 
 class SignInPage extends StatefulWidget with NavigationStates {
   @override
@@ -128,47 +129,48 @@ class _SignInPageState extends State<SignInPage> {
     switch (_loginStatus) {
       case LoginStatus.notSignIn:
         return Scaffold(
-          appBar: AppBar(
-            title: Text("Login"),
-          ),
-          body: Form(
-            key: _key,
-            child: ListView(
-              padding: EdgeInsets.all(16.0),
-              children: <Widget>[
-                TextFormField(
-                  validator: (e) {
-                    if (e.isEmpty) {
-                      return "Please insert username";
-                    }
-                  },
-                  onSaved: (e) => email = e,
-                  decoration: InputDecoration(
-                    labelText: "username",
-                  ),
-                ),
-                TextFormField(
-                  obscureText: _secureText,
-                  onSaved: (e) => password = e,
-                  decoration: InputDecoration(
-                    labelText: "Password",
-                    suffixIcon: IconButton(
-                      onPressed: showHide,
-                      icon: Icon(_secureText
-                          ? Icons.visibility_off
-                          : Icons.visibility),
-                    ),
-                  ),
-                ),
-                MaterialButton(
-                  onPressed: () {
-                    check();
-                  },
-                  child: Text("Login"),
-                ),
-              ],
-            ),
-          ),
+          // appBar: AppBar(
+          //   title: Text("Login"),
+          // ),
+          body: Body(),
+          // Form(
+          //   key: _key,
+          //   child: ListView(
+          //     padding: EdgeInsets.all(16.0),
+          //     children: <Widget>[
+          //       TextFormField(
+          //         validator: (e) {
+          //           if (e.isEmpty) {
+          //             return "Please insert username";
+          //           }
+          //         },
+          //         onSaved: (e) => email = e,
+          //         decoration: InputDecoration(
+          //           labelText: "username",
+          //         ),
+          //       ),
+          //       TextFormField(
+          //         obscureText: _secureText,
+          //         onSaved: (e) => password = e,
+          //         decoration: InputDecoration(
+          //           labelText: "Password",
+          //           suffixIcon: IconButton(
+          //             onPressed: showHide,
+          //             icon: Icon(_secureText
+          //                 ? Icons.visibility_off
+          //                 : Icons.visibility),
+          //           ),
+          //         ),
+          //       ),
+          //       MaterialButton(
+          //         onPressed: () {
+          //           check();
+          //         },
+          //         child: Text("Login"),
+          //       ),
+          //     ],
+          //   ),
+          // ),
         );
         break;
       case LoginStatus.signIn:

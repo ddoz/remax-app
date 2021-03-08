@@ -1,18 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:remax_app/model/todo_item.dart';
 import 'package:remax_app/sidebar/navigation_bloc.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:remax_app/util/database_client.dart';
 import 'package:remax_app/util/date_formatter.dart';
 
-import '../../main.dart';
-import '../detail/detail_page.dart';
-import '../main_drawer.dart';
-
-import 'package:flutter/material.dart';
-
-class FavoritePage extends StatefulWidget  with NavigationStates  {
+class FavoritePage extends StatefulWidget with NavigationStates {
   @override
   _FavoritePageState createState() => new _FavoritePageState();
 }
@@ -52,7 +45,10 @@ class _FavoritePageState extends State<FavoritePage> {
         iconTheme: IconThemeData(
           color: kAppBarColorTheme, //change your color here
         ),
-        title: Text("Favourite", style: TextStyle(color: kAppBarColorTheme),),
+        title: Text(
+          "Favourite",
+          style: TextStyle(color: kAppBarColorTheme),
+        ),
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
@@ -66,18 +62,37 @@ class _FavoritePageState extends State<FavoritePage> {
                   itemCount: _itemList.length,
                   itemBuilder: (_, int index) {
                     return Container(
-                      child: ListTile(
-                        title: _itemList[index],
-                        onTap: () => _showDetail(_itemList[index], index),
-                        trailing: Listener(
-                          key: Key(_itemList[index].itemTitle),
-                          child: Icon(
-                            Icons.delete_forever,
-                            color: Colors.redAccent,
+//                      child: ListTile(
+//                        title: _itemList[index],
+//                        onTap: () => _showDetail(_itemList[index], index),
+//                        trailing: Listener(
+//                          key: Key(_itemList[index].itemTitle),
+//                          child: Icon(
+//                            Icons.delete_forever,
+//                            color: Colors.redAccent,
+//                          ),
+//                          onPointerDown: (pointerEvent) =>
+//                              _deleteNoDo(_itemList[index].id, index),
+//                        ),
+//                      ),
+                      height: 150.0,
+                      child: Stack(
+                        children: <Widget>[
+                          _itemList[index],
+                          GestureDetector(
+                            onTap: () {
+                              _deleteNoDo(_itemList[index].id, index);
+                            },
+                            child: Container(
+                              margin:
+                                  EdgeInsets.only(right: 10.0, bottom: 10.0),
+                              child: Align(
+                                alignment: Alignment.bottomRight,
+                                child: Image.asset('assets/images/love.png'),
+                              ),
+                            ),
                           ),
-                          onPointerDown: (pointerEvent) =>
-                              _deleteNoDo(_itemList[index].id, index),
-                        ),
+                        ],
                       ),
                     );
                   }),
@@ -97,11 +112,11 @@ class _FavoritePageState extends State<FavoritePage> {
         children: <Widget>[
           Expanded(
               child: TextField(
-                controller: _textEditingController,
-                autofocus: true,
-                decoration: InputDecoration(
-                    labelText: "Todo", icon: Icon(Icons.event_note)),
-              ))
+            controller: _textEditingController,
+            autofocus: true,
+            decoration: InputDecoration(
+                labelText: "Todo", icon: Icon(Icons.event_note)),
+          ))
         ],
       ),
       actions: <Widget>[
@@ -150,11 +165,11 @@ class _FavoritePageState extends State<FavoritePage> {
         children: <Widget>[
           Expanded(
               child: TextField(
-                controller: _textEditingController,
-                autofocus: true,
-                decoration: InputDecoration(
-                    labelText: "Update Todo", icon: Icon(Icons.update)),
-              ))
+            controller: _textEditingController,
+            autofocus: true,
+            decoration: InputDecoration(
+                labelText: "Update Todo", icon: Icon(Icons.update)),
+          ))
         ],
       ),
       actions: <Widget>[
@@ -219,7 +234,7 @@ class _FavoritePageState extends State<FavoritePage> {
         children: <Widget>[
           Expanded(
             child:
-            Text("Press to see Todo detail\n\nLong press to update Todo"),
+                Text("Press to see Todo detail\n\nLong press to update Todo"),
           )
         ],
       ),
@@ -231,222 +246,3 @@ class _FavoritePageState extends State<FavoritePage> {
         });
   }
 }
-
-class ItemListFav extends StatelessWidget {
-  //List list;
-  List<TodoItem> list = <TodoItem>[];
-
-
-  ItemListFav({this.list});
-
-  int toInt(String str) {
-    var myInt = int.parse(str);
-    assert(myInt is int);
-    return myInt;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return new ListView.builder(
-      itemCount: list == null ? 0 : list.length,
-      itemBuilder: (context, i) {
-        return new Container(
-          padding: const EdgeInsets.all(10.0),
-          child: new GestureDetector(
-            onTap: () => Navigator.of(context).push(new MaterialPageRoute(
-                builder: (BuildContext context) => new DetailPage(
-                  list: list,
-                  index: i,
-                ))),
-            child: new Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.0),
-              ),
-              child: Column(
-                children: <Widget>[
-                  Container(
-                    width: double.infinity,
-                    padding: EdgeInsets.all(100),
-                    decoration: BoxDecoration(
-                      borderRadius: new BorderRadius.all( const Radius.circular(10.0)
-                      ),
-                      image: DecorationImage(
-                          image: NetworkImage(
-                              'https://genius.remax.co.id/papi/' +
-                                  list[i].itemThumbnail),
-                          fit: BoxFit.cover),
-                    ),
-                  ),
-                  Container(
-                    margin: EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0, bottom: 5.0),
-                    child: Align(
-                      alignment: Alignment.centerLeft,
-                      child: new Text(
-                        list[i].itemTitle,
-                        overflow: TextOverflow.ellipsis,
-                        style: new TextStyle(
-                          fontSize: 16.0,
-                          color: const Color(0xff767472),
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                  ),
-//                  Row(
-//                    children: <Widget>[
-//                      new Container(
-//                        margin:
-//                        EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
-//                        child: new Align(
-//                            alignment: Alignment.centerLeft,
-//                            child: Column(
-//                              children: <Widget>[
-//                                new Image.asset('assets/images/bed.png',
-//                                    width: 15, height: 15),
-//                                list[i]['listBedroom'] != null
-//                                    ? new Text(list[i]['listBedroom'],
-//                                  style: new TextStyle(
-//                                    fontSize: 10.0,
-//                                    fontWeight: FontWeight.bold,
-//                                  ),)
-//                                    : new Text('-',
-//                                    style: new TextStyle(
-//                                      fontSize: 10.0,
-//                                      fontWeight: FontWeight.bold,
-//                                    ))
-//                              ],
-//                            )),
-//                      ),
-//                      new Container(
-//                        margin:
-//                        EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
-//                        child: new Align(
-//                            alignment: Alignment.centerLeft,
-//                            child: Column(
-//                              children: <Widget>[
-//                                new Image.asset('assets/images/bathtub.png',
-//                                    width: 15, height: 15),
-//                                list[i]['listBathroom'] != null
-//                                    ? new Text(list[i]['listBathroom'],
-//                                  style: new TextStyle(
-//                                    fontSize: 10.0,
-//                                    fontWeight: FontWeight.bold,
-//                                  ),)
-//                                    : new Text('-',
-//                                    style: new TextStyle(
-//                                      fontSize: 10.0,
-//                                      fontWeight: FontWeight.bold,
-//                                    ))
-//                              ],
-//                            )),
-//                      ),
-//                      new Container(
-//                        margin:
-//                        EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
-//                        child: new Align(
-//                            alignment: Alignment.centerLeft,
-//                            child: Column(
-//                              children: <Widget>[
-//                                new Image.asset('assets/images/home.png',
-//                                    width: 15, height: 15),
-//                                list[i]['listBuildingSize'] != null
-//                                    ? new Text(list[i]['listBuildingSize'],
-//                                  style: new TextStyle(
-//                                    fontSize: 10.0,
-//                                    fontWeight: FontWeight.bold,
-//                                  ),)
-//                                    : new Text('-',
-//                                    style: new TextStyle(
-//                                      fontSize: 10.0,
-//                                      fontWeight: FontWeight.bold,
-//                                    ))
-//                              ],
-//                            )),
-//                      ),
-//                      new Container(
-//                        margin:
-//                        EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
-//                        child: new Align(
-//                            alignment: Alignment.centerLeft,
-//                            child: Column(
-//                              children: <Widget>[
-//                                new Image.asset('assets/images/area.png',
-//                                    width: 15, height: 15),
-//                                list[i]['listLandSize'] != null
-//                                    ? new Text(list[i]['listLandSize'],
-//                                  style: new TextStyle(
-//                                    fontSize: 10.0,
-//                                    fontWeight: FontWeight.bold,
-//                                  ),)
-//                                    : new Text('-',
-//                                    style: new TextStyle(
-//                                      fontSize: 10.0,
-//                                      fontWeight: FontWeight.bold,
-//                                    ))
-//                              ],
-//                            )),
-//                      ),
-//                    ],
-//                  ),
-                  list[i].itemCategory == "1"
-                      ? Row(children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.all(10.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: new Text(
-                          NumberFormat.compactCurrency(
-                              locale: 'id',
-                              symbol: 'Rp ',
-                              decimalDigits: 0)
-                              .format(toInt(list[i].itemPrice)),
-                          style: new TextStyle(
-                            fontSize: 21.0,
-                            color: const Color(0xffDC1B2E),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    new Text(
-                      "DIJUAL",
-                      style: new TextStyle(
-                          fontSize: 12.0, color: const Color(0xffDC1B2E)),
-                    )
-                  ])
-                      : Row(children: <Widget>[
-                    Container(
-                      margin: EdgeInsets.all(10.0),
-                      child: Align(
-                        alignment: Alignment.centerLeft,
-                        child: new Text(
-                          NumberFormat.compactCurrency(
-                              locale: 'id',
-                              symbol: 'Rp ',
-                              decimalDigits: 0)
-                              .format(toInt(list[i].itemPrice)),
-                          style: new TextStyle(
-                            fontSize: 21.0,
-                            color: const Color(0xff1A3668),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                      ),
-                    ),
-                    new Text(
-                      "DISEWAKAN",
-                      style: new TextStyle(
-                          fontSize: 12.0, color: const Color(0xff1A3668)),
-                    )
-                  ]),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-}
-
-

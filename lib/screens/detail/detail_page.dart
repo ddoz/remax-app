@@ -813,22 +813,33 @@ class _DetailPageState extends State<DetailPage> {
                   future: getDataMember(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) print(snapshot.error);
-                    return snapshot.hasData
-                        ? Container(
-                            margin: EdgeInsets.all(10.0),
+                    if (snapshot.hasData)  {
+                      String lastname = snapshot.data['mmbsLastName'];
+                      if(lastname == null){
+                        lastname = "";
+                      }
+                      return Container(
+
                             child: Column(children: <Widget>[
-                              new Text(
-                                  snapshot.data['mmbsFirstName'] +
-                                      ' ' +
-                                      snapshot.data['mmbsLastName'],
-                                  textAlign: TextAlign.center),
+                            new Text(
+                                    snapshot.data['mmbsFirstName'] +
+                                        ' ' +
+                                        lastname,
+                                    textAlign: TextAlign.center,
+                                  softWrap: true,
+                              overflow: TextOverflow.ellipsis,
+
+                                ),
+
                             ]),
-                          )
-                        : new Text("Loading....",
+                          );
+                    } else {
+                      return new Text("Loading....",
                             textAlign: TextAlign.center,
                             style: new TextStyle(
                                 fontSize: 15.0,
                                 color: const Color(0xff767472)));
+                    }
                   },
                 ),
               ],
@@ -863,13 +874,15 @@ class _DetailPageState extends State<DetailPage> {
                               SizedBox(height: 10),
                               GestureDetector(
                                 onTap: () {
-                                  FlutterOpenWhatsapp.sendSingleMessage(snapshot.data['mmbsCellPhone1'], "");
+                                  FlutterOpenWhatsapp.sendSingleMessage(
+                                      snapshot.data['mmbsCellPhone1'], "");
                                 },
                                 child: Card(
                                   color: kBtnWa,
                                   child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
-                                    crossAxisAlignment: CrossAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: <Widget>[
                                       Image.asset(
                                         'assets/images/whatsapp.png',
@@ -959,38 +972,69 @@ class ImageDialog extends StatelessWidget {
 
   ImageDialog(this.list, this.url);
 
+
   @override
   Widget build(BuildContext context) {
-    return CarouselSlider(
-      height: 400.0,
-      items: list.map((i) {
-        return Builder(
-          builder: (BuildContext context) {
-            return Container(
-              width: MediaQuery.of(context).size.width,
-              margin: EdgeInsets.symmetric(horizontal: 5.0),
-              //decoration: BoxDecoration(color: Colors.white),
-              child: ClipRRect(
-                child: PinchZoom(
-                  image: Container(
-                    child: ClipRRect(
-                        borderRadius: BorderRadius.all(Radius.circular(20)),
-                        child: Image.network(url + i, fit: BoxFit.cover)),
+    return Container(
+      color: Colors.black,
+      child: Stack(
+        children: <Widget>[
+          Align(
+            alignment: Alignment.center,
+            child: CarouselSlider(
+              viewportFraction: 1.0,
+              enableInfiniteScroll: false,
+              height: MediaQuery.of(context).size.height,
+              items: list.map((i) {
+                return Builder(
+                  builder: (BuildContext context) {
+                    return Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin: EdgeInsets.symmetric(horizontal: 5.0),
+                      //decoration: BoxDecoration(color: Colors.white),
+                      child: Stack(
+                        children: <Widget>[
+                          ClipRRect(
+                            child: PinchZoom(
+                              image: Container(
+                                child: ClipRRect(child: Image.network(url + i)),
+                              ),
+                              zoomedBackgroundColor: Colors.black.withOpacity(0.1),
+                              resetDuration: const Duration(milliseconds: 100),
+                              maxScale: 2.5,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              }).toList(),
+            ),
+          ),
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).pop();
+            },
+            child: Align(
+              alignment: Alignment.topRight,
+              child: Container(
+                padding: EdgeInsets.all(5.0),
+                decoration: BoxDecoration(
+                  color: kRedColor,
+                  borderRadius: BorderRadius.only(
+                    bottomLeft: Radius.circular(14.0),
                   ),
-                  zoomedBackgroundColor: Colors.black.withOpacity(0.1),
-                  resetDuration: const Duration(milliseconds: 100),
-                  maxScale: 2.5,
+                ),
+                child: Icon(
+                  Icons.close,
+                  color: Colors.white,
                 ),
               ),
-//                child: GestureDetector(
-//                    child: Image.network(url+i,
-//                        //fit: BoxFit.fill
-//                    ),
-//                )
-            );
-          },
-        );
-      }).toList(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

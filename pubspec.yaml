@@ -42,6 +42,7 @@ dependencies:
   flutter_typeahead: ^1.8.1
   flutter_svg: ^0.19.1 #it helps us to use SVG
   flutter_open_whatsapp: ^0.1.2
+  shimmer: ^1.1.2
 
 dev_dependencies:
   flutter_test:

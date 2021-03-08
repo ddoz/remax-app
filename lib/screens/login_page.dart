@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:remax_app/screens/sign_in_page.dart';
 
 class LoginPage extends StatefulWidget {
 
