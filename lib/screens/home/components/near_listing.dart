@@ -198,6 +198,8 @@ class ItemList extends StatelessWidget {
   int index;
   List list;
 
+
+
   ItemList({this.data, this.index, this.list});
 
   int toInt(String str) {
@@ -206,8 +208,11 @@ class ItemList extends StatelessWidget {
     return myInt;
   }
 
+  List listMedia = new List();
+
   @override
   Widget build(BuildContext context) {
+    listMedia = data['links']['listFile'];
     return new Container(
       padding: const EdgeInsets.all(10.0),
       child: new GestureDetector(
@@ -226,17 +231,42 @@ class ItemList extends StatelessWidget {
           ),
           child: Row(
             children: <Widget>[
-              Container(
-                width: 120,
-                height: 200,
-                decoration: BoxDecoration(
-                  borderRadius:
+              Stack(
+                children: <Widget>[
+                  Container(
+                    width: 120,
+                    height: 200,
+                    decoration: BoxDecoration(
+                      borderRadius:
                       new BorderRadius.all(const Radius.circular(10.0)),
-                  image: DecorationImage(
-                      image: NetworkImage('https://genius.remax.co.id/papi/' +
-                          data['listThumbnail']),
-                      fit: BoxFit.cover),
-                ),
+                      image: DecorationImage(
+                          image: NetworkImage('https://genius.remax.co.id/papi/' +
+                              data['listThumbnail']),
+                          fit: BoxFit.cover),
+                    ),
+                  ),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: Colors.black.withOpacity(0.7),
+                      borderRadius:
+                      new BorderRadius.only(bottomRight: Radius.circular(10.0)),
+                    ),
+                    padding:  EdgeInsets.all(5.0),
+                    child: Row(
+                      children: <Widget>[
+                        SvgPicture.asset(
+                          "assets/icons/camera.svg",
+                          height: 12.0,
+                        ),
+                        SizedBox(width: 3,),
+                        Text(listMedia.length.toString(), style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 12.0,
+                        ),)
+                      ],
+                    ),
+                  ),
+                ]
               ),
               Flexible(
                 child: Column(
