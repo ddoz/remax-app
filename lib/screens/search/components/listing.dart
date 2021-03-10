@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
@@ -10,26 +9,129 @@ import 'package:remax_app/util/constants.dart';
 
 import '../..//detail/detail_page.dart';
 
-class Listing extends StatelessWidget {
-  Future<List> getData() async {
-    final response = await http.get("https://genius.remax.co.id/papi/listing");
+class Listing extends StatefulWidget {
+  @override
+  _ListingState createState() => _ListingState();
+}
 
-    List list = json.decode(response.body)['data'];
-    return list;
+class _ListingState extends State<Listing> {
+  ScrollController _scrollController = ScrollController();
+  int page = 1;
+
+  bool isLoading = false;
+  bool firstLoad = true;
+
+//  Future<List> getData() async {
+//    final response = await http.get("https://genius.remax.co.id/papi/listing?sort=-listId&pageSize=20&filter[listType]=3&pageNumber=1");
+//
+//    List list = json.decode(response.body)['data'];
+//    return list;
+//  }
+
+  List list = new List();
+
+  @override
+  void initState() {
+    super.initState();
+    getProp();
+    print(getProp());
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+        setState(() {
+          isLoading = true;
+        });
+        page++;
+        getNext(page);
+      }
+    });
   }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  getProp() async {
+    final response = await http.get(
+        "https://genius.remax.co.id/papi/listing?sort=-listId&pageSize=20&filter[listType]=3");
+    if (response.statusCode == 200) {
+      List liss = json.decode(response.body)['data'];
+      for (int i = 0; i<liss.length; i++){
+        setState(() {
+          firstLoad = false;
+          list.add(liss[i]);
+        });
+      }
+    }  else {
+      Exception('Failed to load data');
+    }
+  }
+
+  getNext(int page) async {
+    String url = "https://genius.remax.co.id/papi/listing?sort=-listId&pageSize=20&filter[listType]=3&pageNumber=$page";
+    print(url);
+    final response = await http.get(
+        url);
+    if (response.statusCode == 200) {
+      List liss = json.decode(response.body)['data'];
+      for (int i = 0; i<liss.length; i++){
+        setState(() {
+          list.add(liss[i]);
+          isLoading = false;
+        });
+      }
+    } else {
+      Exception('Failed to load data');
+    }
+  }
+
+//  Future<List> getDataNext(int page) async {
+//    final response = await http.get("https://genius.remax.co.id/papi/listing?sort=-listId&pageSize=20&filter[listType]=3&pageNumber=$page");
+//
+//    List list = json.decode(response.body)['data'];
+//    return list;
+//  }
+
+
+
+  int toInt(String str) {
+    var myInt = int.parse(str);
+    assert(myInt is int);
+    return myInt;
+  }
+
+//  Future<void> onScroll() async {
+//    double maxScroll = controller.position.maxScrollExtent;
+//    double currentScroll = controller.position.pixels;
+//
+//    if (currentScroll == maxScroll){
+//      page++;
+//      List list = await getData();
+//      list.add(getDataNext(page));
+//    }
+//
+//    print("page : "+page.toString());
+//  }
 
   String _valSaleRent;
   String _valSortBy;
 
   List _listSaleRent = ["For Sale", "For Rent"];
-  List _listSortBy = ["Highest Price", "Lowest Price", "Newest Listing", "Oldest Listing", "Largest Building Size", "Smallest Building Size"];
-
+  List _listSortBy = [
+    "Highest Price",
+    "Lowest Price",
+    "Newest Listing",
+    "Oldest Listing",
+    "Largest Building Size",
+    "Smallest Building Size"
+  ];
 
   @override
   Widget build(BuildContext context) {
     return Container(
       color: kGreyBgSearch,
-      child: SingleChildScrollView(
+//      child: SingleChildScrollView(
         child: Column(children: <Widget>[
           Container(
             margin: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
@@ -43,9 +145,12 @@ class Listing extends StatelessWidget {
             child: Row(
               children: <Widget>[
                 SvgPicture.asset(
-                  "assets/icons/location.svg", color: kIconColor,
+                  "assets/icons/location.svg",
+                  color: kIconColor,
                 ),
-                SizedBox(width: 5.0,),
+                SizedBox(
+                  width: 5.0,
+                ),
                 Expanded(
                   child: Align(
                     alignment: Alignment.center,
@@ -69,7 +174,7 @@ class Listing extends StatelessWidget {
                       side: BorderSide(color: kBgFilters)),
                   onPressed: () {},
                   color: kBgFilters,
-                  child:   SvgPicture.asset(
+                  child: SvgPicture.asset(
                     "assets/icons/filters.svg",
                     height: 10.0,
                   ),
@@ -78,7 +183,7 @@ class Listing extends StatelessWidget {
             ),
           ),
           Container(
-            margin: EdgeInsets.only(left: 10.0, right: 10.0),
+            margin: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
             child: Row(
               children: <Widget>[
                 Container(
@@ -95,16 +200,22 @@ class Listing extends StatelessWidget {
                     underline: SizedBox(),
                     icon: SvgPicture.asset("assets/icons/dropdown.svg"),
                     isExpanded: true,
-                    hint: Text("Sale/Rent", style: TextStyle(
-                      fontSize: 14.0,
-                      color: kPrimaryColor.withOpacity(0.5),
-                    ),),
+                    hint: Text(
+                      "Sale/Rent",
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        color: kPrimaryColor.withOpacity(0.5),
+                      ),
+                    ),
                     value: _valSaleRent,
                     items: _listSaleRent.map((value) {
                       return DropdownMenuItem(
-                        child: Text(value, style: TextStyle(
-                          fontSize: 14.0,
-                        ),),
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            fontSize: 14.0,
+                          ),
+                        ),
                         value: value,
                       );
                     }).toList(),
@@ -130,16 +241,22 @@ class Listing extends StatelessWidget {
                     underline: SizedBox(),
                     icon: SvgPicture.asset("assets/icons/dropdown.svg"),
                     isExpanded: true,
-                    hint: Text("Sort By", style: TextStyle(
-                      fontSize: 14.0,
-                      color: kPrimaryColor.withOpacity(0.5),
-                    ),),
+                    hint: Text(
+                      "Sort By",
+                      style: TextStyle(
+                        fontSize: 14.0,
+                        color: kPrimaryColor.withOpacity(0.5),
+                      ),
+                    ),
                     value: _valSortBy,
                     items: _listSortBy.map((value) {
                       return DropdownMenuItem(
-                        child: Text(value, style: TextStyle(
-                          fontSize: 14.0,
-                        ),),
+                        child: Text(
+                          value,
+                          style: TextStyle(
+                            fontSize: 14.0,
+                          ),
+                        ),
                         value: value,
                       );
                     }).toList(),
@@ -153,24 +270,26 @@ class Listing extends StatelessWidget {
               ],
             ),
           ),
-          new FutureBuilder<List>(
-            future: getData(),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) print(snapshot.error);
-              return snapshot.hasData
-                  ? new ItemList(
-                      list: snapshot.data,
-                    )
-                  : new Center(
-                      child: new LoadingSearchListing(),
-                    );
-            },
-          ),
+          firstLoad == false
+          ?  new  Expanded(
+            child: new ItemList(
+              list: list,
+              controller: _scrollController,
+            ),
+          )
+          :  Expanded(child: new  LoadingSearchListing())
+
         ]),
-      ),
+//      ),
     );
   }
 }
+
+//class Listing extends StatelessWidget {
+//
+//
+//
+//}
 
 class LoadingSearchListing extends StatelessWidget {
   @override
@@ -178,23 +297,29 @@ class LoadingSearchListing extends StatelessWidget {
     return Container(
       child: Column(
         children: <Widget>[
-          SizedBox(height: 10.0,),
+          SizedBox(
+            height: 10.0,
+          ),
           LoadingShimmerEffect(),
-          SizedBox(height: 10.0,),
-          LoadingShimmerEffect(),
-          SizedBox(height: 10.0,),
-          LoadingShimmerEffect(),
+//          SizedBox(
+//            height: 10.0,
+//          ),
+//          LoadingShimmerEffect(),
+//          SizedBox(
+//            height: 10.0,
+//          ),
+//          LoadingShimmerEffect(),
         ],
       ),
     );
   }
 }
 
-
 class ItemList extends StatelessWidget {
   List list;
+  ScrollController controller;
 
-  ItemList({this.list});
+  ItemList({this.list, this.controller});
 
   int toInt(String str) {
     var myInt = int.parse(str);
@@ -206,11 +331,13 @@ class ItemList extends StatelessWidget {
   Widget build(BuildContext context) {
     return new ListView.builder(
       shrinkWrap: true,
-      physics: NeverScrollableScrollPhysics(),
+      controller: controller,
+//      physics: NeverScrollableScrollPhysics(),
       itemCount: list == null ? 0 : list.length,
-      itemBuilder: (context, i) {
+      itemBuilder: (context, int i) {
         return new Container(
-          padding: const EdgeInsets.only(top:5.0, bottom: 5.0, left: 10.0, right: 10.0),
+          padding: const EdgeInsets.only(
+              top: 5.0, bottom: 5.0, left: 10.0, right: 10.0),
           child: new GestureDetector(
             onTap: () => Navigator.of(context).push(new MaterialPageRoute(
                 builder: (BuildContext context) => new DetailPage(
@@ -253,7 +380,6 @@ class ItemList extends StatelessWidget {
                               style: new TextStyle(
                                 fontSize: 13.0,
                                 color: Colors.black,
-                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
@@ -281,7 +407,7 @@ class ItemList extends StatelessWidget {
                                   ),
                                 ),
                                 new Text(
-                                  "DIJUAL",
+                                  "(DIJUAL)",
                                   style: new TextStyle(
                                       fontSize: 12.0,
                                       color: const Color(0xffDC1B2E)),
@@ -309,7 +435,7 @@ class ItemList extends StatelessWidget {
                                   ),
                                 ),
                                 new Text(
-                                  "DISEWAKAN",
+                                  "(DISEWAKAN)",
                                   style: new TextStyle(
                                       fontSize: 12.0,
                                       color: const Color(0xff1A3668)),
@@ -335,13 +461,13 @@ class ItemList extends StatelessWidget {
                                               list[i]['listBedroom'],
                                               style: new TextStyle(
                                                 fontSize: 10.0,
-                                                fontWeight: FontWeight.bold,
+
                                               ),
                                             )
                                           : new Text('-',
                                               style: new TextStyle(
                                                 fontSize: 10.0,
-                                                fontWeight: FontWeight.bold,
+
                                               ))
                                     ],
                                   )),
@@ -364,13 +490,13 @@ class ItemList extends StatelessWidget {
                                               list[i]['listBathroom'],
                                               style: new TextStyle(
                                                 fontSize: 10.0,
-                                                fontWeight: FontWeight.bold,
+
                                               ),
                                             )
                                           : new Text('-',
                                               style: new TextStyle(
                                                 fontSize: 10.0,
-                                                fontWeight: FontWeight.bold,
+
                                               ))
                                     ],
                                   )),
@@ -394,13 +520,13 @@ class ItemList extends StatelessWidget {
                                                   '(m2)',
                                               style: new TextStyle(
                                                 fontSize: 10.0,
-                                                fontWeight: FontWeight.bold,
+
                                               ),
                                             )
                                           : new Text('-',
                                               style: new TextStyle(
                                                 fontSize: 10.0,
-                                                fontWeight: FontWeight.bold,
+
                                               ))
                                     ],
                                   )),
@@ -423,13 +549,13 @@ class ItemList extends StatelessWidget {
                                               list[i]['listLandSize'] + '(m2)',
                                               style: new TextStyle(
                                                 fontSize: 10.0,
-                                                fontWeight: FontWeight.bold,
+
                                               ),
                                             )
                                           : new Text('-',
                                               style: new TextStyle(
                                                 fontSize: 10.0,
-                                                fontWeight: FontWeight.bold,
+
                                               ))
                                     ],
                                   )),
