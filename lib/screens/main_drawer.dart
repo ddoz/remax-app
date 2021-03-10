@@ -13,34 +13,38 @@ import 'package:remax_app/screens/sign_in/sign_in_page.dart';
 class MainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Drawer(
-      child: Container(
-        color: Colors.white,
+    return Container(
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height,
+      color: Colors.white,
+      child: SafeArea(
         child: ListView(
+          padding: EdgeInsets.zero,
           children: <Widget>[
             Container(
-              width: double.infinity,
-              padding: EdgeInsets.all(20),
-              color: Colors.white,
-              child: Center(
-                child: Column(
-                  children: <Widget>[
-                    Container(
-                      width: 200,
-                      height: 80,
-                      margin: EdgeInsets.only(top: 25),
-                      decoration: BoxDecoration(
-                        image: DecorationImage(
-                            image: NetworkImage(
-                                'https://genius.remax.co.id/papi/company/crud/1/links/compFileId/122390'),
-                            fit: BoxFit.fill),
+                padding: EdgeInsets.all(25),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    new Image.asset('assets/logo/logo_remax_menu.png',
+                        width: 180, height: 67),
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.of(context).pop();
+                      },
+                      child: Container(
+                        child: Image.asset(
+                          'assets/icons/close_menu.png',
+                          width: 35,
+                          height: 35,
+                        ),
                       ),
                     )
                   ],
-                ),
-              ),
-            ),
+                )),
+
             Container(
+              margin: EdgeInsets.only(left: 25, right: 25),
               color: Colors.grey,
               child: SizedBox(
                   height: 1, width: MediaQuery.of(context).size.width * 0.7),
@@ -149,29 +153,31 @@ class MainDrawer extends StatelessWidget {
                 leading: SvgPicture.asset("assets/icons/resources.svg"),
                 expandedCrossAxisAlignment: CrossAxisAlignment.start,
                 expandedAlignment: Alignment.centerLeft,
-                title:  Align(
+                title: Align(
                   child: new Text('Resources'),
-                  alignment: Alignment(-1.5, 0),
+                  alignment: Alignment(-1.2, 0),
                 ),
                 children: <Widget>[
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
                       Navigator.of(context).push(new MaterialPageRoute(
-                          builder: (BuildContext context) => new IstilahPropertyPage()));
+                          builder: (BuildContext context) =>
+                              new IstilahPropertyPage()));
                     },
                     child: Container(
-                        margin : EdgeInsets.only(left: 50.0, bottom: 10.0),
+                        margin: EdgeInsets.only(left: 50.0, bottom: 10.0),
                         child: Text("Istilah Property")),
                   ),
                   GestureDetector(
                     onTap: () {
                       Navigator.of(context).pop();
                       Navigator.of(context).push(new MaterialPageRoute(
-                          builder: (BuildContext context) => new AjukanKprPage()));
+                          builder: (BuildContext context) =>
+                              new AjukanKprPage()));
                     },
                     child: Container(
-                        margin : EdgeInsets.only(left: 50.0, bottom: 10.0),
+                        margin: EdgeInsets.only(left: 50.0, bottom: 10.0),
                         child: Text("Ajukan KPR")),
                   ),
                 ],
@@ -238,7 +244,7 @@ class MainDrawer extends StatelessWidget {
               ),
             ),
             Container(
-              margin: EdgeInsets.only(top: 30.0),
+              margin: EdgeInsets.only(top: 30.0, left: 25, right: 25),
               color: Colors.grey,
               child: SizedBox(
                   height: 1, width: MediaQuery.of(context).size.width * 0.7),
