@@ -10,6 +10,8 @@ import 'package:remax_app/screens/istilahproperty/istilah_property.dart';
 import 'package:remax_app/screens/search/search_screen.dart';
 import 'package:remax_app/screens/sign_in/sign_in_page.dart';
 
+import 'member/my_listing_page.dart';
+
 class MainDrawer extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -190,7 +192,7 @@ class MainDrawer extends StatelessWidget {
                     builder: (BuildContext context) => new FavoritePage()));
               },
               child: Container(
-                margin: EdgeInsets.only(left: 30.0),
+                margin: EdgeInsets.only(left: 30.0, bottom: 10.0),
                 child: Row(children: <Widget>[
                   SvgPicture.asset("assets/icons/love.svg"),
                   SizedBox(

@@ -257,7 +257,7 @@ class ItemList extends StatelessWidget {
                         SizedBox(width: 3,),
                         Text(listMedia.length.toString(), style: TextStyle(
                           color: Colors.white,
-                          fontSize: 12.0,
+                          fontSize: 10.0,
                         ),)
                       ],
                     ),

@@ -272,9 +272,20 @@ class _ListingState extends State<Listing> {
           ),
           firstLoad == false
           ?  new  Expanded(
-            child: new ItemList(
-              list: list,
-              controller: _scrollController,
+            child: Column(
+              children: [
+                Expanded(
+                  child: new ItemList(
+                    list: list,
+                    controller: _scrollController,
+                  ),
+                ),
+                isLoading == true
+                ?  new Center(
+                  child: new CircularProgressIndicator(),
+                )
+                    : new SizedBox(),
+              ],
             ),
           )
           :  Expanded(child: new  LoadingSearchListing())

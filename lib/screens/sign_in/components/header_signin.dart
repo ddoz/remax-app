@@ -64,7 +64,7 @@ class HeaderSignIn extends StatelessWidget {
                     margin: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 30.0, right: 30.0),
                     child: Text('Welcome! Please fill the Usernmae and Password to Sign in into Genius System',
                         style:
-                        TextStyle(fontSize: 14.0, color: Colors.white, fontWeight: FontWeight.bold)),
+                        TextStyle(fontSize: 14.0, color: Colors.white)),
                   ),
                 ],
               ),

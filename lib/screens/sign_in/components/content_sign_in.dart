@@ -3,16 +3,20 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:remax_app/screens/member/my_customer_page.dart';
+import 'package:remax_app/screens/member/my_listing_page.dart';
 import 'package:remax_app/screens/sign_up/sign_up_page.dart';
 import 'package:remax_app/util/constants.dart';
+import 'package:remax_app/util/session.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 
 class ContentSignIn extends StatefulWidget {
   @override
   _ContentSignInState createState() => _ContentSignInState();
 }
 
-enum LoginStatus { notSignIn, signIn }
+enum LoginStatus { notSignIn, signIn, loading }
 
 class _ContentSignInState extends State<ContentSignIn> {
   LoginStatus _loginStatus = LoginStatus.notSignIn;
@@ -20,6 +24,8 @@ class _ContentSignInState extends State<ContentSignIn> {
   final _key = new GlobalKey<FormState>();
 
   Map<String, String> headers = {};
+
+  bool loginLoading = false;
 
   void updateCookie(http.Response response) {
     String rawCookie = response.headers['set-cookie'];
@@ -141,30 +147,6 @@ class _ContentSignInState extends State<ContentSignIn> {
                   key: _key,
                   child: Column(
                     children: <Widget>[
-                      // TextFormField(
-                      //   validator: (e) {
-                      //     if (e.isEmpty) {
-                      //       return "Please insert username";
-                      //     }
-                      //   },
-                      //   onSaved: (e) => email = e,
-                      //   decoration: InputDecoration(
-                      //     labelText: "username",
-                      //   ),
-                      // ),
-                      // TextFormField(
-                      //   obscureText: _secureText,
-                      //   onSaved: (e) => password = e,
-                      //   decoration: InputDecoration(
-                      //     labelText: "Password",
-                      //     suffixIcon: IconButton(
-                      //       onPressed: showHide,
-                      //       icon: Icon(_secureText
-                      //           ? Icons.visibility_off
-                      //           : Icons.visibility),
-                      //     ),
-                      //   ),
-                      // ),
                       Container(
                         alignment: Alignment.center,
                         margin:
@@ -255,14 +237,16 @@ class _ContentSignInState extends State<ContentSignIn> {
                             'Forgot Password?',
                             style: TextStyle(
                                 color: kAppBarColorTheme,
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.bold),
+                                fontSize: 12.0),
                           ),
                         ),
                       ),
                       GestureDetector(
                         onTap: () {
-                          //check();
+                          check();
+                          setState(() {
+                            _loginStatus = LoginStatus.loading;
+                          });
                         },
                         child: new Container(
                           margin: EdgeInsets.all(10.0),
@@ -297,7 +281,7 @@ class _ContentSignInState extends State<ContentSignIn> {
                             Text('Dont have an account?',
                                 style: TextStyle(
                                     fontSize: 12.0,
-                                    fontWeight: FontWeight.bold)),
+                                )),
                             SizedBox(
                               width: 2.0,
                             ),
@@ -329,7 +313,7 @@ class _ContentSignInState extends State<ContentSignIn> {
                 margin: EdgeInsets.only(top: 20.0, bottom: 30.0),
                 child: Text('REMAX application v2.0',
                     style:
-                        TextStyle(fontSize: 12.0, fontWeight: FontWeight.bold)),
+                        TextStyle(fontSize: 12.0)),
               ),
             ],
           ),
@@ -337,6 +321,27 @@ class _ContentSignInState extends State<ContentSignIn> {
         break;
       case LoginStatus.signIn:
         return MainMenu(signOut, headers);
+        break;
+      case LoginStatus.loading:
+        return Container(
+          padding: new EdgeInsets.only(
+            top: MediaQuery.of(context).size.height * 0.45,
+          ),
+          child: Dialog(
+            child: Container(
+              margin: EdgeInsets.all(20.0),
+              child: new Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  new CircularProgressIndicator(),
+                  Container(
+                      margin: EdgeInsets.all(20.0),
+                      child: new Text("Loading")),
+                ],
+              ),
+            ),
+          ),
+        );
         break;
     }
   }
@@ -388,106 +393,111 @@ class _MainMenuState extends State<MainMenu> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: new Column(
-        children: <Widget>[
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                // onTap: () => Navigator.of(context).push(
-                //     new MaterialPageRoute(
-                //         builder: (BuildContext context) =>
-                //         new MyListingPage(signOut, widget.headers))),
-                child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Container(
-                      width: 120.0,
-                      height: 120.0,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.list, size: 50.0, color: Colors.pink),
-                          Text('My Listing')
-                        ],
+    return Container(
+      padding: new EdgeInsets.only(
+        top: MediaQuery.of(context).size.height * 0.45,
+      ),
+      child: Center(
+        child: new Column(
+          children: <Widget>[
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                   onTap: () => Navigator.of(context).push(
+                       new MaterialPageRoute(
+                           builder: (BuildContext context) =>
+                           new MyListingPage(signOut, widget.headers))),
+                  child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                    )),
-              ),
-              GestureDetector(
-                // onTap: () => Navigator.of(context).push(
-                //     new MaterialPageRoute(
-                //         builder: (BuildContext context) =>
-                //         new MyCustomerPage(signOut, widget.headers))),
-                child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Container(
-                      width: 120.0,
-                      height: 120.0,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.person, size: 50.0, color: Colors.pink),
-                          Text('My Customer')
-                        ],
+                      child: Container(
+                        width: 120.0,
+                        height: 120.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.list, size: 50.0, color: Colors.pink),
+                            Text('My Listing')
+                          ],
+                        ),
+                      )),
+                ),
+                GestureDetector(
+                   onTap: () => Navigator.of(context).push(
+                       new MaterialPageRoute(
+                           builder: (BuildContext context) =>
+                           new MyCustomerPage(signOut, widget.headers))),
+                  child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                    )),
-              ),
-            ],
-          ),
-          Row(
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              GestureDetector(
-                // onTap: () => Navigator.of(context).push(
-                //     new MaterialPageRoute(
-                //         builder: (BuildContext context) =>
-                //         new CreateListing())),
-                child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Container(
-                      width: 120.0,
-                      height: 120.0,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.format_list_bulleted,
-                              size: 50.0, color: Colors.pink),
-                          Text('Create Listing')
-                        ],
+                      child: Container(
+                        width: 120.0,
+                        height: 120.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.person, size: 50.0, color: Colors.pink),
+                            Text('My Customer')
+                          ],
+                        ),
+                      )),
+                ),
+              ],
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                GestureDetector(
+                  // onTap: () => Navigator.of(context).push(
+                  //     new MaterialPageRoute(
+                  //         builder: (BuildContext context) =>
+                  //         new CreateListing())),
+                  child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                    )),
-              ),
-              GestureDetector(
-                onTap: () {
-                  signOut();
-                },
-                child: Card(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10.0),
-                    ),
-                    child: Container(
-                      width: 120.0,
-                      height: 120.0,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: <Widget>[
-                          Icon(Icons.logout, size: 50.0, color: Colors.pink),
-                          Text('Logout')
-                        ],
+                      child: Container(
+                        width: 120.0,
+                        height: 120.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.format_list_bulleted,
+                                size: 50.0, color: Colors.pink),
+                            Text('Create Listing')
+                          ],
+                        ),
+                      )),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    signOut();
+                  },
+                  child: Card(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10.0),
                       ),
-                    )),
-              ),
-            ],
-          ),
-        ],
+                      child: Container(
+                        width: 120.0,
+                        height: 120.0,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: <Widget>[
+                            Icon(Icons.logout, size: 50.0, color: Colors.pink),
+                            Text('Logout')
+                          ],
+                        ),
+                      )),
+                ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
