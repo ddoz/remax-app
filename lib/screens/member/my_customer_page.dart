@@ -12,9 +12,8 @@ import 'detail_edit_customer.dart';
 
 class MyCustomerPage extends StatefulWidget {
   final VoidCallback signOut;
-  final Map<String, String> headers;
 
-  MyCustomerPage(this.signOut, this.headers);
+  MyCustomerPage(this.signOut);
 
   @override
   _MyCustomerPageState createState() => _MyCustomerPageState();
@@ -31,19 +30,18 @@ class _MyCustomerPageState extends State<MyCustomerPage> {
 
 //  TabController tabController;
 
-  Future<List> getData() async {
-    final response = await http.get(
-        "https://genius.remax.co.id/api/customer/crud?pageSize=30",
-        headers: widget.headers);
-    List list = json.decode(response.body)['data'];
-    return list;
-  }
+  Map<String, String> headerss = {};
+
 
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       name = preferences.getString("name");
       member = preferences.getString("member");
+      setState(() {
+        headerss['cookie'] = preferences.getString("cookie");
+      });
+
     });
   }
 
@@ -52,7 +50,15 @@ class _MyCustomerPageState extends State<MyCustomerPage> {
     // TODO: implement initState
     super.initState();
     getPref();
-    print(widget.headers);
+    print(headerss);
+  }
+
+  Future<List> getData() async {
+    final response = await http.get(
+        "https://genius.remax.co.id/api/customer/crud?pageSize=30",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+    return list;
   }
 
   @override

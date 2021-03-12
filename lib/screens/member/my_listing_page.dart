@@ -12,9 +12,8 @@ import '../detail/detail_page.dart';
 
 class MyListingPage extends StatefulWidget {
   final VoidCallback signOut;
-  final Map<String, String> headers;
 
-  MyListingPage(this.signOut, this.headers);
+  MyListingPage(this.signOut);
 
   @override
   _MyListingPageState createState() => _MyListingPageState();
@@ -28,22 +27,19 @@ class _MyListingPageState extends State<MyListingPage> {
   }
 
   String name = "", member = "";
+  Map<String, String> headerss = {};
 
 //  TabController tabController;
 
-  Future<List> getData() async {
-    final response = await http.get(
-        "https://genius.remax.co.id/api/listing/crud?sort=-listId",
-        headers: widget.headers);
-    List list = json.decode(response.body)['data'];
-    return list;
-  }
 
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       name = preferences.getString("name");
       member = preferences.getString("member");
+      setState(() {
+        headerss['cookie'] = preferences.getString("cookie");
+      });
     });
   }
 
@@ -52,6 +48,15 @@ class _MyListingPageState extends State<MyListingPage> {
     // TODO: implement initState
     super.initState();
     getPref();
+  }
+
+
+  Future<List> getData() async {
+    final response = await http.get(
+        "https://genius.remax.co.id/api/listing/crud?sort=-listId",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+    return list;
   }
 
   @override

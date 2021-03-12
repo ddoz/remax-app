@@ -27,12 +27,18 @@ class _ContentSignInState extends State<ContentSignIn> {
 
   bool loginLoading = false;
 
+  String headersCookie = "";
+
   void updateCookie(http.Response response) {
     String rawCookie = response.headers['set-cookie'];
     if (rawCookie != null) {
       int index = rawCookie.indexOf(';');
       headers['cookie'] =
           (index == -1) ? rawCookie : rawCookie.substring(0, index);
+      setState(() {
+        headersCookie = headers['cookie'];
+      });
+
     }
   }
 
@@ -77,7 +83,7 @@ class _ContentSignInState extends State<ContentSignIn> {
       print(name + member + office);
       setState(() {
         _loginStatus = LoginStatus.signIn;
-        savePref(value, name, member, office);
+        savePref(value, name, member, office, headersCookie);
       });
     }
   }
@@ -89,13 +95,14 @@ class _ContentSignInState extends State<ContentSignIn> {
     return data;
   }
 
-  savePref(int value, String name, String member, String office) async {
+  savePref(int value, String name, String member, String office, String headers) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setInt("value", value);
       preferences.setString("name", name);
       preferences.setString("member", member);
       preferences.setString("office", office);
+      preferences.setString("cookie", headers);
       preferences.commit();
     });
   }
@@ -408,7 +415,7 @@ class _MainMenuState extends State<MainMenu> {
                    onTap: () => Navigator.of(context).push(
                        new MaterialPageRoute(
                            builder: (BuildContext context) =>
-                           new MyListingPage(signOut, widget.headers))),
+                           new MyListingPage(signOut))),
                   child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -429,7 +436,7 @@ class _MainMenuState extends State<MainMenu> {
                    onTap: () => Navigator.of(context).push(
                        new MaterialPageRoute(
                            builder: (BuildContext context) =>
-                           new MyCustomerPage(signOut, widget.headers))),
+                           new MyCustomerPage(signOut))),
                   child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
