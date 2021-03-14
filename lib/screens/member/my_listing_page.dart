@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
+import 'package:remax_app/screens/addlisting/addlisting_page.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:remax_app/util/session.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -50,7 +51,6 @@ class _MyListingPageState extends State<MyListingPage> {
     getPref();
   }
 
-
   Future<List> getData() async {
     final response = await http.get(
         "https://genius.remax.co.id/api/listing/crud?sort=-listId",
@@ -81,8 +81,8 @@ class _MyListingPageState extends State<MyListingPage> {
             color: Colors.white,
           ),
           onPressed: (){
-//            Navigator.of(context).push(new MaterialPageRoute(
-//                builder: (BuildContext context) => new AddCustomerPage()));
+            Navigator.of(context).push(new MaterialPageRoute(
+                builder: (BuildContext context) => new AddListingPage()));
           },
           backgroundColor: kRedColor,
         ),
