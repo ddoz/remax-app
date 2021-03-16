@@ -43,8 +43,7 @@ class _NearMeListingState extends State<NearMeListing> {
         builder: (context, snapshot) {
           if (snapshot.hasError) print(snapshot.error);
           return snapshot.hasData
-              ?
-          new Stack(
+              ? new Stack(
                   alignment: Alignment.center,
                   children: <Widget>[
                     carouselSlider = CarouselSlider(
@@ -153,7 +152,7 @@ class LoadingShimmerEffect extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.grey,
                         borderRadius:
-                        new BorderRadius.all(const Radius.circular(4.0))),
+                            new BorderRadius.all(const Radius.circular(4.0))),
                     height: 30,
                     width: MediaQuery.of(context).size.width * 0.5,
                   ),
@@ -166,7 +165,7 @@ class LoadingShimmerEffect extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.grey,
                         borderRadius:
-                        new BorderRadius.all(const Radius.circular(4.0))),
+                            new BorderRadius.all(const Radius.circular(4.0))),
                     height: 30,
                     width: MediaQuery.of(context).size.width * 0.5,
                   ),
@@ -179,7 +178,7 @@ class LoadingShimmerEffect extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.grey,
                         borderRadius:
-                        new BorderRadius.all(const Radius.circular(4.0))),
+                            new BorderRadius.all(const Radius.circular(4.0))),
                     height: 50,
                     width: MediaQuery.of(context).size.width * 0.5,
                   ),
@@ -197,8 +196,6 @@ class ItemList extends StatelessWidget {
   dynamic data;
   int index;
   List list;
-
-
 
   ItemList({this.data, this.index, this.list});
 
@@ -231,43 +228,48 @@ class ItemList extends StatelessWidget {
           ),
           child: Row(
             children: <Widget>[
-              Stack(
-                children: <Widget>[
-                  Container(
-                    width: 120,
-                    height: 200,
-                    decoration: BoxDecoration(
-                      borderRadius:
-                      new BorderRadius.all(const Radius.circular(10.0)),
-                      image: DecorationImage(
-                          image: NetworkImage('https://genius.remax.co.id/papi/' +
-                              data['listThumbnail']),
-                          fit: BoxFit.cover),
-                    ),
+              Stack(children: <Widget>[
+                Container(
+                  width: 120,
+                  height: 200,
+                  decoration: BoxDecoration(
+                    borderRadius:
+                        new BorderRadius.all(const Radius.circular(10.0)),
+                    image: DecorationImage(
+                        image: data['listThumbnail'] != null
+                            ? NetworkImage('https://genius.remax.co.id/papi/' +
+                                data['listThumbnail'])
+                            : NetworkImage('-'),
+                        fit: BoxFit.cover),
                   ),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: Colors.black.withOpacity(0.7),
-                      borderRadius:
-                      new BorderRadius.only(bottomRight: Radius.circular(10.0)),
-                    ),
-                    padding:  EdgeInsets.all(5.0),
-                    child: Row(
-                      children: <Widget>[
-                        SvgPicture.asset(
-                          "assets/icons/camera.svg",
-                          height: 12.0,
-                        ),
-                        SizedBox(width: 3,),
-                        Text(listMedia.length.toString(), style: TextStyle(
+                ),
+                Container(
+                  decoration: BoxDecoration(
+                    color: Colors.black.withOpacity(0.7),
+                    borderRadius: new BorderRadius.only(
+                        bottomRight: Radius.circular(10.0)),
+                  ),
+                  padding: EdgeInsets.all(5.0),
+                  child: Row(
+                    children: <Widget>[
+                      SvgPicture.asset(
+                        "assets/icons/camera.svg",
+                        height: 12.0,
+                      ),
+                      SizedBox(
+                        width: 3,
+                      ),
+                      Text(
+                        listMedia.length.toString(),
+                        style: TextStyle(
                           color: Colors.white,
                           fontSize: 10.0,
-                        ),)
-                      ],
-                    ),
+                        ),
+                      )
+                    ],
                   ),
-                ]
-              ),
+                ),
+              ]),
               Flexible(
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -286,7 +288,6 @@ class ItemList extends StatelessWidget {
                               style: new TextStyle(
                                 fontSize: 13.0,
                                 color: Colors.black,
-                                fontWeight: FontWeight.bold,
                               ),
                             ),
                           ),
@@ -376,13 +377,11 @@ class ItemList extends StatelessWidget {
                                                       '(m2)',
                                                   style: new TextStyle(
                                                     fontSize: 10.0,
-                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 )
                                               : new Text('-',
                                                   style: new TextStyle(
                                                     fontSize: 10.0,
-                                                    fontWeight: FontWeight.bold,
                                                   ))
                                         ],
                                       )),
@@ -409,13 +408,11 @@ class ItemList extends StatelessWidget {
                                                   data['listBedroom'],
                                                   style: new TextStyle(
                                                     fontSize: 10.0,
-                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 )
                                               : new Text('-',
                                                   style: new TextStyle(
                                                     fontSize: 10.0,
-                                                    fontWeight: FontWeight.bold,
                                                   ))
                                         ],
                                       )),
@@ -445,13 +442,11 @@ class ItemList extends StatelessWidget {
                                                   data['listLandSize'] + '(m2)',
                                                   style: new TextStyle(
                                                     fontSize: 10.0,
-                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 )
                                               : new Text('-',
                                                   style: new TextStyle(
                                                     fontSize: 10.0,
-                                                    fontWeight: FontWeight.bold,
                                                   ))
                                         ],
                                       )),
@@ -475,13 +470,11 @@ class ItemList extends StatelessWidget {
                                                   data['listBathroom'],
                                                   style: new TextStyle(
                                                     fontSize: 10.0,
-                                                    fontWeight: FontWeight.bold,
                                                   ),
                                                 )
                                               : new Text('-',
                                                   style: new TextStyle(
                                                     fontSize: 10.0,
-                                                    fontWeight: FontWeight.bold,
                                                   ))
                                         ],
                                       )),

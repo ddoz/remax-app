@@ -36,7 +36,8 @@ class _ListingState extends State<Listing> {
     getProp();
     print(getProp());
     _scrollController.addListener(() {
-      if (_scrollController.position.pixels == _scrollController.position.maxScrollExtent) {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
         setState(() {
           isLoading = true;
         });
@@ -57,25 +58,25 @@ class _ListingState extends State<Listing> {
         "https://genius.remax.co.id/papi/listing?sort=-listId&pageSize=20&filter[listType]=3");
     if (response.statusCode == 200) {
       List liss = json.decode(response.body)['data'];
-      for (int i = 0; i<liss.length; i++){
+      for (int i = 0; i < liss.length; i++) {
         setState(() {
           firstLoad = false;
           list.add(liss[i]);
         });
       }
-    }  else {
+    } else {
       Exception('Failed to load data');
     }
   }
 
   getNext(int page) async {
-    String url = "https://genius.remax.co.id/papi/listing?sort=-listId&pageSize=20&filter[listType]=3&pageNumber=$page";
+    String url =
+        "https://genius.remax.co.id/papi/listing?sort=-listId&pageSize=20&filter[listType]=3&pageNumber=$page";
     print(url);
-    final response = await http.get(
-        url);
+    final response = await http.get(url);
     if (response.statusCode == 200) {
       List liss = json.decode(response.body)['data'];
-      for (int i = 0; i<liss.length; i++){
+      for (int i = 0; i < liss.length; i++) {
         setState(() {
           list.add(liss[i]);
           isLoading = false;
@@ -92,8 +93,6 @@ class _ListingState extends State<Listing> {
 //    List list = json.decode(response.body)['data'];
 //    return list;
 //  }
-
-
 
   int toInt(String str) {
     var myInt = int.parse(str);
@@ -132,165 +131,164 @@ class _ListingState extends State<Listing> {
     return Container(
       color: kGreyBgSearch,
 //      child: SingleChildScrollView(
-        child: Column(children: <Widget>[
-          Container(
-            margin: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-            alignment: Alignment.center,
-            padding: EdgeInsets.only(left: kDefaultPadding, right: 5.0),
-            height: 45,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(7),
-            ),
-            child: Row(
-              children: <Widget>[
-                SvgPicture.asset(
-                  "assets/icons/location.svg",
-                  color: kIconColor,
-                ),
-                SizedBox(
-                  width: 5.0,
-                ),
-                Expanded(
-                  child: Align(
-                    alignment: Alignment.center,
-                    child: TextField(
-                      onChanged: (value) {},
-                      decoration: InputDecoration(
-                        hintText: "Search Your Properties..",
-                        hintStyle: TextStyle(
-                          fontSize: 14.0,
-                          color: kPrimaryColor.withOpacity(0.5),
-                        ),
-                        enabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                      ),
-                    ),
-                  ),
-                ),
-                RaisedButton(
-                  shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(6.0),
-                      side: BorderSide(color: kBgFilters)),
-                  onPressed: () {},
-                  color: kBgFilters,
-                  child: SvgPicture.asset(
-                    "assets/icons/filters.svg",
-                    height: 10.0,
-                  ),
-                ),
-              ],
-            ),
+      child: Column(children: <Widget>[
+        Container(
+          margin: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+          alignment: Alignment.center,
+          padding: EdgeInsets.only(left: kDefaultPadding, right: 5.0),
+          height: 45,
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(7),
           ),
-          Container(
-            margin: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
-            child: Row(
-              children: <Widget>[
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.45,
+          child: Row(
+            children: <Widget>[
+              SvgPicture.asset(
+                "assets/icons/location.svg",
+                color: kIconColor,
+              ),
+              SizedBox(
+                width: 5.0,
+              ),
+              Expanded(
+                child: Align(
                   alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 10),
-                  padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  child: DropdownButton(
-                    underline: SizedBox(),
-                    icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-                    isExpanded: true,
-                    hint: Text(
-                      "Sale/Rent",
-                      style: TextStyle(
+                  child: TextField(
+                    onChanged: (value) {},
+                    decoration: InputDecoration(
+                      hintText: "Search Your Properties..",
+                      hintStyle: TextStyle(
                         fontSize: 14.0,
                         color: kPrimaryColor.withOpacity(0.5),
                       ),
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
                     ),
-                    value: _valSaleRent,
-                    items: _listSaleRent.map((value) {
-                      return DropdownMenuItem(
-                        child: Text(
-                          value,
-                          style: TextStyle(
-                            fontSize: 14.0,
-                          ),
-                        ),
-                        value: value,
-                      );
-                    }).toList(),
-//                  onChanged: (value) {
-//                    setState(() {
-//                      _valSaleRent = value;
-//                    });
-//                  },
                   ),
                 ),
-                Spacer(),
-                Container(
-                  width: MediaQuery.of(context).size.width * 0.45,
-                  alignment: Alignment.center,
-                  margin: EdgeInsets.only(top: 10),
-                  padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                  height: 45,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(7),
-                  ),
-                  child: DropdownButton(
-                    underline: SizedBox(),
-                    icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-                    isExpanded: true,
-                    hint: Text(
-                      "Sort By",
-                      style: TextStyle(
-                        fontSize: 14.0,
-                        color: kPrimaryColor.withOpacity(0.5),
-                      ),
+              ),
+              RaisedButton(
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(6.0),
+                    side: BorderSide(color: kBgFilters)),
+                onPressed: () async {
+                  await showDialog(
+                    builder: (_) => ImageDialog(),
+                    context: context,
+                  );
+                },
+                color: kBgFilters,
+                child: SvgPicture.asset(
+                  "assets/icons/filters.svg",
+                  height: 10.0,
+                ),
+              ),
+            ],
+          ),
+        ),
+        Container(
+          margin: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
+          child: Row(
+            children: <Widget>[
+              Container(
+                width: MediaQuery.of(context).size.width * 0.45,
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(top: 10),
+                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                height: 45,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(7),
+                ),
+                child: DropdownButton(
+                  underline: SizedBox(),
+                  icon: SvgPicture.asset("assets/icons/dropdown.svg"),
+                  isExpanded: true,
+                  hint: Text(
+                    "Sale/Rent",
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      color: kPrimaryColor.withOpacity(0.5),
                     ),
-                    value: _valSortBy,
-                    items: _listSortBy.map((value) {
-                      return DropdownMenuItem(
-                        child: Text(
-                          value,
-                          style: TextStyle(
-                            fontSize: 14.0,
-                          ),
+                  ),
+                  value: _valSaleRent,
+                  items: _listSaleRent.map((value) {
+                    return DropdownMenuItem(
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          fontSize: 14.0,
                         ),
-                        value: value,
-                      );
-                    }).toList(),
+                      ),
+                      value: value,
+                    );
+                  }).toList(),
+                ),
+              ),
+              Spacer(),
+              Container(
+                width: MediaQuery.of(context).size.width * 0.45,
+                alignment: Alignment.center,
+                margin: EdgeInsets.only(top: 10),
+                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                height: 45,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(7),
+                ),
+                child: DropdownButton(
+                  underline: SizedBox(),
+                  icon: SvgPicture.asset("assets/icons/dropdown.svg"),
+                  isExpanded: true,
+                  hint: Text(
+                    "Sort By",
+                    style: TextStyle(
+                      fontSize: 14.0,
+                      color: kPrimaryColor.withOpacity(0.5),
+                    ),
+                  ),
+                  value: _valSortBy,
+                  items: _listSortBy.map((value) {
+                    return DropdownMenuItem(
+                      child: Text(
+                        value,
+                        style: TextStyle(
+                          fontSize: 14.0,
+                        ),
+                      ),
+                      value: value,
+                    );
+                  }).toList(),
 //                  onChanged: (value) {
 //                    setState(() {
 //                      _valTypeOfWork = value;
 //                    });
 //                  },
-                  ),
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-          firstLoad == false
-          ?  new  Expanded(
-            child: Column(
-              children: [
-                Expanded(
-                  child: new ItemList(
-                    list: list,
-                    controller: _scrollController,
-                  ),
+        ),
+        firstLoad == false
+            ? new Expanded(
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: new ItemList(
+                        list: list,
+                        controller: _scrollController,
+                      ),
+                    ),
+                    isLoading == true
+                        ? new Center(
+                            child: new CircularProgressIndicator(),
+                          )
+                        : new SizedBox(),
+                  ],
                 ),
-                isLoading == true
-                ?  new Center(
-                  child: new CircularProgressIndicator(),
-                )
-                    : new SizedBox(),
-              ],
-            ),
-          )
-          :  Expanded(child: new  LoadingSearchListing())
-
-        ]),
+              )
+            : Expanded(child: new LoadingSearchListing())
+      ]),
 //      ),
     );
   }
@@ -338,6 +336,8 @@ class ItemList extends StatelessWidget {
     return myInt;
   }
 
+  List listMedia = new List();
+
   @override
   Widget build(BuildContext context) {
     return new ListView.builder(
@@ -346,6 +346,7 @@ class ItemList extends StatelessWidget {
 //      physics: NeverScrollableScrollPhysics(),
       itemCount: list == null ? 0 : list.length,
       itemBuilder: (context, int i) {
+        listMedia = list[i]['links']['listFile'];
         return new Container(
           padding: const EdgeInsets.only(
               top: 5.0, bottom: 5.0, left: 10.0, right: 10.0),
@@ -361,20 +362,51 @@ class ItemList extends StatelessWidget {
               ),
               child: Row(
                 children: <Widget>[
-                  Container(
-                    width: 120,
-                    height: 120,
+                  Stack(children: <Widget>[
+                    Container(
+                      width: 120,
+                      height: 153,
 //                    padding: EdgeInsets.all(80),
-                    decoration: BoxDecoration(
-                      borderRadius:
-                          new BorderRadius.all(const Radius.circular(10.0)),
-                      image: DecorationImage(
-                          image: NetworkImage(
-                              'https://genius.remax.co.id/papi/' +
-                                  list[i]['listThumbnail']),
-                          fit: BoxFit.cover),
+                      decoration: BoxDecoration(
+                        borderRadius:
+                            new BorderRadius.all(const Radius.circular(10.0)),
+                        image: DecorationImage(
+                            image: list[i]['listThumbnail'] != null
+                                ? NetworkImage(
+                                    'https://genius.remax.co.id/papi/' +
+                                        list[i]['listThumbnail'])
+                                : NetworkImage('-'),
+                            fit: BoxFit.cover),
+                      ),
                     ),
-                  ),
+                    Container(
+                      decoration: BoxDecoration(
+                        color: Colors.black.withOpacity(0.7),
+                        borderRadius: new BorderRadius.only(
+                            topLeft: Radius.circular(10.0),
+                            bottomRight: Radius.circular(10.0)),
+                      ),
+                      padding: EdgeInsets.all(5.0),
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            "assets/icons/camera.svg",
+                            height: 12.0,
+                          ),
+                          SizedBox(
+                            width: 3,
+                          ),
+                          Text(
+                            listMedia.length.toString(),
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 10.0,
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  ]),
                   Flexible(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -472,13 +504,11 @@ class ItemList extends StatelessWidget {
                                               list[i]['listBedroom'],
                                               style: new TextStyle(
                                                 fontSize: 10.0,
-
                                               ),
                                             )
                                           : new Text('-',
                                               style: new TextStyle(
                                                 fontSize: 10.0,
-
                                               ))
                                     ],
                                   )),
@@ -501,13 +531,11 @@ class ItemList extends StatelessWidget {
                                               list[i]['listBathroom'],
                                               style: new TextStyle(
                                                 fontSize: 10.0,
-
                                               ),
                                             )
                                           : new Text('-',
                                               style: new TextStyle(
                                                 fontSize: 10.0,
-
                                               ))
                                     ],
                                   )),
@@ -531,13 +559,11 @@ class ItemList extends StatelessWidget {
                                                   '(m2)',
                                               style: new TextStyle(
                                                 fontSize: 10.0,
-
                                               ),
                                             )
                                           : new Text('-',
                                               style: new TextStyle(
                                                 fontSize: 10.0,
-
                                               ))
                                     ],
                                   )),
@@ -560,14 +586,43 @@ class ItemList extends StatelessWidget {
                                               list[i]['listLandSize'] + '(m2)',
                                               style: new TextStyle(
                                                 fontSize: 10.0,
-
                                               ),
                                             )
                                           : new Text('-',
                                               style: new TextStyle(
                                                 fontSize: 10.0,
-
                                               ))
+                                    ],
+                                  )),
+                            ),
+                          ],
+                        ),
+                        Row(
+                          children: <Widget>[
+                            new Container(
+                              margin: EdgeInsets.only(
+                                  left: 10.0, top: 5.0, bottom: 10.0),
+                              child: new Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Row(
+                                    children: <Widget>[
+                                      SvgPicture.asset(
+                                        "assets/icons/share.svg",
+                                      ),
+                                    ],
+                                  )),
+                            ),
+                            Spacer(),
+                            new Container(
+                              margin: EdgeInsets.only(
+                                  left: 10.0, top: 5.0, bottom: 5.0),
+                              child: new Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: Row(
+                                    children: <Widget>[
+                                      SvgPicture.asset(
+                                        "assets/icons/love_white.svg",
+                                      ),
                                     ],
                                   )),
                             ),
@@ -585,3 +640,905 @@ class ItemList extends StatelessWidget {
     );
   }
 }
+
+//class ImageDialog extends StatelessWidget {
+//
+//  String _valSaleRent;
+//  String _valSortBy;
+//
+//  List _listSaleRent = ["For Sale", "For Rent"];
+//  List _listSortBy = [
+//    "Highest Price",
+//    "Lowest Price",
+//    "Newest Listing",
+//    "Oldest Listing",
+//    "Largest Building Size",
+//    "Smallest Building Size"
+//  ];
+//
+//  RangeValues values = RangeValues(1, 100);
+//
+//  @override
+//  Widget build(BuildContext context) {
+//    return Material(
+//      child: SingleChildScrollView(
+//        child: Container(
+//          color: kBgCardItemListing,
+//          height: MediaQuery.of(context).size.height,
+//          width: MediaQuery.of(context).size.width,
+//          child: Stack(
+//            children: <Widget>[
+//              SingleChildScrollView(
+//                child: Column(
+//                  mainAxisAlignment: MainAxisAlignment.start,
+//                  crossAxisAlignment: CrossAxisAlignment.start,
+//                  children: <Widget>[
+//                    Container(
+//                      margin: EdgeInsets.only(left: 15.0, top: 45.0),
+//                      child: Text(
+//                        'Filter',
+//                        style: TextStyle(
+//                            fontSize: 20.0,
+//                            fontWeight: FontWeight.bold,
+//                            color: kAppBarColorTheme),
+//                      ),
+//                    ),
+//                    Container(
+//                      margin: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+//                      alignment: Alignment.center,
+//                      padding: EdgeInsets.only(left: kDefaultPadding, right: 5.0),
+//                      height: 45,
+//                      decoration: BoxDecoration(
+//                        color: Colors.white,
+//                        borderRadius: BorderRadius.circular(7),
+//                      ),
+//                      child: Row(
+//                        children: <Widget>[
+//                          SvgPicture.asset(
+//                            "assets/icons/search.svg",
+//                            color: kIconColor,
+//                          ),
+//                          SizedBox(
+//                            width: 5.0,
+//                          ),
+//                          Expanded(
+//                            child: Align(
+//                              alignment: Alignment.center,
+//                              child: TextField(
+//                                onChanged: (value) {},
+//                                decoration: InputDecoration(
+//                                  hintText: "Search...",
+//                                  hintStyle: TextStyle(
+//                                    fontSize: 14.0,
+//                                    color: kPrimaryColor.withOpacity(0.5),
+//                                  ),
+//                                  enabledBorder: InputBorder.none,
+//                                  focusedBorder: InputBorder.none,
+//                                ),
+//                              ),
+//                            ),
+//                          ),
+//                        ],
+//                      ),
+//                    ),
+//                    Container(
+//                      alignment: Alignment.center,
+//                      margin: EdgeInsets.all(10.0),
+//                      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+//                      height: 45,
+//                      decoration: BoxDecoration(
+//                        color: Colors.white,
+//                        borderRadius: BorderRadius.circular(7),
+//                      ),
+//                      child: DropdownButton(
+//                        underline: SizedBox(),
+//                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
+//                        isExpanded: true,
+//                        hint: Text(
+//                          "For Sale/Rent",
+//                          style: TextStyle(
+//                            fontSize: 14.0,
+//                            color: kPrimaryColor.withOpacity(0.5),
+//                          ),
+//                        ),
+//                        value: _valSaleRent,
+//                        items: _listSaleRent.map((value) {
+//                          return DropdownMenuItem(
+//                            child: Text(
+//                              value,
+//                              style: TextStyle(
+//                                fontSize: 14.0,
+//                              ),
+//                            ),
+//                            value: value,
+//                          );
+//                        }).toList(),
+//                      ),
+//                    ),
+//                    Container(
+//                      margin: EdgeInsets.only(left: 10.0, right: 10.0),
+//                      alignment: Alignment.center,
+//                      padding: EdgeInsets.only(left: kDefaultPadding, right: 5.0),
+//                      height: 45,
+//                      decoration: BoxDecoration(
+//                        color: Colors.white,
+//                        borderRadius: BorderRadius.circular(7),
+//                      ),
+//                      child: Row(
+//                        children: <Widget>[
+//                          Expanded(
+//                            child: Align(
+//                              alignment: Alignment.center,
+//                              child: TextField(
+//                                onChanged: (value) {},
+//                                decoration: InputDecoration(
+//                                  hintText: "Listing Title",
+//                                  hintStyle: TextStyle(
+//                                    fontSize: 14.0,
+//                                    color: kPrimaryColor.withOpacity(0.5),
+//                                  ),
+//                                  enabledBorder: InputBorder.none,
+//                                  focusedBorder: InputBorder.none,
+//                                ),
+//                              ),
+//                            ),
+//                          ),
+//                        ],
+//                      ),
+//                    ),
+//                    Container(
+//                      margin: EdgeInsets.only(left: 10.0, right: 10.0, top:10.0),
+//                      alignment: Alignment.center,
+//                      padding: EdgeInsets.only(left: kDefaultPadding, right: 5.0),
+//                      height: 45,
+//                      decoration: BoxDecoration(
+//                        color: Colors.white,
+//                        borderRadius: BorderRadius.circular(7),
+//                      ),
+//                      child: Row(
+//                        children: <Widget>[
+//                          Expanded(
+//                            child: Align(
+//                              alignment: Alignment.center,
+//                              child: TextField(
+//                                onChanged: (value) {},
+//                                decoration: InputDecoration(
+//                                  hintText: "City",
+//                                  hintStyle: TextStyle(
+//                                    fontSize: 14.0,
+//                                    color: kPrimaryColor.withOpacity(0.5),
+//                                  ),
+//                                  enabledBorder: InputBorder.none,
+//                                  focusedBorder: InputBorder.none,
+//                                ),
+//                              ),
+//                            ),
+//                          ),
+//                        ],
+//                      ),
+//                    ),
+//
+//                    Container(
+//                      alignment: Alignment.center,
+//                      margin: EdgeInsets.all(10.0),
+//                      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+//                      height: 45,
+//                      decoration: BoxDecoration(
+//                        color: Colors.white,
+//                        borderRadius: BorderRadius.circular(7),
+//                      ),
+//                      child: DropdownButton(
+//                        underline: SizedBox(),
+//                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
+//                        isExpanded: true,
+//                        hint: Text(
+//                          "Property Type",
+//                          style: TextStyle(
+//                            fontSize: 14.0,
+//                            color: kPrimaryColor.withOpacity(0.5),
+//                          ),
+//                        ),
+//                        value: _valSaleRent,
+//                        items: _listSaleRent.map((value) {
+//                          return DropdownMenuItem(
+//                            child: Text(
+//                              value,
+//                              style: TextStyle(
+//                                fontSize: 14.0,
+//                              ),
+//                            ),
+//                            value: value,
+//                          );
+//                        }).toList(),
+//                      ),
+//                    ),
+//                    Container(
+//                      alignment: Alignment.center,
+//                      margin: EdgeInsets.all(10.0),
+//                      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+//                      height: 45,
+//                      decoration: BoxDecoration(
+//                        color: Colors.white,
+//                        borderRadius: BorderRadius.circular(7),
+//                      ),
+//                      child: DropdownButton(
+//                        underline: SizedBox(),
+//                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
+//                        isExpanded: true,
+//                        hint: Text(
+//                          "Facilities",
+//                          style: TextStyle(
+//                            fontSize: 14.0,
+//                            color: kPrimaryColor.withOpacity(0.5),
+//                          ),
+//                        ),
+//                        value: _valSaleRent,
+//                        items: _listSaleRent.map((value) {
+//                          return DropdownMenuItem(
+//                            child: Text(
+//                              value,
+//                              style: TextStyle(
+//                                fontSize: 14.0,
+//                              ),
+//                            ),
+//                            value: value,
+//                          );
+//                        }).toList(),
+//                      ),
+//                    ),
+//                    Container(
+//                      alignment: Alignment.center,
+//                      margin: EdgeInsets.all(10.0),
+//                      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+//                      height: 45,
+//                      decoration: BoxDecoration(
+//                        color: Colors.white,
+//                        borderRadius: BorderRadius.circular(7),
+//                      ),
+//                      child: DropdownButton(
+//                        underline: SizedBox(),
+//                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
+//                        isExpanded: true,
+//                        hint: Text(
+//                          "Rent Frequency",
+//                          style: TextStyle(
+//                            fontSize: 14.0,
+//                            color: kPrimaryColor.withOpacity(0.5),
+//                          ),
+//                        ),
+//                        value: _valSaleRent,
+//                        items: _listSaleRent.map((value) {
+//                          return DropdownMenuItem(
+//                            child: Text(
+//                              value,
+//                              style: TextStyle(
+//                                fontSize: 14.0,
+//                              ),
+//                            ),
+//                            value: value,
+//                          );
+//                        }).toList(),
+//                      ),
+//                    ),
+//                    Container(
+//                      alignment: Alignment.center,
+//                      margin: EdgeInsets.all(10.0),
+//                      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+//                      height: 45,
+//                      decoration: BoxDecoration(
+//                        color: Colors.white,
+//                        borderRadius: BorderRadius.circular(7),
+//                      ),
+//                      child: DropdownButton(
+//                        underline: SizedBox(),
+//                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
+//                        isExpanded: true,
+//                        hint: Text(
+//                          "Listing Status",
+//                          style: TextStyle(
+//                            fontSize: 14.0,
+//                            color: kPrimaryColor.withOpacity(0.5),
+//                          ),
+//                        ),
+//                        value: _valSaleRent,
+//                        items: _listSaleRent.map((value) {
+//                          return DropdownMenuItem(
+//                            child: Text(
+//                              value,
+//                              style: TextStyle(
+//                                fontSize: 14.0,
+//                              ),
+//                            ),
+//                            value: value,
+//                          );
+//                        }).toList(),
+//                      ),
+//                    ),
+//                    RangeSlider(
+//                        activeColor: Colors.red[700],
+//                        inactiveColor: Colors.red[300],
+//                        min: 1,
+//                        max: 100,
+//                        values: values,
+//                        onChanged: (values){
+//                          setState(() {
+//                            values =values;
+//                          });
+//                        }
+//                    ),
+//                    new Container(
+//                      margin: EdgeInsets.all(10.0),
+//                      child: Card(
+//                        color: kAppBarColorTheme,
+//                        child: Padding(
+//                          padding: EdgeInsets.all(10.0),
+//                          child: Row(
+//                            mainAxisAlignment: MainAxisAlignment.center,
+//                            crossAxisAlignment: CrossAxisAlignment.center,
+//                            children: <Widget>[
+//                              Text(
+//                                'Join',
+//                                style: TextStyle(
+//                                    color: Colors.white,
+//                                    fontWeight: FontWeight.bold),
+//                              ),
+//                            ],
+//                          ),
+//                        ),
+//                      ),
+//                    ),
+//                  ],
+//                ),
+//              ),
+//              Container(
+//                margin: EdgeInsets.only(top: 15.0),
+//                child: Align(
+//                    alignment: Alignment.topRight,
+//                    child: RawMaterialButton(
+//                      onPressed: () {
+//                        Navigator.of(context).pop();
+//                      },
+//                      elevation: 2.0,
+//                      fillColor: Colors.white,
+//                      child: Icon(
+//                        Icons.close,
+//                        size: 20.0,
+//                      ),
+//                      shape: CircleBorder(),
+//                    )),
+//              ),
+//            ],
+//          ),
+//        ),
+//      ),
+//    );
+//  }
+//}
+
+class ImageDialog extends StatefulWidget {
+  @override
+  _ImageDialogState createState() => _ImageDialogState();
+}
+
+class _ImageDialogState extends State<ImageDialog> {
+
+  String _valSaleRent;
+  String _valSortBy;
+
+  List _listSaleRent = ["For Sale", "For Rent"];
+  List _listSortBy = [
+    "Highest Price",
+    "Lowest Price",
+    "Newest Listing",
+    "Oldest Listing",
+    "Largest Building Size",
+    "Smallest Building Size"
+  ];
+
+  RangeValues values = RangeValues(1, 100);
+  bool checkedValue = false;
+  double startPrice;
+  double endPrice;
+
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: SingleChildScrollView(
+        child: Container(
+          color: kBgCardItemListing,
+          height: MediaQuery.of(context).size.height,
+          width: MediaQuery.of(context).size.width,
+          child: Stack(
+            children: <Widget>[
+              SingleChildScrollView(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Container(
+                      margin: EdgeInsets.only(left: 15.0, top: 45.0),
+                      child: Text(
+                        'Filter',
+                        style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                            color: kAppBarColorTheme),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(left: kDefaultPadding, right: 5.0),
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          SvgPicture.asset(
+                            "assets/icons/search.svg",
+                            color: kIconColor,
+                          ),
+                          SizedBox(
+                            width: 5.0,
+                          ),
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: TextField(
+                                onChanged: (value) {},
+                                decoration: InputDecoration(
+                                  hintText: "Search...",
+                                  hintStyle: TextStyle(
+                                    fontSize: 14.0,
+                                    color: kPrimaryColor.withOpacity(0.5),
+                                  ),
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.all(10.0),
+                      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: DropdownButton(
+                        underline: SizedBox(),
+                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
+                        isExpanded: true,
+                        hint: Text(
+                          "For Sale/Rent",
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: kPrimaryColor.withOpacity(0.5),
+                          ),
+                        ),
+                        value: _valSaleRent,
+                        items: _listSaleRent.map((value) {
+                          return DropdownMenuItem(
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                fontSize: 14.0,
+                              ),
+                            ),
+                            value: value,
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(left: kDefaultPadding, right: 5.0),
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: TextField(
+                                onChanged: (value) {},
+                                decoration: InputDecoration(
+                                  hintText: "Listing Title",
+                                  hintStyle: TextStyle(
+                                    fontSize: 14.0,
+                                    color: kPrimaryColor.withOpacity(0.5),
+                                  ),
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 10.0, right: 10.0, top:10.0),
+                      alignment: Alignment.center,
+                      padding: EdgeInsets.only(left: kDefaultPadding, right: 5.0),
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: Align(
+                              alignment: Alignment.center,
+                              child: TextField(
+                                onChanged: (value) {},
+                                decoration: InputDecoration(
+                                  hintText: "City",
+                                  hintStyle: TextStyle(
+                                    fontSize: 14.0,
+                                    color: kPrimaryColor.withOpacity(0.5),
+                                  ),
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+
+                    Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.all(10.0),
+                      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: DropdownButton(
+                        underline: SizedBox(),
+                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
+                        isExpanded: true,
+                        hint: Text(
+                          "Property Type",
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: kPrimaryColor.withOpacity(0.5),
+                          ),
+                        ),
+                        value: _valSaleRent,
+                        items: _listSaleRent.map((value) {
+                          return DropdownMenuItem(
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                fontSize: 14.0,
+                              ),
+                            ),
+                            value: value,
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.all(10.0),
+                      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: DropdownButton(
+                        underline: SizedBox(),
+                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
+                        isExpanded: true,
+                        hint: Text(
+                          "Facilities",
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: kPrimaryColor.withOpacity(0.5),
+                          ),
+                        ),
+                        value: _valSaleRent,
+                        items: _listSaleRent.map((value) {
+                          return DropdownMenuItem(
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                fontSize: 14.0,
+                              ),
+                            ),
+                            value: value,
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.all(10.0),
+                      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: DropdownButton(
+                        underline: SizedBox(),
+                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
+                        isExpanded: true,
+                        hint: Text(
+                          "Rent Frequency",
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: kPrimaryColor.withOpacity(0.5),
+                          ),
+                        ),
+                        value: _valSaleRent,
+                        items: _listSaleRent.map((value) {
+                          return DropdownMenuItem(
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                fontSize: 14.0,
+                              ),
+                            ),
+                            value: value,
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.all(10.0),
+                      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
+                      ),
+                      child: DropdownButton(
+                        underline: SizedBox(),
+                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
+                        isExpanded: true,
+                        hint: Text(
+                          "Listing Status",
+                          style: TextStyle(
+                            fontSize: 14.0,
+                            color: kPrimaryColor.withOpacity(0.5),
+                          ),
+                        ),
+                        value: _valSaleRent,
+                        items: _listSaleRent.map((value) {
+                          return DropdownMenuItem(
+                            child: Text(
+                              value,
+                              style: TextStyle(
+                                fontSize: 14.0,
+                              ),
+                            ),
+                            value: value,
+                          );
+                        }).toList(),
+                      ),
+                    ),
+
+                    CheckboxListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      title: Text(
+                          "Price", style: TextStyle(
+                        color: kPrimaryColor
+                      ),),
+                      value: checkedValue,
+                      onChanged: (newValue) {
+                        setState(() {
+                          checkedValue = newValue;
+                        });
+                      },
+                      controlAffinity:
+                      ListTileControlAffinity.leading, //  <-- leading Checkbox
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text('Min', style: TextStyle(
+                            color: Colors.grey
+                          ),),
+                          Spacer(),
+                          Text('Max', style: TextStyle(
+                            color: Colors.grey
+                          ),)
+                        ],
+                      ),
+                    ),
+                    RangeSlider(
+                        activeColor: Colors.red[700],
+                        inactiveColor: Colors.grey[400],
+                        min: 1,
+                        max: 100,
+                        values: values,
+                        onChanged: (values){
+                          setState(() {
+                            //values = values;
+                            startPrice = values.start;
+                            endPrice = values.end;
+                          });
+                        }
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text(startPrice.toString(), style: TextStyle(
+                              color: Colors.grey
+                          ),),
+                          Spacer(),
+                          Text(endPrice.toString(), style: TextStyle(
+                              color: Colors.grey
+                          ),)
+                        ],
+                      ),
+                    ),
+
+                    CheckboxListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      title: Text(
+                        "Land Size", style: TextStyle(
+                          color: kPrimaryColor
+                      ),),
+                      value: checkedValue,
+                      onChanged: (newValue) {
+                        setState(() {
+                          checkedValue = newValue;
+                        });
+                      },
+                      controlAffinity:
+                      ListTileControlAffinity.leading, //  <-- leading Checkbox
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text('Min', style: TextStyle(
+                              color: Colors.grey
+                          ),),
+                          Spacer(),
+                          Text('Max', style: TextStyle(
+                              color: Colors.grey
+                          ),)
+                        ],
+                      ),
+                    ),
+                    RangeSlider(
+                        activeColor: Colors.red[700],
+                        inactiveColor: Colors.grey[400],
+                        min: 1,
+                        max: 100,
+                        values: values,
+                        onChanged: (values){
+                          setState(() {
+                            //values = values;
+                            startPrice = values.start;
+                            endPrice = values.end;
+                          });
+                        }
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text(startPrice.toString(), style: TextStyle(
+                              color: Colors.grey
+                          ),),
+                          Spacer(),
+                          Text(endPrice.toString(), style: TextStyle(
+                              color: Colors.grey
+                          ),)
+                        ],
+                      ),
+                    ),
+
+                    CheckboxListTile(
+                      contentPadding: EdgeInsets.all(0),
+                      title: Text(
+                        "Building Size", style: TextStyle(
+                          color: kPrimaryColor
+                      ),),
+                      value: checkedValue,
+                      onChanged: (newValue) {
+                        setState(() {
+                          checkedValue = newValue;
+                        });
+                      },
+                      controlAffinity:
+                      ListTileControlAffinity.leading, //  <-- leading Checkbox
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text('Min', style: TextStyle(
+                              color: Colors.grey
+                          ),),
+                          Spacer(),
+                          Text('Max', style: TextStyle(
+                              color: Colors.grey
+                          ),)
+                        ],
+                      ),
+                    ),
+                    RangeSlider(
+                        activeColor: Colors.red[700],
+                        inactiveColor: Colors.grey[400],
+                        min: 1,
+                        max: 100,
+                        values: values,
+                        onChanged: (values){
+                          setState(() {
+                            //values = values;
+                            startPrice = values.start;
+                            endPrice = values.end;
+                          });
+                        }
+                    ),
+                    Container(
+                      margin: EdgeInsets.only(left: 15.0, right: 15.0),
+                      child: Row(
+                        children: <Widget>[
+                          Text(startPrice.toString(), style: TextStyle(
+                              color: Colors.grey
+                          ),),
+                          Spacer(),
+                          Text(endPrice.toString(), style: TextStyle(
+                              color: Colors.grey
+                          ),)
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: 50.0,)
+
+                  ],
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(top: 15.0),
+                child: Align(
+                    alignment: Alignment.topRight,
+                    child: RawMaterialButton(
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      elevation: 2.0,
+                      fillColor: Colors.white,
+                      child: Icon(
+                        Icons.close,
+                        size: 20.0,
+                      ),
+                      shape: CircleBorder(),
+                    )),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
