@@ -613,19 +613,49 @@ class ItemList extends StatelessWidget {
                                   )),
                             ),
                             Spacer(),
-                            new Container(
-                              margin: EdgeInsets.only(
-                                  left: 10.0, top: 5.0, bottom: 5.0),
-                              child: new Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Row(
-                                    children: <Widget>[
-                                      SvgPicture.asset(
-                                        "assets/icons/love_white.svg",
-                                      ),
-                                    ],
-                                  )),
-                            ),
+//                            new Container(
+//                              margin: EdgeInsets.only(
+//                                  left: 10.0, top: 5.0, bottom: 5.0),
+//                              child: new Align(
+//                                  alignment: Alignment.centerLeft,
+//                                  child: Row(
+//                                    children: <Widget>[
+//                                      SvgPicture.asset(
+//                                        "assets/icons/love_white.svg",
+//                                      ),
+//                                    ],
+//                                  )),
+//                            ),
+//                            RawMaterialButton(
+//                              onPressed: () {
+//                               // Navigator.of(context).pop();
+//                              },
+//                              padding: EdgeInsets.zero,
+//                              elevation: 2.0,
+//                              fillColor: Colors.white,
+//                              child: Icon(
+//                                Icons.favorite_border,
+//                                size: 20.0,
+//                              ),
+//                              shape: CircleBorder(),
+//                            ),
+                            Card(
+                              margin: EdgeInsets.only(right: 10.0),
+//                              onPressed: () {
+//                                // Navigator.of(context).pop();
+//                              },
+//                              padding: EdgeInsets.zero,
+                              elevation: 2.0,
+                              //fillColor: Colors.white,
+                              child: Container(
+                                margin: EdgeInsets.all(10.0),
+                                child: Icon(
+                                  Icons.favorite_border,
+                                  size: 15.0,
+                                ),
+                              ),
+                              shape: CircleBorder(),
+                            )
                           ],
                         ),
                       ],
@@ -1035,10 +1065,21 @@ class _ImageDialogState extends State<ImageDialog> {
     "Smallest Building Size"
   ];
 
-  RangeValues values = RangeValues(1, 100);
-  bool checkedValue = false;
-  double startPrice;
-  double endPrice;
+  RangeValues valuesPrice = RangeValues(1, 100);
+  RangeValues valuesLandSize = RangeValues(1, 100);
+  RangeValues valuesBuilding = RangeValues(1, 100);
+  bool checkedValuePrice = false;
+  bool checkedValueLandSize = false;
+  bool checkedValueBuildingSize = false;
+
+  double startPrice = 0.0;
+  double endPrice = 0.0;
+
+  double startLandSize = 0.0;
+  double endLandSize = 0.0;
+
+  double startBuildingSize = 0.0;
+  double endBuldingSize = 0.0;
 
 
   @override
@@ -1344,10 +1385,10 @@ class _ImageDialogState extends State<ImageDialog> {
                           "Price", style: TextStyle(
                         color: kPrimaryColor
                       ),),
-                      value: checkedValue,
+                      value: checkedValuePrice,
                       onChanged: (newValue) {
                         setState(() {
-                          checkedValue = newValue;
+                          checkedValuePrice = newValue;
                         });
                       },
                       controlAffinity:
@@ -1372,10 +1413,10 @@ class _ImageDialogState extends State<ImageDialog> {
                         inactiveColor: Colors.grey[400],
                         min: 1,
                         max: 100,
-                        values: values,
+                        values: valuesPrice,
                         onChanged: (values){
                           setState(() {
-                            //values = values;
+                            this.valuesPrice = values;
                             startPrice = values.start;
                             endPrice = values.end;
                           });
@@ -1402,10 +1443,10 @@ class _ImageDialogState extends State<ImageDialog> {
                         "Land Size", style: TextStyle(
                           color: kPrimaryColor
                       ),),
-                      value: checkedValue,
+                      value: checkedValueLandSize,
                       onChanged: (newValue) {
                         setState(() {
-                          checkedValue = newValue;
+                          checkedValueLandSize = newValue;
                         });
                       },
                       controlAffinity:
@@ -1430,12 +1471,12 @@ class _ImageDialogState extends State<ImageDialog> {
                         inactiveColor: Colors.grey[400],
                         min: 1,
                         max: 100,
-                        values: values,
+                        values: valuesLandSize,
                         onChanged: (values){
                           setState(() {
-                            //values = values;
-                            startPrice = values.start;
-                            endPrice = values.end;
+                            this.valuesLandSize = values;
+                            startLandSize = values.start;
+                            endLandSize = values.end;
                           });
                         }
                     ),
@@ -1443,11 +1484,11 @@ class _ImageDialogState extends State<ImageDialog> {
                       margin: EdgeInsets.only(left: 15.0, right: 15.0),
                       child: Row(
                         children: <Widget>[
-                          Text(startPrice.toString(), style: TextStyle(
+                          Text(startLandSize.toString(), style: TextStyle(
                               color: Colors.grey
                           ),),
                           Spacer(),
-                          Text(endPrice.toString(), style: TextStyle(
+                          Text(endLandSize.toString(), style: TextStyle(
                               color: Colors.grey
                           ),)
                         ],
@@ -1460,10 +1501,10 @@ class _ImageDialogState extends State<ImageDialog> {
                         "Building Size", style: TextStyle(
                           color: kPrimaryColor
                       ),),
-                      value: checkedValue,
+                      value: checkedValueBuildingSize,
                       onChanged: (newValue) {
                         setState(() {
-                          checkedValue = newValue;
+                          checkedValueBuildingSize = newValue;
                         });
                       },
                       controlAffinity:
@@ -1488,12 +1529,12 @@ class _ImageDialogState extends State<ImageDialog> {
                         inactiveColor: Colors.grey[400],
                         min: 1,
                         max: 100,
-                        values: values,
+                        values: valuesBuilding,
                         onChanged: (values){
                           setState(() {
-                            //values = values;
-                            startPrice = values.start;
-                            endPrice = values.end;
+                            this.valuesBuilding = values;
+                            startBuildingSize = values.start;
+                            endBuldingSize = values.end;
                           });
                         }
                     ),
@@ -1501,11 +1542,11 @@ class _ImageDialogState extends State<ImageDialog> {
                       margin: EdgeInsets.only(left: 15.0, right: 15.0),
                       child: Row(
                         children: <Widget>[
-                          Text(startPrice.toString(), style: TextStyle(
+                          Text(startBuildingSize.toString(), style: TextStyle(
                               color: Colors.grey
                           ),),
                           Spacer(),
-                          Text(endPrice.toString(), style: TextStyle(
+                          Text(endBuldingSize.toString(), style: TextStyle(
                               color: Colors.grey
                           ),)
                         ],
