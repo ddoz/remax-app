@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:remax_app/util/constants.dart';
 
 class ContentAddInfoListing extends StatefulWidget {
@@ -139,6 +140,76 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
 
   String _valHelperBathroom;
   List _listHelperBathroom = ["1", "2", "3"];
+
+  List<Asset> images = <Asset>[];
+  String _error = 'No Error Dectected';
+
+  Widget buildGridView() {
+//    return GridView.count(
+//      crossAxisCount: 3,
+//      children: List.generate(images.length, (index) {
+//        Asset asset = images[index];
+//        return AssetThumb(
+//          asset: asset,
+//          width: 300,
+//          height: 300,
+//        );
+//      }),
+//    );
+  return ListView.builder(
+    shrinkWrap: true,
+    itemCount: images.length,
+    itemBuilder: (context, i) {
+//      return Container(
+//        child: Column(
+//          children: <Widget>[
+//            Text(images[i].name, style: TextStyle(
+//              fontWeight: FontWeight.bold
+//            ),),
+//            Text(images[i].toString(), style: TextStyle(
+//            ),),
+//          ],
+//        ),
+//      );
+
+      return ListTile(
+          title: Text(images[i].name));
+    },
+  );
+  }
+
+  Future<void> loadAssets() async {
+    List<Asset> resultList = <Asset>[];
+    String error = 'No Error Detected';
+
+    try {
+      resultList = await MultiImagePicker.pickImages(
+        maxImages: 300,
+        enableCamera: true,
+        selectedAssets: images,
+        cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
+        materialOptions: MaterialOptions(
+          actionBarColor: "#abcdef",
+          actionBarTitle: "Example App",
+          allViewTitle: "All Photos",
+          useDetailsView: false,
+          selectCircleStrokeColor: "#000000",
+        ),
+      );
+    } on Exception catch (e) {
+      error = e.toString();
+    }
+
+    // If the widget was removed from the tree while the asynchronous platform
+    // message was in flight, we want to discard the reply rather than calling
+    // setState to update our non-existent appearance.
+    if (!mounted) return;
+
+    setState(() {
+      images = resultList;
+      _error = error;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -1526,9 +1597,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                     ),
                     GestureDetector(
                       onTap: () {
-//                        setState(() {
-//                          _addStatus = AddListingStatus.addInfo;
-//                        });
+                        loadAssets();
                       },
                       child: new Container(
                         height: 70.0,
@@ -1558,6 +1627,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                         ),
                       ),
                     ),
+                    Container(child: buildGridView()),
                     GestureDetector(
                       onTap: () {
                         widget.scrollController.animateTo(

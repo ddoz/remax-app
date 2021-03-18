@@ -15,6 +15,7 @@ const kRedGradient = Color(0xffdf222f);
 const kOrangeGradient = Color(0xfff24e1a);
 const kGreyBgSearch = Color(0xffe5e5e5);
 const kBgFilters = Color(0xffC1D9FD);
+const kBgCardItemListing = Color(0xffF1F1F1);
 
 
 

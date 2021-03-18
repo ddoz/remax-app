@@ -10,6 +10,7 @@ import 'package:remax_app/screens/istilahproperty/istilah_property.dart';
 import 'package:remax_app/screens/search/search_screen.dart';
 import 'package:remax_app/screens/sign_in/sign_in_page.dart';
 
+import '../multiple_picker_image.dart';
 import 'member/my_listing_page.dart';
 
 class MainDrawer extends StatelessWidget {
@@ -189,7 +190,7 @@ class MainDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(new MaterialPageRoute(
-                    builder: (BuildContext context) => new FavoritePage()));
+                    builder: (BuildContext context) => new MyMultiplePicker()));
               },
               child: Container(
                 margin: EdgeInsets.only(left: 30.0, bottom: 10.0),

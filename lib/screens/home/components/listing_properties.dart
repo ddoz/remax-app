@@ -48,7 +48,7 @@ class _ListingPropertiesState extends State<ListingProperties> {
                   alignment: Alignment.center,
                   children: <Widget>[
                     carouselSlider = CarouselSlider(
-                      height: 330,
+                      height: 370,
                       initialPage: 0,
                       enlargeCenterPage: false,
                       autoPlay: true,
@@ -235,8 +235,10 @@ class ItemList extends StatelessWidget {
                       borderRadius:
                       new BorderRadius.all(const Radius.circular(10.0)),
                       image: DecorationImage(
-                          image: NetworkImage('https://genius.remax.co.id/papi/' +
-                              data['listThumbnail']),
+                          image: data['listThumbnail'] != null
+                              ? NetworkImage('https://genius.remax.co.id/papi/' +
+                              data['listThumbnail'])
+                              : NetworkImage('-'),
                           fit: BoxFit.cover),
                     ),
                   ),
@@ -271,7 +273,7 @@ class ItemList extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                        margin: EdgeInsets.only(left: 10.0, right: 10.0, top:5.0),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: new Text(
@@ -281,7 +283,6 @@ class ItemList extends StatelessWidget {
                             style: new TextStyle(
                               fontSize: 13.0,
                               color: Colors.black,
-                              fontWeight: FontWeight.bold,
                             ),
                           ),
                         ),
@@ -306,13 +307,11 @@ class ItemList extends StatelessWidget {
                                             data['listBedroom'],
                                             style: new TextStyle(
                                               fontSize: 10.0,
-                                              fontWeight: FontWeight.bold,
                                             ),
                                           )
                                         : new Text('-',
                                             style: new TextStyle(
                                               fontSize: 10.0,
-                                              fontWeight: FontWeight.bold,
                                             ))
                                   ],
                                 )),
@@ -335,13 +334,11 @@ class ItemList extends StatelessWidget {
                                             data['listBathroom'],
                                             style: new TextStyle(
                                               fontSize: 10.0,
-                                              fontWeight: FontWeight.bold,
                                             ),
                                           )
                                         : new Text('-',
                                             style: new TextStyle(
                                               fontSize: 10.0,
-                                              fontWeight: FontWeight.bold,
                                             ))
                                   ],
                                 )),
@@ -365,13 +362,11 @@ class ItemList extends StatelessWidget {
                                             data['listBuildingSize'],
                                             style: new TextStyle(
                                               fontSize: 10.0,
-                                              fontWeight: FontWeight.bold,
                                             ),
                                           )
                                         : new Text('-',
                                             style: new TextStyle(
                                               fontSize: 10.0,
-                                              fontWeight: FontWeight.bold,
                                             ))
                                   ],
                                 )),
@@ -395,13 +390,11 @@ class ItemList extends StatelessWidget {
                                             data['listLandSize'],
                                             style: new TextStyle(
                                               fontSize: 10.0,
-                                              fontWeight: FontWeight.bold,
                                             ),
                                           )
                                         : new Text('-',
                                             style: new TextStyle(
                                               fontSize: 10.0,
-                                              fontWeight: FontWeight.bold,
                                             ))
                                   ],
                                 )),
@@ -465,6 +458,55 @@ class ItemList extends StatelessWidget {
                                     color: const Color(0xff1A3668)),
                               )
                             ]),
+
+                      Row(
+                        children: <Widget>[
+                          new Container(
+                            margin: EdgeInsets.only(
+                                left: 10.0, top: 10.0, bottom: 10.0),
+                            child: new Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  children: <Widget>[
+                                    SvgPicture.asset(
+                                      "assets/icons/share.svg",
+                                    ),
+                                  ],
+                                )),
+                          ),
+                          Spacer(),
+//                            new Container(
+//                              margin: EdgeInsets.only(
+//                                  left: 10.0, top: 5.0, bottom: 5.0),
+//                              child: new Align(
+//                                  alignment: Alignment.centerLeft,
+//                                  child: Row(
+//                                    children: <Widget>[
+//                                      SvgPicture.asset(
+//                                        "assets/icons/love_white.svg",
+//                                      ),
+//                                    ],
+//                                  )),
+//                            ),
+                          Card(
+                            margin: EdgeInsets.only(right: 10.0),
+//                              onPressed: () {
+//                                // Navigator.of(context).pop();
+//                              },
+//                              padding: EdgeInsets.zero,
+                            elevation: 2.0,
+                            //fillColor: Colors.white,
+                            child: Container(
+                              margin: EdgeInsets.all(10.0),
+                              child: Icon(
+                                Icons.favorite_border,
+                                size: 15.0,
+                              ),
+                            ),
+                            shape: CircleBorder(),
+                          )
+                        ],
+                      ),
                     ],
                   ),
                 ],
