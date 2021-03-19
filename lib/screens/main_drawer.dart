@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:remax_app/google_maps.dart';
 import 'package:remax_app/screens/about/about_page.dart';
 import 'package:remax_app/screens/agents/agents_page.dart';
 import 'package:remax_app/screens/ajukan_kpr/ajukan_kpr_page.dart';
@@ -190,7 +191,7 @@ class MainDrawer extends StatelessWidget {
               onTap: () {
                 Navigator.of(context).pop();
                 Navigator.of(context).push(new MaterialPageRoute(
-                    builder: (BuildContext context) => new MyMultiplePicker()));
+                    builder: (BuildContext context) => new MapsDemo()));
               },
               child: Container(
                 margin: EdgeInsets.only(left: 30.0, bottom: 10.0),
