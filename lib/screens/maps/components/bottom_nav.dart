@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:remax_app/screens/maps/map_page.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:remax_app/screens/search/search_screen.dart';
 import 'package:remax_app/util/constants.dart';
 
 class MyBottomNavBar extends StatelessWidget {
@@ -52,16 +52,16 @@ class MyBottomNavBar extends StatelessWidget {
             onTap: (){
               Navigator.of(context).pop();
               Navigator.of(context).push(new MaterialPageRoute(
-                  builder: (BuildContext context) => MapPage()));
+                  builder: (BuildContext context) => SearchScreen()));
             },
             child: Container(
               margin: EdgeInsets.all(10.0),
               child: Column(children: <Widget>[
                 SizedBox(
                     height: 16.0,
-                    child: SvgPicture.asset("assets/icons/map.svg")),
+                    child: SvgPicture.asset("assets/icons/grid.svg")),
                 Text(
-                  'Map',
+                  'Grid List',
                   style: TextStyle(fontSize: 13.0),
                 )
               ]),

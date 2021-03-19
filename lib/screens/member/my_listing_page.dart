@@ -12,20 +12,16 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../detail/detail_page.dart';
 
 class MyListingPage extends StatefulWidget {
-  final VoidCallback signOut;
 
-  MyListingPage(this.signOut);
+
+  MyListingPage();
 
   @override
   _MyListingPageState createState() => _MyListingPageState();
 }
 
 class _MyListingPageState extends State<MyListingPage> {
-  signOut() {
-    setState(() {
-      widget.signOut();
-    });
-  }
+
 
   String name = "", member = "";
   Map<String, String> headerss = {};

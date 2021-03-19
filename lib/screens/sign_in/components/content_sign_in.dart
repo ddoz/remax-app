@@ -327,7 +327,12 @@ class _ContentSignInState extends State<ContentSignIn> {
         );
         break;
       case LoginStatus.signIn:
-        return MainMenu(signOut, headers);
+        //return MainMenu(signOut, headers);
+      //return SizedBox();
+      setState(() {
+        Navigator.of(context).pop();
+      });
+
         break;
       case LoginStatus.loading:
         return Container(
@@ -415,7 +420,7 @@ class _MainMenuState extends State<MainMenu> {
                    onTap: () => Navigator.of(context).push(
                        new MaterialPageRoute(
                            builder: (BuildContext context) =>
-                           new MyListingPage(signOut))),
+                           new MyListingPage())),
                   child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -436,7 +441,7 @@ class _MainMenuState extends State<MainMenu> {
                    onTap: () => Navigator.of(context).push(
                        new MaterialPageRoute(
                            builder: (BuildContext context) =>
-                           new MyCustomerPage(signOut))),
+                           new MyCustomerPage())),
                   child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),

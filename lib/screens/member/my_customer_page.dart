@@ -11,20 +11,12 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'detail_edit_customer.dart';
 
 class MyCustomerPage extends StatefulWidget {
-  final VoidCallback signOut;
-
-  MyCustomerPage(this.signOut);
 
   @override
   _MyCustomerPageState createState() => _MyCustomerPageState();
 }
 
 class _MyCustomerPageState extends State<MyCustomerPage> {
-  signOut() {
-    setState(() {
-      widget.signOut();
-    });
-  }
 
   String name = "", member = "";
 
