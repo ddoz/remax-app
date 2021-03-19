@@ -5,7 +5,7 @@ import 'package:remax_app/screens/contactus/contact_us_page.dart';
 import 'package:remax_app/screens/favourite/favourite_page.dart';
 import 'package:remax_app/screens/gallery_page.dart';
 import 'package:remax_app/screens/home_page.dart';
-import 'package:remax_app/screens/map_page.dart';
+import 'file:///D:/ITERA/Project/Flutter/remax_app/lib/screens/maps/map_page.dart';
 import 'package:remax_app/screens/sign_in/sign_in_page.dart';
 
 
