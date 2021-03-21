@@ -425,7 +425,7 @@ class ItemList extends StatelessWidget {
                               children: <Widget>[
                                 new Container(
                                   margin: EdgeInsets.only(
-                                      left: 15.0, right: 15.0, top: 5.0),
+                                      left: 10.0, right: 10.0, top: 5.0),
                                   child: new Align(
                                       alignment: Alignment.centerLeft,
                                       child: Row(
@@ -453,7 +453,7 @@ class ItemList extends StatelessWidget {
                                 ),
                                 new Container(
                                   margin: EdgeInsets.only(
-                                      left: 15.0, right: 15.0, top: 5.0),
+                                      left: 10.0, right: 10.0, top: 5.0),
                                   child: new Align(
                                       alignment: Alignment.centerLeft,
                                       child: Row(
@@ -487,7 +487,7 @@ class ItemList extends StatelessWidget {
                           children: <Widget>[
                             new Container(
                               margin: EdgeInsets.only(
-                                  left: 10.0, top: 10.0, bottom: 10.0),
+                                  left: 10.0, top: 10.0, bottom: 4.0),
                               child: new Align(
                                   alignment: Alignment.centerLeft,
                                   child: Row(
@@ -521,7 +521,7 @@ class ItemList extends StatelessWidget {
                               elevation: 2.0,
                               //fillColor: Colors.white,
                               child: Container(
-                                margin: EdgeInsets.all(10.0),
+                                margin: EdgeInsets.all(6.0),
                                 child: Icon(
                                   Icons.favorite_border,
                                   size: 15.0,

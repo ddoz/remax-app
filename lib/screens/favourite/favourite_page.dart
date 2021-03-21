@@ -25,7 +25,7 @@ class _FavoritePageState extends State<FavoritePage> {
   void _handleSubmitted(String text) async {
     _textEditingController.clear();
 
-    TodoItem noDoItem = TodoItem(1, "", "", "", "", dateFormatted());
+    TodoItem noDoItem = TodoItem(1, "", "", "", "", "","","","","",dateFormatted());
     int savedItemId = await db.saveItem(noDoItem);
 
     TodoItem addedItem = await db.getItem(savedItemId);
@@ -75,7 +75,7 @@ class _FavoritePageState extends State<FavoritePage> {
 //                              _deleteNoDo(_itemList[index].id, index),
 //                        ),
 //                      ),
-                      height: 150.0,
+                      height: 190.0,
                       child: Stack(
                         children: <Widget>[
                           _itemList[index],
