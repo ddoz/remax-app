@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -675,6 +676,15 @@ class _ItemListState extends State<ItemList> {
     await db.deleteItem(id);
   }
 
+  Future<void> share(String idListing, String judul) async {
+    await FlutterShare.share(
+        title: 'Share',
+        text: judul,
+        linkUrl: 'https://remax.co.id/property/${idListing}',
+        chooserTitle: 'Choose application'
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     listMedia = widget.data['links']['listFile'];
@@ -956,18 +966,23 @@ class _ItemListState extends State<ItemList> {
                         ),
                         Row(
                           children: <Widget>[
-                            new Container(
-                              margin: EdgeInsets.only(
-                                  left: 10.0),
-                              child: new Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Row(
-                                    children: <Widget>[
-                                      SvgPicture.asset(
-                                        "assets/icons/share.svg",
-                                      ),
-                                    ],
-                                  )),
+                            GestureDetector(
+                              onTap: (){
+                                share(widget.data['id'], widget.data['listTitle']);
+                              },
+                              child: new Container(
+                                margin: EdgeInsets.only(
+                                    left: 10.0),
+                                child: new Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: Row(
+                                      children: <Widget>[
+                                        SvgPicture.asset(
+                                          "assets/icons/share.svg",
+                                        ),
+                                      ],
+                                    )),
+                              ),
                             ),
                             Spacer(),
                             FutureBuilder(
