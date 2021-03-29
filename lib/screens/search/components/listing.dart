@@ -1390,11 +1390,11 @@ class _ItemListState extends State<ItemList> {
                               ),
                             ),
                             Spacer(),
-                            FutureBuilder(
+                            FutureBuilder<bool>(
                                 future: checkfav(toInt(widget.list[i]['id'])),
                                 builder: (context, snapshot) {
                                   if (snapshot.hasError) print(snapshot.error);
-                                  if (snapshot.data) {
+                                  if (snapshot.data == true) {
                                     return GestureDetector(
                                       onTap: (){
                                         _deletefav(toInt(widget.list[i]['id']));
@@ -1416,7 +1416,8 @@ class _ItemListState extends State<ItemList> {
                                         shape: CircleBorder(),
                                       ),
                                     );
-                                  } else {
+                                  }
+                                  else {
                                     return GestureDetector(
                                       onTap: (){
                                         _handleSubmitted(

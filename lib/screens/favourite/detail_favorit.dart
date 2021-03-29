@@ -162,51 +162,6 @@ class _DetailFavPageState extends State<DetailFavPage> {
         ),
         centerTitle: true,
         backgroundColor: Colors.white,
-//        actions: <Widget>[
-//          FutureBuilder(
-//              future: checkfav(toInt(widget.list[widget.index]['id'])),
-//              builder: (context, snapshot) {
-//                if (snapshot.hasError) print(snapshot.error);
-//                if (snapshot.data) {
-//                  return IconButton(
-//                    icon: Icon(
-//                      Icons.favorite,
-//                      color: kAppBarColorTheme,
-//                    ),
-//                    onPressed: () {
-//                      _deletefav(toInt(widget.list[widget.index]['id']));
-//                      // do something
-//                      setState(() {});
-//                    },
-//                  );
-//                } else {
-//                  return IconButton(
-//                    icon: Icon(
-//                      Icons.favorite_border,
-//                      color: kPrimaryColor,
-//                    ),
-//                    onPressed: () {
-//                      _handleSubmitted(
-//                        toInt(widget.list[widget.index]['id']),
-//                        widget.list[widget.index]['listTitle'],
-//                        widget.list[widget.index]['listThumbnail'],
-//                        widget.list[widget.index]['listListingPrice'],
-//                        widget.list[widget.index]['links']
-//                        ['listListingCategoryId'],
-//                        imgSlider().length.toString(),
-//                        widget.list[widget.index]['listBedroom'],
-//                        widget.list[widget.index]['listBathroom'],
-//                        widget.list[widget.index]['listBuildingSize'],
-//                        widget.list[widget.index]['listLandSize'],
-//
-//                      );
-//                      // do something
-//                      setState(() {});
-//                    },
-//                  );
-//                }
-//              })
-//        ],
       ),
       body: FutureBuilder<Map<String, dynamic>>(
           future: getData(),
@@ -265,26 +220,6 @@ class _DetailFavPageState extends State<DetailFavPage> {
                             color: Colors.white),
                         child: Column(
                           children: [
-                            // new Container(
-                            //   margin: EdgeInsets.all(15.0),
-                            //   child: new Align(
-                            //     alignment: Alignment.centerLeft,
-                            //     child: new Text(
-                            //       "Detail Informasi",
-                            //       style: new TextStyle(
-                            //           fontSize: 25.0, color: const Color(0xff1A3668)),
-                            //     ),
-                            //   ),
-                            // ),
-                            // new Align(
-                            //   alignment: Alignment.centerLeft,
-                            //   child: Container(
-                            //     margin: EdgeInsets.only(left: 15.0),
-                            //     width: 40,
-                            //     height: 2,
-                            //     color: const Color(0xffDC1B2E),
-                            //   ),
-                            // ),
                             new Container(
                               margin: EdgeInsets.only(top: 25.0, left: 15.0),
                               child: new Row(
@@ -388,17 +323,6 @@ class _DetailFavPageState extends State<DetailFavPage> {
                                 ),
                               ),
                             ),
-                            // new Container(
-                            //   margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 5.0),
-                            //   child: new Align(
-                            //     alignment: Alignment.centerLeft,
-                            //     child: new Text(
-                            //       widget.list[widget.index]['listStreetName'],
-                            //       style: new TextStyle(
-                            //           fontSize: 18.0, color: const Color(0xff767472)),
-                            //     ),
-                            //   ),
-                            // ),
                             Container(
                               margin: EdgeInsets.all(15.0),
                               child: Row(
@@ -535,91 +459,6 @@ class _DetailFavPageState extends State<DetailFavPage> {
                                 ],
                               ),
                             ),
-                            // new Container(
-                            //   margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                            //   child: new Row(
-                            //     children: <Widget>[
-                            //       new Text(
-                            //         "Kota: ",
-                            //         style: new TextStyle(fontSize: 15.0),
-                            //       ),
-                            //       new FutureBuilder<String>(
-                            //         future: getDataKota(),
-                            //         builder: (context, snapshot) {
-                            //           if (snapshot.hasError) print(snapshot.error);
-                            //           return snapshot.hasData
-                            //               ? new Text(snapshot.data,
-                            //               style: new TextStyle(fontSize: 15.0))
-                            //               : new Text("Loading....",
-                            //               style: new TextStyle(
-                            //                   fontSize: 15.0,
-                            //                   color: const Color(0xff767472)));
-                            //         },
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
-                            // new Container(
-                            //   margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                            //   child: new Row(
-                            //     children: <Widget>[
-                            //       new Text(
-                            //         "Provinsi: ",
-                            //         style: new TextStyle(fontSize: 15.0),
-                            //       ),
-                            //       new FutureBuilder<String>(
-                            //         future: getDataProv(),
-                            //         builder: (context, snapshot) {
-                            //           if (snapshot.hasError) print(snapshot.error);
-                            //           return snapshot.hasData
-                            //               ? new Text(snapshot.data,
-                            //               style: new TextStyle(fontSize: 15.0))
-                            //               : new Text("Loading....",
-                            //               style: new TextStyle(
-                            //                   fontSize: 15.0,
-                            //                   color: const Color(0xff767472)));
-                            //         },
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
-                            // new Container(
-                            //   margin: EdgeInsets.only(left: 15.0, right: 15.0),
-                            //   child: new Row(
-                            //     children: <Widget>[
-                            //       new Text(
-                            //         "Negara: ",
-                            //         style: new TextStyle(fontSize: 15.0),
-                            //       ),
-                            //       new FutureBuilder<String>(
-                            //         future: getDataNegara(),
-                            //         builder: (context, snapshot) {
-                            //           if (snapshot.hasError) print(snapshot.error);
-                            //           return snapshot.hasData
-                            //               ? new Text(snapshot.data,
-                            //               style: new TextStyle(fontSize: 15.0))
-                            //               : new Text("Loading....",
-                            //               style: new TextStyle(
-                            //                   fontSize: 15.0,
-                            //                   color: const Color(0xff767472)));
-                            //         },
-                            //       ),
-                            //     ],
-                            //   ),
-                            // ),
-                            // new Container(
-                            //   margin: EdgeInsets.only(left: 15.0, right: 15.0, top: 30.0),
-                            //   child: new Align(
-                            //     alignment: Alignment.centerLeft,
-                            //     child: new Text(
-                            //       "Deskripsi",
-                            //       style: new TextStyle(
-                            //         fontSize: 23.0,
-                            //         fontWeight: FontWeight.bold,
-                            //       ),
-                            //     ),
-                            //   ),
-                            // ),
 
                             new Container(
                               margin: EdgeInsets.only(left: 15.0, right: 15.0),
@@ -734,9 +573,6 @@ class _DetailFavPageState extends State<DetailFavPage> {
                                 child: Container(
                                   margin: EdgeInsets.all(15.0),
                                   child: Table(
-                                    // textDirection: TextDirection.rtl,
-                                    // defaultVerticalAlignment: TableCellVerticalAlignment.bottom,
-                                    // border:TableBorder.all(width: 2.0,color: Colors.red),
                                     children: [
                                       TableRow(children: [
                                         Container(

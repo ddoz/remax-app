@@ -117,11 +117,11 @@ class _DetailPageState extends State<DetailPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: <Widget>[
-          FutureBuilder(
+          FutureBuilder<bool>(
               future: checkfav(toInt(widget.list[widget.index]['id'])),
               builder: (context, snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
-                if (snapshot.data) {
+                if (snapshot.data == true) {
                   return IconButton(
                     icon: Icon(
                       Icons.favorite,

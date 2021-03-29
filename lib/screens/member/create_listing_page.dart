@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 class CreateListing extends StatefulWidget {
   @override
@@ -33,6 +37,7 @@ class _CreateListingState extends State<CreateListing> {
   ];
 
   final TextEditingController _typeAheadController = TextEditingController();
+  final TextEditingController _typeAheadControllerProv = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -64,6 +69,26 @@ class _CreateListingState extends State<CreateListing> {
                 },
                 onSuggestionSelected: (suggestion) {
                   this._typeAheadController.text = suggestion;
+                }),
+            TypeAheadField(
+                textFieldConfiguration: TextFieldConfiguration(
+                  decoration: InputDecoration(labelText: 'Province'),
+                  controller: this._typeAheadControllerProv,
+                ),
+                suggestionsCallback: (pattern) async {
+                  return await StateServiceProv.getSuggestions(pattern);
+                },
+                transitionBuilder:
+                    (context, suggestionsBox, controller) {
+                  return suggestionsBox;
+                },
+                itemBuilder: (context, suggestion) {
+                  return ListTile(
+                    title: Text(suggestion),
+                  );
+                },
+                onSuggestionSelected: (suggestion) {
+                  this._typeAheadControllerProv.text = suggestion;
                 }),
             TextFormField(
               onSaved: (e) => email = e,
@@ -187,50 +212,40 @@ class _CreateListingState extends State<CreateListing> {
 }
 
 class StateService {
+
   static final List<String> states = [
-    'ANDAMAN AND NICOBAR ISLANDS',
+    'Pertamburan, Jakarta Barat',
     'ANDHRA PRADESH',
-    'ARUNACHAL PRADESH',
-    'ASSAM',
-    'BIHAR',
-    'CHATTISGARH',
-    'CHANDIGARH',
-    'DAMAN AND DIU',
-    'DELHI',
-    'DADRA AND NAGAR HAVELI',
-    'GOA',
-    'GUJARAT',
-    'HIMACHAL PRADESH',
-    'HARYANA',
-    'JAMMU AND KASHMIR',
-    'JHARKHAND',
-    'KERALA',
-    'KARNATAKA',
-    'LAKSHADWEEP',
-    'MEGHALAYA',
-    'MAHARASHTRA',
-    'MANIPUR',
-    'MADHYA PRADESH',
-    'MIZORAM',
-    'NAGALAND',
-    'ORISSA',
-    'PUNJAB',
-    'PONDICHERRY',
-    'RAJASTHAN',
-    'SIKKIM',
-    'TAMIL NADU',
-    'TRIPURA',
-    'UTTARAKHAND',
-    'UTTAR PRADESH',
-    'WEST BENGAL',
-    'TELANGANA',
-    'LADAKH'
+    'ARUNACHAL PRADESH'
   ];
 
 
   static List<String> getSuggestions(String query) {
     List<String> matches = List();
     matches.addAll(states);
+    matches.retainWhere((s) => s.toLowerCase().contains(query.toLowerCase()));
+    return matches;
+  }
+}
+
+class StateServiceProv {
+  static Future<List<dynamic>> getSuggestions(String query) async {
+
+    Map<String, String> headerss = {};
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    headerss['cookie'] = preferences.getString("cookie");
+    print(headerss);
+    final response = await http.get(
+        "https://genius.remax.co.id/api/province/crud?pageSize=100",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+    List matches = List();
+
+    for (int i=0; i<list.length; i++){
+      matches.add(list[i]['mprvDescription']);
+    }
+
     matches.retainWhere((s) => s.toLowerCase().contains(query.toLowerCase()));
     return matches;
   }

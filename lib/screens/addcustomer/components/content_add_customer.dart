@@ -1,6 +1,11 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:remax_app/util/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class ContentAddCustomer extends StatefulWidget {
   @override
@@ -9,11 +14,42 @@ class ContentAddCustomer extends StatefulWidget {
 
 class _ContentAddCustomerState extends State<ContentAddCustomer> {
 
-  String _valProvince;
-  List _listProvince = ["Jakarta", "Surabaya", "Medan"];
 
-  String _valMarital;
-  List _listMarital = ["Singel", "Married"];
+  final TextEditingController _typeAheadControllerProv = TextEditingController();
+  final TextEditingController _typeAheadControllerCity = TextEditingController();
+  final TextEditingController _typeAheadControllerMarital = TextEditingController();
+
+
+  TextEditingController controllerCustName = new TextEditingController();
+  TextEditingController controllerCustAddres = new TextEditingController();
+  TextEditingController controllerCustMobileNumber = new TextEditingController();
+  TextEditingController controllerCustPhoneNumber = new TextEditingController();
+  TextEditingController controllerCustEmail = new TextEditingController();
+  TextEditingController controllerCustIdentity = new TextEditingController();
+
+  String idProvince, idCity, idMarital;
+
+
+  Map<String, String> headerss = {};
+
+
+  getPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      setState(() {
+        headerss['cookie'] = preferences.getString("cookie");
+      });
+
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPref();
+    print(headerss);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,6 +69,7 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
+                    controller: controllerCustName,
                     onChanged: (value) {},
                     decoration: InputDecoration(
                       hintText: "Customer Name",
@@ -65,6 +102,7 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
+                    controller: controllerCustAddres,
                     onChanged: (value) {},
                     decoration: InputDecoration(
                       hintText: "Cust Address",
@@ -92,61 +130,120 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
               color: kLightGrey,
               borderRadius: BorderRadius.circular(7),
             ),
-            child: DropdownButton(
-              underline: SizedBox(),
-              icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-              isExpanded: true,
-              hint: Text("Gender", style: TextStyle(
-                fontSize: 14.0,
-                color: kPrimaryColor.withOpacity(0.5),
-              ),),
-              value: _valProvince,
-              items: _listProvince.map((value) {
-                return DropdownMenuItem(
-                  child: Text(value, style: TextStyle(
-                    fontSize: 14.0,
-                  ),),
-                  value: value,
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  _valProvince = value;
-                });
-              },
-            ),
-          ),
-          Container(
-            alignment: Alignment.center,
-            margin: EdgeInsets.only(top: 10, left: 15.0, right: 15.0),
-            padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-            height: 45,
-            decoration: BoxDecoration(
-              color: kLightGrey,
-              borderRadius: BorderRadius.circular(10),
+            child: TypeAheadField(
+                textFieldConfiguration: TextFieldConfiguration(
 
-            ),
-            child: Row(
-              children: <Widget>[
-                Expanded(
-                  child: TextField(
-                    onChanged: (value) {},
-                    decoration: InputDecoration(
-                      hintText: "City",
-                      hintStyle: TextStyle(
-                        color: kPrimaryColor.withOpacity(0.5),
-                      ),
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: InputBorder.none,
-                      // surffix isn't working properly  with SVG
-                      // thats why we use row
-                      // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
+                  decoration: InputDecoration(
+                    hintText: "Province",
+                    hintStyle: TextStyle(
+                      color: kPrimaryColor.withOpacity(0.5),
                     ),
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
                   ),
+                  controller: this._typeAheadControllerProv,
                 ),
-                SvgPicture.asset("assets/icons/city.svg", color: kIconColor),
-              ],
+                suggestionsCallback: (pattern) async {
+                  return await StateServiceProv.getSuggestions(pattern);
+                },
+                transitionBuilder:
+                    (context, suggestionsBox, controller) {
+                  return suggestionsBox;
+                },
+                itemBuilder: (context, suggestion) {
+                  return ListTile(
+                    title: Text(suggestion['mprvDescription']),
+                  );
+                },
+                onSuggestionSelected: (suggestion) {
+                  this._typeAheadControllerProv.text = suggestion['mprvDescription'];
+                  //print( suggestion['mprvDescription'] +" idnya adalah "+suggestion['id']);
+                  setState(() {
+                    idProvince = suggestion['id'];
+                  });
+                }),
+          ),
+          Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(top: 10, left: 15.0, right: 15.0),
+            padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+            height: 45,
+            decoration: BoxDecoration(
+              color: kLightGrey,
+              borderRadius: BorderRadius.circular(7),
             ),
+            child: TypeAheadField(
+                textFieldConfiguration: TextFieldConfiguration(
+
+                  decoration: InputDecoration(
+                    hintText: "City",
+                    hintStyle: TextStyle(
+                      color: kPrimaryColor.withOpacity(0.5),
+                    ),
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                  ),
+                  controller: this._typeAheadControllerCity,
+                ),
+                suggestionsCallback: (pattern) async {
+                  return await StateServiceCity.getSuggestions(pattern);
+                },
+                transitionBuilder:
+                    (context, suggestionsBox, controller) {
+                  return suggestionsBox;
+                },
+                itemBuilder: (context, suggestion) {
+                  return ListTile(
+                    title: Text(suggestion['mctyDescription']),
+                  );
+                },
+                onSuggestionSelected: (suggestion) {
+                  this._typeAheadControllerCity.text = suggestion['mctyDescription'];
+                  setState(() {
+                    idCity = suggestion['id'];
+                  });
+                }),
+          ),
+          Container(
+            alignment: Alignment.center,
+            margin: EdgeInsets.only(top: 10, left: 15.0, right: 15.0),
+            padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+            height: 45,
+            decoration: BoxDecoration(
+              color: kLightGrey,
+              borderRadius: BorderRadius.circular(7),
+            ),
+            child: TypeAheadField(
+                textFieldConfiguration: TextFieldConfiguration(
+
+                  decoration: InputDecoration(
+                    hintText: "Marital Status",
+                    hintStyle: TextStyle(
+                      color: kPrimaryColor.withOpacity(0.5),
+                    ),
+                    enabledBorder: InputBorder.none,
+                    focusedBorder: InputBorder.none,
+                  ),
+                  controller: this._typeAheadControllerMarital,
+                ),
+                suggestionsCallback: (pattern) async {
+                  return await StateServiceMartial.getSuggestions(pattern);
+                },
+                transitionBuilder:
+                    (context, suggestionsBox, controller) {
+                  return suggestionsBox;
+                },
+                itemBuilder: (context, suggestion) {
+                  return ListTile(
+                    title: Text(suggestion['mmslName']),
+                  );
+                },
+                onSuggestionSelected: (suggestion) {
+                  this._typeAheadControllerMarital.text = suggestion['mmslName'];
+                  setState(() {
+                    idMarital = suggestion['id'];
+                  });
+                }),
           ),
           Container(
             alignment: Alignment.center,
@@ -162,6 +259,8 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
+                    controller: controllerCustMobileNumber,
+                keyboardType: TextInputType.phone,
                     onChanged: (value) {},
                     decoration: InputDecoration(
                       hintText: "Mobile Number",
@@ -194,6 +293,8 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
+                    controller: controllerCustPhoneNumber,
+                    keyboardType: TextInputType.phone,
                     onChanged: (value) {},
                     decoration: InputDecoration(
                       hintText: "Phone Number",
@@ -226,6 +327,8 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
+                    controller: controllerCustEmail,
+                    keyboardType: TextInputType.emailAddress,
                     onChanged: (value) {},
                     decoration: InputDecoration(
                       hintText: "Email",
@@ -244,39 +347,7 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
               ],
             ),
           ),
-          Container(
-            alignment: Alignment.center,
-            margin: EdgeInsets.only(top: 10, left: 15.0, right: 15.0),
-            padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-            height: 45,
-            decoration: BoxDecoration(
-              color: kLightGrey,
-              borderRadius: BorderRadius.circular(7),
-            ),
-            child: DropdownButton(
-              underline: SizedBox(),
-              icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-              isExpanded: true,
-              hint: Text("Marital Status", style: TextStyle(
-                fontSize: 14.0,
-                color: kPrimaryColor.withOpacity(0.5),
-              ),),
-              value: _valMarital,
-              items: _listMarital.map((value) {
-                return DropdownMenuItem(
-                  child: Text(value, style: TextStyle(
-                    fontSize: 14.0,
-                  ),),
-                  value: value,
-                );
-              }).toList(),
-              onChanged: (value) {
-                setState(() {
-                  _valMarital = value;
-                });
-              },
-            ),
-          ),
+
           Container(
             alignment: Alignment.center,
             margin: EdgeInsets.only(top: 10, left: 15.0, right: 15.0),
@@ -291,6 +362,7 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
               children: <Widget>[
                 Expanded(
                   child: TextField(
+                    controller: controllerCustIdentity,
                     onChanged: (value) {},
                     decoration: InputDecoration(
                       hintText: "Identity Number",
@@ -310,23 +382,28 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
             ),
           ),
 
-          new Container(
-            margin: EdgeInsets.all(10.0),
-            child: Card(
-              color: kAppBarColorTheme,
-              child: Padding(
-                padding: EdgeInsets.all(10.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: <Widget>[
-                    Text(
-                      'Submit',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold),
-                    ),
-                  ],
+          GestureDetector(
+            onTap: (){
+              addData();
+            },
+            child: new Container(
+              margin: EdgeInsets.all(10.0),
+              child: Card(
+                color: kAppBarColorTheme,
+                child: Padding(
+                  padding: EdgeInsets.all(10.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: <Widget>[
+                      Text(
+                        'Submit',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -334,5 +411,180 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
         ],
       ),
     );
+  }
+
+  String validator(){
+    String error = "kosong";
+    if (controllerCustName.text.isEmpty){
+      error = "Nama cust tidak boleh kosong";
+      return error;
+    } else if (controllerCustAddres.text.isEmpty){
+      error = "Alamat cust tidak boleh kosong";
+      return error;
+    } else if (controllerCustMobileNumber.text.isEmpty){
+      error = "Email cust tidak boleh kosong";
+      return error;
+    } else if (controllerCustPhoneNumber.text.isEmpty){
+      error = "Phone Number cust tidak boleh kosong";
+      return error;
+    } else if (controllerCustEmail.text.isEmpty){
+      error = "Mobile Number cust tidak boleh kosong";
+      return error;
+    } else if (controllerCustIdentity.text.isEmpty){
+      error = "No KTP cust tidak boleh kosong";
+      return error;
+    } else {
+      return error;
+    }
+  }
+
+  addData() async {
+    showLoaderDialog(context);
+
+    if(validator() == "kosong"){
+      Map dataCust = {
+        "custAddress": controllerCustAddres.text,
+        "custEmail": controllerCustEmail.text,
+        "custKTP": controllerCustIdentity.text,
+        "custMobile": controllerCustMobileNumber.text,
+        "custName": controllerCustName.text,
+        "custPhone": controllerCustPhoneNumber.text,
+        "links" : {
+          "custCityId": idCity,
+          "custMaritalStatusId": idMarital,
+          "custProvinceId": idProvince
+        }
+      };
+      var body = json.encode(dataCust);
+      headerss['Content-Type'] = "application/json";
+      print(headerss);
+
+      final response = await http.post("https://genius.remax.co.id/api/customer/crud",
+          headers: headerss, body: body);
+
+      final data = jsonDecode(response.body);
+
+
+      print(data);
+
+      String message = "kosong";
+      if (data['status'].containsKey('error')) {
+        Navigator.pop(context);
+        message = data['status']['error']['message'];
+        print(message);
+        _showToast(context, message);
+      } else {
+        Navigator.pop(context);
+        message = data['status']['message'];
+        print(message);
+        _showToast(context, message);
+        Navigator.pop(context);
+
+      }
+    } else {
+      Navigator.pop(context);
+      _showToast(context, validator());
+    }
+
+
+
+  }
+
+  showLoaderDialog(BuildContext context){
+    AlertDialog alert=AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          Container(margin: EdgeInsets.only(left: 7),child:Text("Loading..." )),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context:context,
+      builder:(BuildContext context){
+        return alert;
+      },
+    );
+  }
+
+  void _showToast(BuildContext context, String message) {
+    final scaffold = Scaffold.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: new Text(message),
+        action: SnackBarAction(
+            label: 'OK', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
+
+}
+
+class StateServiceProv {
+  static Future<List> getSuggestions(String query) async {
+
+    Map<String, String> headerss = {};
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    headerss['cookie'] = preferences.getString("cookie");
+    print(headerss);
+    final response = await http.get(
+        "https://genius.remax.co.id/api/province/crud?pageSize=100",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+//    List matches = List();
+//
+//
+//    for (int i=0; i<list.length; i++){
+//      matches.add(list[i]['mprvDescription']);
+//    }
+
+    list.retainWhere((s) => s['mprvDescription'].toLowerCase().contains(query.toLowerCase()));
+    return list;
+  }
+}
+
+class StateServiceCity {
+  static Future<List<dynamic>> getSuggestions(String query) async {
+
+    Map<String, String> headerss = {};
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    headerss['cookie'] = preferences.getString("cookie");
+    print(headerss);
+    final response = await http.get(
+        "https://genius.remax.co.id/api/city/crud?pageSize=505",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+//    List matches = List();
+//
+//    for (int i=0; i<list.length; i++){
+//      matches.add(list[i]['mctyDescription']);
+//    }
+
+    list.retainWhere((s) => s['mctyDescription'].toLowerCase().contains(query.toLowerCase()));
+    return list;
+  }
+}
+
+class StateServiceMartial {
+  static Future<List<dynamic>> getSuggestions(String query) async {
+
+    Map<String, String> headerss = {};
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    headerss['cookie'] = preferences.getString("cookie");
+    print(headerss);
+    final response = await http.get(
+        "https://genius.remax.co.id/api/maritalstatus/crud",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+//    List matches = List();
+//
+//    for (int i=0; i<list.length; i++){
+//      matches.add(list[i]['mmslName']);
+//    }
+
+    list.retainWhere((s) => s['mmslName'].toLowerCase().contains(query.toLowerCase()));
+    return list;
   }
 }

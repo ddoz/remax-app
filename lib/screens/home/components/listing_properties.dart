@@ -581,11 +581,11 @@ class _ItemListState extends State<ItemList> {
                             ),
                           ),
                           Spacer(),
-                          FutureBuilder(
+                          FutureBuilder<bool>(
                               future: checkfav(toInt(widget.data['id'])),
                               builder: (context, snapshot) {
                                 if (snapshot.hasError) print(snapshot.error);
-                                if (snapshot.data) {
+                                if (snapshot.data == true) {
                                   return GestureDetector(
                                     onTap: (){
                                       _deletefav(toInt(widget.data['id']));

@@ -6,6 +6,7 @@ import 'package:remax_app/screens/detail/detail_page.dart';
 import 'package:remax_app/screens/gallery_page.dart';
 import 'package:remax_app/screens/home/home_screen.dart';
 import 'package:remax_app/screens/home_page.dart';
+import 'package:remax_app/screens/member/create_listing_page.dart';
 import 'package:remax_app/screens/search/search_screen.dart';
 import 'package:remax_app/sidebar/sidebar.dart';
 import 'package:remax_app/slider_try.dart';
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
       home: HomeScreen(),
+      //home: CreateListing(),
     );
   }
 }
