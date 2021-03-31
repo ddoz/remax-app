@@ -1,7 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:remax_app/screens/addcustomer/components/content_add_customer.dart';
 import 'package:remax_app/util/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class ContentAddInfoListing extends StatefulWidget {
   final ScrollController scrollController;
@@ -15,10 +21,27 @@ class ContentAddInfoListing extends StatefulWidget {
 enum AddListingStatus { addInfo, inputDetail }
 
 class _ContentAddInfoState extends State<ContentAddInfoListing> {
+
+
+
+  Map<String, String> headerss = {};
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPref();
+  }
+
   AddListingStatus _addStatus = AddListingStatus.addInfo;
 
   bool checkedValueLamudi = false;
   bool checkedValueRumah123 = false;
+
+  String nameUser, officeId, officeName, member;
+
+  //Links
+  String ownerId, countryId, provId, cityId, listingTypeId, listingCategoryId, propertyTypeId, certificateTypeId, currenciesId;
 
   // Page 1 Controller
   DateTime selectedPublishDate = DateTime.now();
@@ -34,6 +57,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
       new TextEditingController();
   TextEditingController controllerOwnerName = new TextEditingController();
   TextEditingController controllerStreetName = new TextEditingController();
+  TextEditingController controllerCountry = new TextEditingController();
+  TextEditingController controllerProv = new TextEditingController();
   TextEditingController controllerHouseNo = new TextEditingController();
   TextEditingController controllerBlockNo = new TextEditingController();
   TextEditingController controllerCity = new TextEditingController();
@@ -47,9 +72,26 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
   TextEditingController controllerPropertyType = new TextEditingController();
   TextEditingController controllerCertificateType = new TextEditingController();
   TextEditingController controllerLandSize = new TextEditingController();
+  TextEditingController controllerBuildingSize = new TextEditingController();
   TextEditingController controllerCurrencies = new TextEditingController();
   TextEditingController controllerCommisionPercent = new TextEditingController();
   TextEditingController controllerCommisionRupiah = new TextEditingController();
+
+
+  getPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      officeId = preferences.getString("office");
+      officeName = preferences.getString("officename");
+      nameUser = preferences.getString("name");
+      member = preferences.getString("member");
+      headerss['cookie'] = preferences.getString("cookie");
+
+      controllerOfficeName.text = officeName;
+      controllerAgentName.text = nameUser;
+
+    });
+  }
 
 
   Future<void> _selectPublishDate(BuildContext context) async {
@@ -85,43 +127,43 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
     String tgl = tanggal.substring(8, 10);
     String bln = tanggal.substring(5, 7);
     String thn = tanggal.substring(0, 4);
-    if (bln == "01") {
-      bln = "Jan";
-    }
-    if (bln == "02") {
-      bln = "Feb";
-    }
-    if (bln == "03") {
-      bln = "Mar";
-    }
-    if (bln == "04") {
-      bln = "Apr";
-    }
-    if (bln == "05") {
-      bln = "Mei";
-    }
-    if (bln == "06") {
-      bln = "Jun";
-    }
-    if (bln == "07") {
-      bln = "Jul";
-    }
-    if (bln == "08") {
-      bln = "Agu";
-    }
-    if (bln == "09") {
-      bln = "Sep";
-    }
-    if (bln == "10") {
-      bln = "Okt";
-    }
-    if (bln == "11") {
-      bln = "Nov";
-    }
-    if (bln == "12") {
-      bln = "Des";
-    }
-    return tgl + " " + bln + " " + thn;
+//    if (bln == "01") {
+//      bln = "Jan";
+//    }
+//    if (bln == "02") {
+//      bln = "Feb";
+//    }
+//    if (bln == "03") {
+//      bln = "Mar";
+//    }
+//    if (bln == "04") {
+//      bln = "Apr";
+//    }
+//    if (bln == "05") {
+//      bln = "Mei";
+//    }
+//    if (bln == "06") {
+//      bln = "Jun";
+//    }
+//    if (bln == "07") {
+//      bln = "Jul";
+//    }
+//    if (bln == "08") {
+//      bln = "Agu";
+//    }
+//    if (bln == "09") {
+//      bln = "Sep";
+//    }
+//    if (bln == "10") {
+//      bln = "Okt";
+//    }
+//    if (bln == "11") {
+//      bln = "Nov";
+//    }
+//    if (bln == "12") {
+//      bln = "Des";
+//    }
+    return tgl + "-" + bln + "-" + thn;
   }
 
   String _valCountry;
@@ -575,33 +617,39 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       height: 45,
                       decoration: BoxDecoration(
                         color: kLightGrey,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(7),
                       ),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: TextField(
-                              onChanged: (value) {},
-                              controller: controllerOwnerName,
-                              decoration: InputDecoration(
-                                hintText: "Owner Name",
-                                hintStyle: TextStyle(
-                                  color: kPrimaryColor.withOpacity(0.5),
-                                ),
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                // surffix isn't working properly  with SVG
-                                // thats why we use row
-                                // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
+                      child: TypeAheadField(
+                          textFieldConfiguration: TextFieldConfiguration(
+
+                            decoration: InputDecoration(
+                              hintText: "Owner Name",
+                              hintStyle: TextStyle(
+                                color: kPrimaryColor.withOpacity(0.5),
                               ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
                             ),
+                            controller: this.controllerOwnerName,
                           ),
-                          SvgPicture.asset(
-                            "assets/icons/person.svg",
-                            color: kIconColor,
-                          ),
-                        ],
-                      ),
+                          suggestionsCallback: (pattern) async {
+                            return await StateServiceOwner.getSuggestions(pattern);
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion['custName']),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            this.controllerOwnerName.text = suggestion['custName'];
+                            setState(() {
+                              ownerId = suggestion['id'];
+                            });
+                          }),
                     ),
                     Container(
                       alignment: Alignment.topCenter,
@@ -616,6 +664,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                         children: <Widget>[
                           Expanded(
                             child: TextField(
+                              keyboardType: TextInputType.multiline,
+                              maxLines: 3,
                               onChanged: (value) {},
                               controller: controllerStreetName,
                               decoration: InputDecoration(
@@ -641,80 +691,84 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                     Container(
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(top: 10, left: 15.0, right: 15.0),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
                       height: 45,
                       decoration: BoxDecoration(
                         color: kLightGrey,
                         borderRadius: BorderRadius.circular(7),
                       ),
-                      child: DropdownButton(
-                        underline: SizedBox(),
-                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-                        isExpanded: true,
-                        hint: Text(
-                          "Country",
-                          style: TextStyle(
-                            color: kPrimaryColor.withOpacity(0.5),
-                          ),
-                        ),
-                        value: _valCountry,
-                        items: _listCountry.map((value) {
-                          return DropdownMenuItem(
-                            child: Text(
-                              value,
-                              style: TextStyle(
-                                fontSize: 14.0,
+                      child: TypeAheadField(
+                          textFieldConfiguration: TextFieldConfiguration(
+
+                            decoration: InputDecoration(
+                              hintText: "Country",
+                              hintStyle: TextStyle(
+                                color: kPrimaryColor.withOpacity(0.5),
                               ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
                             ),
-                            value: value,
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _valCountry = value;
-                          });
-                        },
-                      ),
+                            controller: this.controllerCountry,
+                          ),
+                          suggestionsCallback: (pattern) async {
+                            return await StateServiceCountry.getSuggestions(pattern);
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion['mctrDescription']),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            this.controllerCountry.text = suggestion['mctrDescription'];
+                            setState(() {
+                              countryId = suggestion['id'];
+                            });
+                          }),
                     ),
                     Container(
                       alignment: Alignment.center,
                       margin: EdgeInsets.only(top: 10, left: 15.0, right: 15.0),
-                      padding:
-                          EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
                       height: 45,
                       decoration: BoxDecoration(
                         color: kLightGrey,
                         borderRadius: BorderRadius.circular(7),
                       ),
-                      child: DropdownButton(
-                        underline: SizedBox(),
-                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-                        isExpanded: true,
-                        hint: Text(
-                          "Province",
-                          style: TextStyle(
-                            color: kPrimaryColor.withOpacity(0.5),
-                          ),
-                        ),
-                        value: _valProvince,
-                        items: _listProvince.map((value) {
-                          return DropdownMenuItem(
-                            child: Text(
-                              value,
-                              style: TextStyle(
-                                fontSize: 14.0,
+                      child: TypeAheadField(
+                          textFieldConfiguration: TextFieldConfiguration(
+
+                            decoration: InputDecoration(
+                              hintText: "Province",
+                              hintStyle: TextStyle(
+                                color: kPrimaryColor.withOpacity(0.5),
                               ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
                             ),
-                            value: value,
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            _valProvince = value;
-                          });
-                        },
-                      ),
+                            controller: this.controllerProv,
+                          ),
+                          suggestionsCallback: (pattern) async {
+                            return await StateServiceProv.getSuggestions(pattern);
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion['mprvDescription']),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            this.controllerProv.text = suggestion['mprvDescription'];
+                            setState(() {
+                              provId = suggestion['id'];
+                            });
+                          }),
                     ),
                     Row(
                       children: <Widget>[
@@ -813,47 +867,45 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       children: <Widget>[
                         Container(
                           alignment: Alignment.center,
-                          margin:
-                              EdgeInsets.only(top: 10, left: 15.0, right: 5.0),
+                          margin: EdgeInsets.only(top: 10, left: 15.0, right: 5.0),
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
-                          height: 45,
                           width: MediaQuery.of(context).size.width * 0.43,
+                          height: 45,
                           decoration: BoxDecoration(
                             color: kLightGrey,
-                            borderRadius: BorderRadius.circular(10),
+                            borderRadius: BorderRadius.circular(7),
                           ),
-                          child: Row(
-                            children: <Widget>[
-                              Expanded(
-                                child: TextField(
-                                  onChanged: (value) {},
-                                  controller: controllerCity,
-                                  decoration: InputDecoration(
-                                      hintText: "City",
-                                      hintStyle: TextStyle(
-                                        color: kPrimaryColor.withOpacity(0.5),
-                                      ),
-                                      enabledBorder: InputBorder.none,
-                                      focusedBorder: InputBorder.none,
-                                      disabledBorder: InputBorder.none
-                                      // surffix isn't working properly  with SVG
-                                      // thats why we use row
-                                      // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
-                                      ),
+                          child: TypeAheadField(
+                              textFieldConfiguration: TextFieldConfiguration(
+
+                                decoration: InputDecoration(
+                                  hintText: "City",
+                                  hintStyle: TextStyle(
+                                    color: kPrimaryColor.withOpacity(0.5),
+                                  ),
+                                  enabledBorder: InputBorder.none,
+                                  focusedBorder: InputBorder.none,
                                 ),
-//                              GestureDetector(
-//                                  onTap: () {
-//                                    _selectDate(context);
-//                                  },
-//                                  child: Text("${selectedDate.toLocal()}"
-//                                      .split(' ')[0])),
+                                controller: this.controllerCity,
                               ),
-                              SvgPicture.asset(
-                                "assets/icons/city.svg",
-                                color: kIconColor,
-                              ),
-                            ],
-                          ),
+                              suggestionsCallback: (pattern) async {
+                                return await StateServiceCity.getSuggestions(pattern);
+                              },
+                              transitionBuilder:
+                                  (context, suggestionsBox, controller) {
+                                return suggestionsBox;
+                              },
+                              itemBuilder: (context, suggestion) {
+                                return ListTile(
+                                  title: Text(suggestion['mctyDescription']),
+                                );
+                              },
+                              onSuggestionSelected: (suggestion) {
+                                this.controllerCity.text = suggestion['mctyDescription'];
+                                setState(() {
+                                  cityId = suggestion['id'];
+                                });
+                              }),
                         ),
                         Container(
                           alignment: Alignment.center,
@@ -915,6 +967,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                         children: <Widget>[
                           Expanded(
                             child: TextField(
+                              keyboardType: TextInputType.number,
                               onChanged: (value) {},
                               controller: controllerPrice,
                               decoration: InputDecoration(
@@ -941,7 +994,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       alignment: Alignment.topCenter,
                       margin: EdgeInsets.only(top: 10, left: 15.0, right: 15.0),
                       padding: EdgeInsets.symmetric(horizontal: 10.0),
-                      height: 85,
+                      height: 105,
                       decoration: BoxDecoration(
                         color: kLightGrey,
                         borderRadius: BorderRadius.circular(10),
@@ -950,6 +1003,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                         children: <Widget>[
                           Expanded(
                             child: TextField(
+                              keyboardType: TextInputType.multiline,
+                              maxLines: 5,
                               onChanged: (value) {},
                               controller: controllerDescription,
                               decoration: InputDecoration(
@@ -1120,33 +1175,39 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       height: 45,
                       decoration: BoxDecoration(
                         color: kLightGrey,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(7),
                       ),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: TextField(
-                              onChanged: (value) {},
-                              controller: controllerListingType,
-                              decoration: InputDecoration(
-                                hintText: "Listing Type",
-                                hintStyle: TextStyle(
-                                  color: kPrimaryColor.withOpacity(0.5),
-                                ),
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                // surffix isn't working properly  with SVG
-                                // thats why we use row
-                                // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
+                      child: TypeAheadField(
+                          textFieldConfiguration: TextFieldConfiguration(
+
+                            decoration: InputDecoration(
+                              hintText: "Listing Type",
+                              hintStyle: TextStyle(
+                                color: kPrimaryColor.withOpacity(0.5),
                               ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
                             ),
+                            controller: this.controllerListingType,
                           ),
-                          SvgPicture.asset(
-                            "assets/icons/listing_type.svg",
-                            color: kIconColor,
-                          ),
-                        ],
-                      ),
+                          suggestionsCallback: (pattern) async {
+                            return await StateServiceListingType.getSuggestions(pattern);
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion['lstlName']),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            this.controllerListingType.text = suggestion['lstlName'];
+                            setState(() {
+                              listingTypeId = suggestion['id'];
+                            });
+                          }),
                     ),
                     Container(
                       alignment: Alignment.center,
@@ -1155,33 +1216,39 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       height: 45,
                       decoration: BoxDecoration(
                         color: kLightGrey,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(7),
                       ),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: TextField(
-                              onChanged: (value) {},
-                              controller: controllerListingCategory,
-                              decoration: InputDecoration(
-                                hintText: "Listing Category",
-                                hintStyle: TextStyle(
-                                  color: kPrimaryColor.withOpacity(0.5),
-                                ),
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                // surffix isn't working properly  with SVG
-                                // thats why we use row
-                                // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
+                      child: TypeAheadField(
+                          textFieldConfiguration: TextFieldConfiguration(
+
+                            decoration: InputDecoration(
+                              hintText: "Listing Category",
+                              hintStyle: TextStyle(
+                                color: kPrimaryColor.withOpacity(0.5),
                               ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
                             ),
+                            controller: this.controllerListingCategory,
                           ),
-                          SvgPicture.asset(
-                            "assets/icons/listing_category.svg",
-                            color: kIconColor,
-                          ),
-                        ],
-                      ),
+                          suggestionsCallback: (pattern) async {
+                            return await StateServiceListingCategory.getSuggestions(pattern);
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion['lsclName']),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            this.controllerListingCategory.text = suggestion['lsclName'];
+                            setState(() {
+                              listingCategoryId = suggestion['id'];
+                            });
+                          }),
                     ),
                     Container(
                       alignment: Alignment.center,
@@ -1190,33 +1257,39 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       height: 45,
                       decoration: BoxDecoration(
                         color: kLightGrey,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(7),
                       ),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: TextField(
-                              onChanged: (value) {},
-                              controller: controllerPropertyType,
-                              decoration: InputDecoration(
-                                hintText: "Property Type",
-                                hintStyle: TextStyle(
-                                  color: kPrimaryColor.withOpacity(0.5),
-                                ),
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                // surffix isn't working properly  with SVG
-                                // thats why we use row
-                                // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
+                      child: TypeAheadField(
+                          textFieldConfiguration: TextFieldConfiguration(
+
+                            decoration: InputDecoration(
+                              hintText: "Property Type",
+                              hintStyle: TextStyle(
+                                color: kPrimaryColor.withOpacity(0.5),
                               ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
                             ),
+                            controller: this.controllerPropertyType,
                           ),
-                          SvgPicture.asset(
-                            "assets/icons/property_type.svg",
-                            color: kIconColor,
-                          ),
-                        ],
-                      ),
+                          suggestionsCallback: (pattern) async {
+                            return await StateServicePropertyType.getSuggestions(pattern);
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion['prtlName']),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            this.controllerPropertyType.text = suggestion['prtlName'];
+                            setState(() {
+                              propertyTypeId = suggestion['id'];
+                            });
+                          }),
                     ),
                     Container(
                       alignment: Alignment.center,
@@ -1225,33 +1298,39 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       height: 45,
                       decoration: BoxDecoration(
                         color: kLightGrey,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(7),
                       ),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: TextField(
-                              onChanged: (value) {},
-                              controller: controllerCertificateType,
-                              decoration: InputDecoration(
-                                hintText: "Certificate Type",
-                                hintStyle: TextStyle(
-                                  color: kPrimaryColor.withOpacity(0.5),
-                                ),
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                // surffix isn't working properly  with SVG
-                                // thats why we use row
-                                // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
+                      child: TypeAheadField(
+                          textFieldConfiguration: TextFieldConfiguration(
+
+                            decoration: InputDecoration(
+                              hintText: "Certificate Type",
+                              hintStyle: TextStyle(
+                                color: kPrimaryColor.withOpacity(0.5),
                               ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
                             ),
+                            controller: this.controllerCertificateType,
                           ),
-                          SvgPicture.asset(
-                            "assets/icons/certificate.svg",
-                            color: kIconColor,
-                          ),
-                        ],
-                      ),
+                          suggestionsCallback: (pattern) async {
+                            return await StateServiceCertificateType.getSuggestions(pattern);
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion['ltlgName']),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            this.controllerCertificateType.text = suggestion['ltlgName'];
+                            setState(() {
+                              certificateTypeId = suggestion['id'];
+                            });
+                          }),
                     ),
                     Container(
                       alignment: Alignment.center,
@@ -1268,6 +1347,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             child: TextField(
                               onChanged: (value) {},
                               controller: controllerLandSize,
+                              keyboardType: TextInputType.number,
                               decoration: InputDecoration(
                                 hintText: "Land Size",
                                 hintStyle: TextStyle(
@@ -1283,6 +1363,42 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                           ),
                           SvgPicture.asset(
                             "assets/icons/land_size.svg",
+                            color: kIconColor,
+                          ),
+                        ],
+                      ),
+                    ),
+                    Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(top: 10, left: 15.0, right: 15.0),
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: kLightGrey,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        children: <Widget>[
+                          Expanded(
+                            child: TextField(
+                              onChanged: (value) {},
+                              controller: controllerBuildingSize,
+                              keyboardType: TextInputType.number,
+                              decoration: InputDecoration(
+                                hintText: "Building Size",
+                                hintStyle: TextStyle(
+                                  color: kPrimaryColor.withOpacity(0.5),
+                                ),
+                                enabledBorder: InputBorder.none,
+                                focusedBorder: InputBorder.none,
+                                // surffix isn't working properly  with SVG
+                                // thats why we use row
+                                // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
+                              ),
+                            ),
+                          ),
+                          SvgPicture.asset(
+                            "assets/icons/home.svg",
                             color: kIconColor,
                           ),
                         ],
@@ -1467,33 +1583,39 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       height: 45,
                       decoration: BoxDecoration(
                         color: kLightGrey,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(7),
                       ),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: TextField(
-                              onChanged: (value) {},
-                              controller: controllerCurrencies,
-                              decoration: InputDecoration(
-                                hintText: "Currencies",
-                                hintStyle: TextStyle(
-                                  color: kPrimaryColor.withOpacity(0.5),
-                                ),
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                // surffix isn't working properly  with SVG
-                                // thats why we use row
-                                // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
+                      child: TypeAheadField(
+                          textFieldConfiguration: TextFieldConfiguration(
+
+                            decoration: InputDecoration(
+                              hintText: "Currencies",
+                              hintStyle: TextStyle(
+                                color: kPrimaryColor.withOpacity(0.5),
                               ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
                             ),
+                            controller: this.controllerCurrencies,
                           ),
-                          SvgPicture.asset(
-                            "assets/icons/currencies.svg",
-                            color: kIconColor,
-                          ),
-                        ],
-                      ),
+                          suggestionsCallback: (pattern) async {
+                            return await StateServiceCurrencies.getSuggestions(pattern);
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion['mculName']),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            this.controllerCurrencies.text = suggestion['mculName'];
+                            setState(() {
+                              currenciesId = suggestion['id'];
+                            });
+                          }),
                     ),
                     Container(
                       alignment: Alignment.center,
@@ -1508,6 +1630,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                         children: <Widget>[
                           Expanded(
                             child: TextField(
+                              keyboardType: TextInputType.number,
                               onChanged: (value) {},
                               controller: controllerCommisionPercent,
                               decoration: InputDecoration(
@@ -1543,6 +1666,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                         children: <Widget>[
                           Expanded(
                             child: TextField(
+                              keyboardType: TextInputType.number,
                               onChanged: (value) {},
                               controller: controllerCommisionRupiah,
                               decoration: InputDecoration(
@@ -1670,9 +1794,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                     ),
                     GestureDetector(
                       onTap: () {
-//                        setState(() {
-//                          _addStatus = AddListingStatus.addInfo;
-//                        });
+                        publishListing();
                       },
                       child: new Container(
                         margin: EdgeInsets.only(
@@ -1703,5 +1825,187 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
         ]);
         break;
     }
+  }
+
+  publishListing() async{
+
+
+    Map dataListing = {
+      "listStreetName": controllerStreetName.text,
+      "listTitle": controllerListingTitle.text,
+      "listDescription": controllerDescription.text,
+      "listBlock": controllerBlockNo.text,
+      "listHouseNumber": controllerHouseNo.text,
+      "listUrl": controllerCustomListingUrl.text,
+      "listPostalCode": controllerPostCode.text,
+      "listCoordinat": "",
+      "listListingPrice": controllerPrice.text,
+      "listPublishDate": controllerPublishDate.text,
+      "listExpiryDate": controllerExpiryDate.text,
+      "listBedroom": _valBedRooms,
+      "listLandSize": controllerLandSize.text,
+      "listBuildingSize": controllerBuildingSize.text,
+      "listBathroom": _valBathRoom,
+      "listValueSVTO": "",
+      "listCreatedTime": "",
+      "listIdListing": "",
+      "listCommissionPercentage": controllerCommisionPercent,
+      "listCommissionMoneter": controllerCommisionRupiah,
+      "listMaidRoom": _valHelpersBedRoooms,
+      "listMaidBathroom": _valHelperBathroom,
+      "links" : {
+        "listCustId": ownerId,
+        "listType": listingTypeId,
+        "listMmbsId": member,
+        "listOfficeId": officeId,
+        "listCityId": cityId,
+        "listProvinceId": provId,
+        "listCountryId": countryId,
+        "listListingStatusId": listingTypeId,
+        "listListingCategoryId": listingCategoryId,
+        "listPropertyTypeId": propertyTypeId,
+        "listRentFreqId": listingTypeId,
+        "listLegalTermId": certificateTypeId,
+        "listCurrencyId": currenciesId,
+      }
+    };
+
+    var body = json.encode(dataListing);
+    //print(body);
+
+    headerss['Content-Type'] = "application/json";
+    print(headerss);
+
+    final response = await http.post("https://genius.remax.co.id/api/listing/crud",
+        headers: headerss, body: body);
+
+    final data = jsonDecode(response.body);
+
+
+    print(data);
+
+
+  }
+}
+
+class StateServiceOwner {
+  static Future<List<dynamic>> getSuggestions(String query) async {
+
+    Map<String, String> headerss = {};
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    headerss['cookie'] = preferences.getString("cookie");
+    print(headerss);
+    final response = await http.get(
+        "https://genius.remax.co.id/api/customer/crud?pageSize=505",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+
+    list.retainWhere((s) => s['custName'].toLowerCase().contains(query.toLowerCase()));
+    return list;
+  }
+}
+
+class StateServiceCountry {
+  static Future<List<dynamic>> getSuggestions(String query) async {
+
+    Map<String, String> headerss = {};
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    headerss['cookie'] = preferences.getString("cookie");
+    print(headerss);
+    final response = await http.get(
+        "https://genius.remax.co.id/api/country/crud?pageSize=505",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+
+    list.retainWhere((s) => s['mctrDescription'].toLowerCase().contains(query.toLowerCase()));
+    return list;
+  }
+}
+
+class StateServiceListingType {
+  static Future<List<dynamic>> getSuggestions(String query) async {
+
+    Map<String, String> headerss = {};
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    headerss['cookie'] = preferences.getString("cookie");
+    print(headerss);
+    final response = await http.get(
+        "https://genius.remax.co.id/api/listingstatus/crud",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+
+    list.retainWhere((s) => s['lstlName'].toLowerCase().contains(query.toLowerCase()));
+    return list;
+  }
+}
+class StateServiceListingCategory {
+  static Future<List<dynamic>> getSuggestions(String query) async {
+
+    Map<String, String> headerss = {};
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    headerss['cookie'] = preferences.getString("cookie");
+    print(headerss);
+    final response = await http.get(
+        "https://genius.remax.co.id/api/listingcategory/crud",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+
+    list.retainWhere((s) => s['lsclName'].toLowerCase().contains(query.toLowerCase()));
+    return list;
+  }
+}
+class StateServicePropertyType {
+  static Future<List<dynamic>> getSuggestions(String query) async {
+
+    Map<String, String> headerss = {};
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    headerss['cookie'] = preferences.getString("cookie");
+    print(headerss);
+    final response = await http.get(
+        "https://genius.remax.co.id/api/propertytype/crud",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+
+    list.retainWhere((s) => s['prtlName'].toLowerCase().contains(query.toLowerCase()));
+    return list;
+  }
+}
+class StateServiceCertificateType {
+  static Future<List<dynamic>> getSuggestions(String query) async {
+
+    Map<String, String> headerss = {};
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    headerss['cookie'] = preferences.getString("cookie");
+    print(headerss);
+    final response = await http.get(
+        "https://genius.remax.co.id/api/legalterm/crud",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+
+    list.retainWhere((s) => s['ltlgName'].toLowerCase().contains(query.toLowerCase()));
+    return list;
+  }
+}
+class StateServiceCurrencies {
+  static Future<List<dynamic>> getSuggestions(String query) async {
+
+    Map<String, String> headerss = {};
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    headerss['cookie'] = preferences.getString("cookie");
+    print(headerss);
+    final response = await http.get(
+        "https://genius.remax.co.id/api/currency/crud",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+
+    list.retainWhere((s) => s['mculName'].toLowerCase().contains(query.toLowerCase()));
+    return list;
   }
 }

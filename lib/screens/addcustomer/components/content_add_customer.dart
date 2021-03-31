@@ -495,6 +495,7 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
       content: new Row(
         children: [
           CircularProgressIndicator(),
+          SizedBox(width: 10,),
           Container(margin: EdgeInsets.only(left: 7),child:Text("Loading..." )),
         ],),
     );

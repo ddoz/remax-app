@@ -80,10 +80,11 @@ class _ContentSignInState extends State<ContentSignIn> {
       String name = datas['profile']['name'];
       String member = datas['profile']['member'];
       String office = datas['profile']['office'];
-      print(name + member + office);
+      String officeName = datas['member']['linked']['mmbsFranchise']['frofOfficeName'];
+      print(name + member + office + officeName);
       setState(() {
         _loginStatus = LoginStatus.signIn;
-        savePref(value, name, member, office, headersCookie);
+        savePref(value, name, member, office, officeName,  headersCookie);
       });
     }
   }
@@ -95,13 +96,14 @@ class _ContentSignInState extends State<ContentSignIn> {
     return data;
   }
 
-  savePref(int value, String name, String member, String office, String headers) async {
+  savePref(int value, String name, String member, String office, String officeName,  String headers) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setInt("value", value);
       preferences.setString("name", name);
       preferences.setString("member", member);
       preferences.setString("office", office);
+      preferences.setString("officename", officeName);
       preferences.setString("cookie", headers);
       preferences.commit();
     });
