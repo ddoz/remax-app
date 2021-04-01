@@ -1,6 +1,12 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:remax_app/screens/addcustomer/components/content_add_customer.dart';
 import 'package:remax_app/util/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class DetailEditCustomer extends StatefulWidget {
 
@@ -25,31 +31,60 @@ class _DetailEditCustomerState extends State<DetailEditCustomer> {
   var controllerMarital = TextEditingController();
   var controllerIdentityNumber = TextEditingController();
 
+  String idProv, idCity, idMarital, idCustomer;
 
-  String _valProvince;
-  List _listProvince = ["Jakarta", "Surabaya", "Medan"];
-
-  String _valMarital;
-  List _listMarital = ["Singel", "Married"];
 
   bool enableTv = false;
 
   String buttonText = "Edit";
 
+  Map<String, String> headerss = {};
+
+
+  getPref() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      setState(() {
+        headerss['cookie'] = preferences.getString("cookie");
+      });
+
+    });
+  }
+
   @override
-  void initState() {
+  initState() {
     // TODO: implement initState
     super.initState();
+    idCustomer = widget.list[widget.index]['custId'];
     controllerName.text = widget.list[widget.index]['custName'];
     controllerAddress.text = widget.list[widget.index]['custAddress'];
-    controllerProvince.text = widget.list[widget.index]['links']['custProvinceId'];
-    controllerCity.text = widget.list[widget.index]['links']['custCityId'];
+    idProv = widget.list[widget.index]['links']['custProvinceId'];
+    //controllerProvince.text = widget.list[widget.index]['links']['custProvinceId'];
+    idCity = widget.list[widget.index]['links']['custCityId'];
+    //controllerCity.text = widget.list[widget.index]['links']['custCityId'];
     controllerMobileNmbr.text = widget.list[widget.index]['custMobile'];
     controllerPhoneNumber.text = widget.list[widget.index]['custPhone'];
     controllerEmail.text = widget.list[widget.index]['custEmail'];
-    controllerMarital.text = widget.list[widget.index]['links']['custMaritalStatusId'];
+    idMarital = widget.list[widget.index]['links']['custMaritalStatusId'];
+    //controllerMarital.text = widget.list[widget.index]['links']['custMaritalStatusId'];
     controllerIdentityNumber.text = widget.list[widget.index]['custKTP'];
+    getProv();
+    getCity();
+    getMarital();
+    getPref();
   }
+
+  getProv() async {
+    controllerProvince.text = await StateServiceProv.getProvNameById(widget.list[widget.index]['links']['custProvinceId']);
+  }
+  getCity() async {
+    controllerCity.text = await StateServiceCity.getCityNameById(widget.list[widget.index]['links']['custCityId']);
+  }
+  getMarital() async {
+    controllerMarital.text = await StateServiceMartial.getMaritalNameById(widget.list[widget.index]['links']['custMaritalStatusId']);
+  }
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -146,29 +181,38 @@ class _DetailEditCustomerState extends State<DetailEditCustomer> {
                 color: kLightGrey,
                 borderRadius: BorderRadius.circular(7),
               ),
-              child: DropdownButton(
-                underline: SizedBox(),
-                icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-                isExpanded: true,
-                hint: Text("Province", style: TextStyle(
-                  fontSize: 14.0,
-                  color: kPrimaryColor.withOpacity(0.5),
-                ),),
-                value: _valProvince,
-                items: _listProvince.map((value) {
-                  return DropdownMenuItem(
-                    child: Text(value, style: TextStyle(
-                      fontSize: 14.0,
-                    ),),
-                    value: value,
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _valProvince = value;
-                  });
-                },
-              ),
+              child: TypeAheadField(
+                  textFieldConfiguration: TextFieldConfiguration(
+
+                    decoration: InputDecoration(
+                      hintText: "Province",
+                      hintStyle: TextStyle(
+                        color: kPrimaryColor.withOpacity(0.5),
+                      ),
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                    ),
+                    controller: this.controllerProvince,
+                  ),
+                  suggestionsCallback: (pattern) async {
+                    return await StateServiceProv.getSuggestions(pattern);
+                  },
+                  transitionBuilder:
+                      (context, suggestionsBox, controller) {
+                    return suggestionsBox;
+                  },
+                  itemBuilder: (context, suggestion) {
+                    return ListTile(
+                      title: Text(suggestion['mprvDescription']),
+                    );
+                  },
+                  onSuggestionSelected: (suggestion) {
+                    this.controllerProvince.text = suggestion['mprvDescription'];
+                    //print( suggestion['mprvDescription'] +" idnya adalah "+suggestion['id']);
+                    setState(() {
+                      idProv = suggestion['id'];
+                    });
+                  }),
             ),
             Container(
               alignment: Alignment.center,
@@ -177,33 +221,80 @@ class _DetailEditCustomerState extends State<DetailEditCustomer> {
               height: 45,
               decoration: BoxDecoration(
                 color: kLightGrey,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(7),
+              ),
+              child: TypeAheadField(
+                  textFieldConfiguration: TextFieldConfiguration(
 
-              ),
-              child: Row(
-                children: <Widget>[
-                  Expanded(
-                    child: TextField(
-                      controller: controllerCity,
-                      onChanged: (value) {},
-                      decoration: InputDecoration(
-                        hintText: "City",
-                        hintStyle: TextStyle(
-                          color: kPrimaryColor.withOpacity(0.5),
-                        ),
-                        enabledBorder: InputBorder.none,
-                        disabledBorder: InputBorder.none,
-                        focusedBorder: InputBorder.none,
-                        enabled: enableTv,
-                        // surffix isn't working properly  with SVG
-                        // thats why we use row
-                        // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
+                    decoration: InputDecoration(
+                      hintText: "City",
+                      hintStyle: TextStyle(
+                        color: kPrimaryColor.withOpacity(0.5),
                       ),
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
                     ),
+                    controller: this.controllerCity,
                   ),
-                  SvgPicture.asset("assets/icons/city.svg", color: kIconColor),
-                ],
+                  suggestionsCallback: (pattern) async {
+                    return await StateServiceCity.getSuggestions(pattern);
+                  },
+                  transitionBuilder:
+                      (context, suggestionsBox, controller) {
+                    return suggestionsBox;
+                  },
+                  itemBuilder: (context, suggestion) {
+                    return ListTile(
+                      title: Text(suggestion['mctyDescription']),
+                    );
+                  },
+                  onSuggestionSelected: (suggestion) {
+                    this.controllerCity.text = suggestion['mctyDescription'];
+                    setState(() {
+                      idCity = suggestion['id'];
+                    });
+                  }),
+            ),
+            Container(
+              alignment: Alignment.center,
+              margin: EdgeInsets.only(top: 10, left: 15.0, right: 15.0),
+              padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+              height: 45,
+              decoration: BoxDecoration(
+                color: kLightGrey,
+                borderRadius: BorderRadius.circular(7),
               ),
+              child: TypeAheadField(
+                  textFieldConfiguration: TextFieldConfiguration(
+
+                    decoration: InputDecoration(
+                      hintText: "Marital Status",
+                      hintStyle: TextStyle(
+                        color: kPrimaryColor.withOpacity(0.5),
+                      ),
+                      enabledBorder: InputBorder.none,
+                      focusedBorder: InputBorder.none,
+                    ),
+                    controller: this.controllerMarital,
+                  ),
+                  suggestionsCallback: (pattern) async {
+                    return await StateServiceMartial.getSuggestions(pattern);
+                  },
+                  transitionBuilder:
+                      (context, suggestionsBox, controller) {
+                    return suggestionsBox;
+                  },
+                  itemBuilder: (context, suggestion) {
+                    return ListTile(
+                      title: Text(suggestion['mmslName']),
+                    );
+                  },
+                  onSuggestionSelected: (suggestion) {
+                    this.controllerMarital.text = suggestion['mmslName'];
+                    setState(() {
+                      idMarital = suggestion['id'];
+                    });
+                  }),
             ),
             Container(
               alignment: Alignment.center,
@@ -317,39 +408,6 @@ class _DetailEditCustomerState extends State<DetailEditCustomer> {
               height: 45,
               decoration: BoxDecoration(
                 color: kLightGrey,
-                borderRadius: BorderRadius.circular(7),
-              ),
-              child: DropdownButton(
-                underline: SizedBox(),
-                icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-                isExpanded: true,
-                hint: Text("Marital Status", style: TextStyle(
-                  fontSize: 14.0,
-                  color: kPrimaryColor.withOpacity(0.5),
-                ),),
-                value: _valMarital,
-                items: _listMarital.map((value) {
-                  return DropdownMenuItem(
-                    child: Text(value, style: TextStyle(
-                      fontSize: 14.0,
-                    ),),
-                    value: value,
-                  );
-                }).toList(),
-                onChanged: (value) {
-                  setState(() {
-                    _valMarital = value;
-                  });
-                },
-              ),
-            ),
-            Container(
-              alignment: Alignment.center,
-              margin: EdgeInsets.only(top: 10, left: 15.0, right: 15.0),
-              padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-              height: 45,
-              decoration: BoxDecoration(
-                color: kLightGrey,
                 borderRadius: BorderRadius.circular(10),
 
               ),
@@ -389,7 +447,8 @@ class _DetailEditCustomerState extends State<DetailEditCustomer> {
                 } else {
                   setState(() {
                     enableTv = false;
-                    buttonText = "Edit";
+                    //buttonText = "Edit";
+                    addData();
                   });
 
                 }
@@ -421,4 +480,137 @@ class _DetailEditCustomerState extends State<DetailEditCustomer> {
       )
     );
   }
+
+  String validator(){
+    String error = "kosong";
+    if (controllerName.text.isEmpty){
+      error = "Nama cust tidak boleh kosong";
+      return error;
+    } else if (controllerAddress.text.isEmpty){
+      error = "Alamat cust tidak boleh kosong";
+      return error;
+    } else if (controllerMobileNmbr.text.isEmpty){
+      error = "Email cust tidak boleh kosong";
+      return error;
+    } else if (controllerPhoneNumber.text.isEmpty){
+      error = "Phone Number cust tidak boleh kosong";
+      return error;
+    } else if (controllerEmail.text.isEmpty){
+      error = "Mobile Number cust tidak boleh kosong";
+      return error;
+    } else if (controllerIdentityNumber.text.isEmpty){
+      error = "No KTP cust tidak boleh kosong";
+      return error;
+    } else {
+      return error;
+    }
+  }
+
+  addData() async {
+    showLoaderDialog(context);
+
+    if(validator() == "kosong"){
+      Map dataCust = {
+        "custAddress": controllerAddress.text,
+        "custEmail": controllerEmail.text,
+        "custKTP": controllerIdentityNumber.text,
+        "custMobile": controllerMobileNmbr.text,
+        "custName": controllerName.text,
+        "custPhone": controllerPhoneNumber.text,
+        "links" : {
+          "custCityId": idCity,
+          "custMaritalStatusId": idMarital,
+          "custProvinceId": idProv
+        }
+      };
+      var body = json.encode(dataCust);
+      print(body);
+      headerss['Content-Type'] = "application/json";
+      print(headerss);
+
+      final response = await http.put("https://genius.remax.co.id/api/customer/crud/${idCustomer}",
+          headers: headerss, body: body);
+
+      final data = jsonDecode(response.body);
+
+
+      print(data);
+
+      String message = "kosong";
+      if (data['status'].containsKey('error')) {
+        Navigator.pop(context);
+        message = data['status']['error']['message'];
+        print(message);
+        _showToast(context, message);
+      } else {
+        Navigator.pop(context);
+        message = data['status']['message'];
+        print(message);
+        _showToast(context, message);
+        Navigator.pop(context);
+
+      }
+    } else {
+      Navigator.pop(context);
+      _showToast(context, validator());
+    }
+
+
+
+  }
+
+  showLoaderDialog(BuildContext context){
+    AlertDialog alert=AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          SizedBox(width: 10,),
+          Container(margin: EdgeInsets.only(left: 7),child:Text("Loading..." )),
+        ],),
+    );
+    showDialog(barrierDismissible: false,
+      context:context,
+      builder:(BuildContext context){
+        return alert;
+      },
+    );
+  }
+
+  void _showToast(BuildContext context, String message) {
+    final scaffold = Scaffold.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: new Text(message),
+        action: SnackBarAction(
+            label: 'OK', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
 }
+
+//class StateServiceProv {
+//  static Future<String> getProvNameById(String id) async {
+//
+//    Map<String, String> headerss = {};
+//    SharedPreferences preferences = await SharedPreferences.getInstance();
+//
+//    headerss['cookie'] = preferences.getString("cookie");
+//    print(headerss);
+//    final response = await http.get(
+//        "https://genius.remax.co.id/api/province/crud?pageSize=100",
+//        headers: headerss);
+//    List list = json.decode(response.body)['data'];
+//    String prov;
+//    for(int i=0; i<list.length; i++){
+//      if(list[i]['id']==id){
+//        prov = list[i]['mprvDescription'];
+//
+//        return prov;
+//      }
+//    }
+//
+//    //list.retainWhere((s) => s['mprvDescription'].toLowerCase().contains(query.toLowerCase()));
+//
+//  }
+//}
+

@@ -3,11 +3,11 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:http/http.dart' as http;
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:remax_app/screens/addcustomer/components/content_add_customer.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http;
 
 class ContentAddInfoListing extends StatefulWidget {
   final ScrollController scrollController;
@@ -21,9 +21,6 @@ class ContentAddInfoListing extends StatefulWidget {
 enum AddListingStatus { addInfo, inputDetail }
 
 class _ContentAddInfoState extends State<ContentAddInfoListing> {
-
-
-
   Map<String, String> headerss = {};
 
   @override
@@ -41,7 +38,15 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
   String nameUser, officeId, officeName, member;
 
   //Links
-  String ownerId, countryId, provId, cityId, listingTypeId, listingCategoryId, propertyTypeId, certificateTypeId, currenciesId;
+  String ownerId,
+      countryId,
+      provId,
+      cityId,
+      listingTypeId,
+      listingCategoryId,
+      propertyTypeId,
+      certificateTypeId,
+      currenciesId;
 
   // Page 1 Controller
   DateTime selectedPublishDate = DateTime.now();
@@ -74,9 +79,9 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
   TextEditingController controllerLandSize = new TextEditingController();
   TextEditingController controllerBuildingSize = new TextEditingController();
   TextEditingController controllerCurrencies = new TextEditingController();
-  TextEditingController controllerCommisionPercent = new TextEditingController();
-  TextEditingController controllerCommisionRupiah = new TextEditingController();
-
+  TextEditingController controllerPercent =
+      new TextEditingController();
+  TextEditingController controllerRupiah = new TextEditingController();
 
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -89,10 +94,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
 
       controllerOfficeName.text = officeName;
       controllerAgentName.text = nameUser;
-
     });
   }
-
 
   Future<void> _selectPublishDate(BuildContext context) async {
     final DateTime picked = await showDatePicker(
@@ -166,10 +169,6 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
     return tgl + "-" + bln + "-" + thn;
   }
 
-  String _valCountry;
-  List _listCountry = ["Indonesia", "Autralia", "Malaysia"];
-  String _valProvince;
-  List _listProvince = ["Jakarta", "Surabaya", "Medan"];
 
   String _valBedRooms;
   List _listBedRooms = ["1", "2", "3"];
@@ -198,10 +197,10 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
 //        );
 //      }),
 //    );
-  return ListView.builder(
-    shrinkWrap: true,
-    itemCount: images.length,
-    itemBuilder: (context, i) {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: images.length,
+      itemBuilder: (context, i) {
 //      return Container(
 //        child: Column(
 //          children: <Widget>[
@@ -214,10 +213,9 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
 //        ),
 //      );
 
-      return ListTile(
-          title: Text(images[i].name));
-    },
-  );
+        return ListTile(title: Text(images[i].name));
+      },
+    );
   }
 
   Future<void> loadAssets() async {
@@ -621,7 +619,6 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       ),
                       child: TypeAheadField(
                           textFieldConfiguration: TextFieldConfiguration(
-
                             decoration: InputDecoration(
                               hintText: "Owner Name",
                               hintStyle: TextStyle(
@@ -633,7 +630,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             controller: this.controllerOwnerName,
                           ),
                           suggestionsCallback: (pattern) async {
-                            return await StateServiceOwner.getSuggestions(pattern);
+                            return await StateServiceOwner.getSuggestions(
+                                pattern);
                           },
                           transitionBuilder:
                               (context, suggestionsBox, controller) {
@@ -645,7 +643,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             );
                           },
                           onSuggestionSelected: (suggestion) {
-                            this.controllerOwnerName.text = suggestion['custName'];
+                            this.controllerOwnerName.text =
+                                suggestion['custName'];
                             setState(() {
                               ownerId = suggestion['id'];
                             });
@@ -699,7 +698,6 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       ),
                       child: TypeAheadField(
                           textFieldConfiguration: TextFieldConfiguration(
-
                             decoration: InputDecoration(
                               hintText: "Country",
                               hintStyle: TextStyle(
@@ -711,7 +709,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             controller: this.controllerCountry,
                           ),
                           suggestionsCallback: (pattern) async {
-                            return await StateServiceCountry.getSuggestions(pattern);
+                            return await StateServiceCountry.getSuggestions(
+                                pattern);
                           },
                           transitionBuilder:
                               (context, suggestionsBox, controller) {
@@ -723,7 +722,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             );
                           },
                           onSuggestionSelected: (suggestion) {
-                            this.controllerCountry.text = suggestion['mctrDescription'];
+                            this.controllerCountry.text =
+                                suggestion['mctrDescription'];
                             setState(() {
                               countryId = suggestion['id'];
                             });
@@ -740,7 +740,6 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       ),
                       child: TypeAheadField(
                           textFieldConfiguration: TextFieldConfiguration(
-
                             decoration: InputDecoration(
                               hintText: "Province",
                               hintStyle: TextStyle(
@@ -752,7 +751,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             controller: this.controllerProv,
                           ),
                           suggestionsCallback: (pattern) async {
-                            return await StateServiceProv.getSuggestions(pattern);
+                            return await StateServiceProv.getSuggestions(
+                                pattern);
                           },
                           transitionBuilder:
                               (context, suggestionsBox, controller) {
@@ -764,7 +764,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             );
                           },
                           onSuggestionSelected: (suggestion) {
-                            this.controllerProv.text = suggestion['mprvDescription'];
+                            this.controllerProv.text =
+                                suggestion['mprvDescription'];
                             setState(() {
                               provId = suggestion['id'];
                             });
@@ -867,7 +868,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       children: <Widget>[
                         Container(
                           alignment: Alignment.center,
-                          margin: EdgeInsets.only(top: 10, left: 15.0, right: 5.0),
+                          margin:
+                              EdgeInsets.only(top: 10, left: 15.0, right: 5.0),
                           padding: EdgeInsets.symmetric(horizontal: 10.0),
                           width: MediaQuery.of(context).size.width * 0.43,
                           height: 45,
@@ -877,7 +879,6 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                           ),
                           child: TypeAheadField(
                               textFieldConfiguration: TextFieldConfiguration(
-
                                 decoration: InputDecoration(
                                   hintText: "City",
                                   hintStyle: TextStyle(
@@ -889,7 +890,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                                 controller: this.controllerCity,
                               ),
                               suggestionsCallback: (pattern) async {
-                                return await StateServiceCity.getSuggestions(pattern);
+                                return await StateServiceCity.getSuggestions(
+                                    pattern);
                               },
                               transitionBuilder:
                                   (context, suggestionsBox, controller) {
@@ -901,7 +903,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                                 );
                               },
                               onSuggestionSelected: (suggestion) {
-                                this.controllerCity.text = suggestion['mctyDescription'];
+                                this.controllerCity.text =
+                                    suggestion['mctyDescription'];
                                 setState(() {
                                   cityId = suggestion['id'];
                                 });
@@ -1179,7 +1182,6 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       ),
                       child: TypeAheadField(
                           textFieldConfiguration: TextFieldConfiguration(
-
                             decoration: InputDecoration(
                               hintText: "Listing Type",
                               hintStyle: TextStyle(
@@ -1191,7 +1193,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             controller: this.controllerListingType,
                           ),
                           suggestionsCallback: (pattern) async {
-                            return await StateServiceListingType.getSuggestions(pattern);
+                            return await StateServiceListingType.getSuggestions(
+                                pattern);
                           },
                           transitionBuilder:
                               (context, suggestionsBox, controller) {
@@ -1203,7 +1206,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             );
                           },
                           onSuggestionSelected: (suggestion) {
-                            this.controllerListingType.text = suggestion['lstlName'];
+                            this.controllerListingType.text =
+                                suggestion['lstlName'];
                             setState(() {
                               listingTypeId = suggestion['id'];
                             });
@@ -1220,7 +1224,6 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       ),
                       child: TypeAheadField(
                           textFieldConfiguration: TextFieldConfiguration(
-
                             decoration: InputDecoration(
                               hintText: "Listing Category",
                               hintStyle: TextStyle(
@@ -1232,7 +1235,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             controller: this.controllerListingCategory,
                           ),
                           suggestionsCallback: (pattern) async {
-                            return await StateServiceListingCategory.getSuggestions(pattern);
+                            return await StateServiceListingCategory
+                                .getSuggestions(pattern);
                           },
                           transitionBuilder:
                               (context, suggestionsBox, controller) {
@@ -1244,7 +1248,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             );
                           },
                           onSuggestionSelected: (suggestion) {
-                            this.controllerListingCategory.text = suggestion['lsclName'];
+                            this.controllerListingCategory.text =
+                                suggestion['lsclName'];
                             setState(() {
                               listingCategoryId = suggestion['id'];
                             });
@@ -1261,7 +1266,6 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       ),
                       child: TypeAheadField(
                           textFieldConfiguration: TextFieldConfiguration(
-
                             decoration: InputDecoration(
                               hintText: "Property Type",
                               hintStyle: TextStyle(
@@ -1273,7 +1277,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             controller: this.controllerPropertyType,
                           ),
                           suggestionsCallback: (pattern) async {
-                            return await StateServicePropertyType.getSuggestions(pattern);
+                            return await StateServicePropertyType
+                                .getSuggestions(pattern);
                           },
                           transitionBuilder:
                               (context, suggestionsBox, controller) {
@@ -1285,7 +1290,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             );
                           },
                           onSuggestionSelected: (suggestion) {
-                            this.controllerPropertyType.text = suggestion['prtlName'];
+                            this.controllerPropertyType.text =
+                                suggestion['prtlName'];
                             setState(() {
                               propertyTypeId = suggestion['id'];
                             });
@@ -1302,7 +1308,6 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       ),
                       child: TypeAheadField(
                           textFieldConfiguration: TextFieldConfiguration(
-
                             decoration: InputDecoration(
                               hintText: "Certificate Type",
                               hintStyle: TextStyle(
@@ -1314,7 +1319,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             controller: this.controllerCertificateType,
                           ),
                           suggestionsCallback: (pattern) async {
-                            return await StateServiceCertificateType.getSuggestions(pattern);
+                            return await StateServiceCertificateType
+                                .getSuggestions(pattern);
                           },
                           transitionBuilder:
                               (context, suggestionsBox, controller) {
@@ -1326,7 +1332,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             );
                           },
                           onSuggestionSelected: (suggestion) {
-                            this.controllerCertificateType.text = suggestion['ltlgName'];
+                            this.controllerCertificateType.text =
+                                suggestion['ltlgName'];
                             setState(() {
                               certificateTypeId = suggestion['id'];
                             });
@@ -1587,7 +1594,6 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       ),
                       child: TypeAheadField(
                           textFieldConfiguration: TextFieldConfiguration(
-
                             decoration: InputDecoration(
                               hintText: "Currencies",
                               hintStyle: TextStyle(
@@ -1599,7 +1605,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             controller: this.controllerCurrencies,
                           ),
                           suggestionsCallback: (pattern) async {
-                            return await StateServiceCurrencies.getSuggestions(pattern);
+                            return await StateServiceCurrencies.getSuggestions(
+                                pattern);
                           },
                           transitionBuilder:
                               (context, suggestionsBox, controller) {
@@ -1611,7 +1618,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             );
                           },
                           onSuggestionSelected: (suggestion) {
-                            this.controllerCurrencies.text = suggestion['mculName'];
+                            this.controllerCurrencies.text =
+                                suggestion['mculName'];
                             setState(() {
                               currenciesId = suggestion['id'];
                             });
@@ -1632,7 +1640,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             child: TextField(
                               keyboardType: TextInputType.number,
                               onChanged: (value) {},
-                              controller: controllerCommisionPercent,
+                              controller: controllerPercent,
                               decoration: InputDecoration(
                                 hintText: "Commision In %",
                                 hintStyle: TextStyle(
@@ -1668,7 +1676,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                             child: TextField(
                               keyboardType: TextInputType.number,
                               onChanged: (value) {},
-                              controller: controllerCommisionRupiah,
+                              controller: controllerRupiah,
                               decoration: InputDecoration(
                                 hintText: "Commision in Rp",
                                 hintStyle: TextStyle(
@@ -1735,9 +1743,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
-                                SvgPicture.asset(
-                                  "assets/icons/upload.svg"
-                                ),
+                                SvgPicture.asset("assets/icons/upload.svg"),
                                 SizedBox(width: 10.0),
                                 Text(
                                   'Upload Files',
@@ -1757,8 +1763,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                         widget.scrollController.animateTo(
                             widget.scrollController.position.maxScrollExtent,
                             duration: Duration(milliseconds: 100),
-                            curve: Curves.ease
-                        );
+                            curve: Curves.ease);
                         setState(() {
                           _addStatus = AddListingStatus.addInfo;
                         });
@@ -1827,9 +1832,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
     }
   }
 
-  publishListing() async{
-
-
+  publishListing() async {
     Map dataListing = {
       "listStreetName": controllerStreetName.text,
       "listTitle": controllerListingTitle.text,
@@ -1849,11 +1852,11 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
       "listValueSVTO": "",
       "listCreatedTime": "",
       "listIdListing": "",
-      "listCommissionPercentage": controllerCommisionPercent,
-      "listCommissionMoneter": controllerCommisionRupiah,
+      "listCommissionPercentage": controllerPercent.text,
+      "listCommissionMoneter": controllerRupiah.text,
       "listMaidRoom": _valHelpersBedRoooms,
       "listMaidBathroom": _valHelperBathroom,
-      "links" : {
+      "links": {
         "listCustId": ownerId,
         "listType": listingTypeId,
         "listMmbsId": member,
@@ -1867,14 +1870,16 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
         "listRentFreqId": listingTypeId,
         "listLegalTermId": certificateTypeId,
         "listCurrencyId": currenciesId,
+        "listDistrictId": "",
+        "listFile" : ""
       }
     };
 
     var body = json.encode(dataListing);
-    //print(body);
+    print(body);
 
     headerss['Content-Type'] = "application/json";
-    print(headerss);
+    print('add listing : '+ headerss.toString());
 
     final response = await http.post("https://genius.remax.co.id/api/listing/crud",
         headers: headerss, body: body);
@@ -1883,14 +1888,11 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
 
 
     print(data);
-
-
   }
 }
 
 class StateServiceOwner {
   static Future<List<dynamic>> getSuggestions(String query) async {
-
     Map<String, String> headerss = {};
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -1901,14 +1903,14 @@ class StateServiceOwner {
         headers: headerss);
     List list = json.decode(response.body)['data'];
 
-    list.retainWhere((s) => s['custName'].toLowerCase().contains(query.toLowerCase()));
+    list.retainWhere(
+        (s) => s['custName'].toLowerCase().contains(query.toLowerCase()));
     return list;
   }
 }
 
 class StateServiceCountry {
   static Future<List<dynamic>> getSuggestions(String query) async {
-
     Map<String, String> headerss = {};
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -1919,14 +1921,14 @@ class StateServiceCountry {
         headers: headerss);
     List list = json.decode(response.body)['data'];
 
-    list.retainWhere((s) => s['mctrDescription'].toLowerCase().contains(query.toLowerCase()));
+    list.retainWhere((s) =>
+        s['mctrDescription'].toLowerCase().contains(query.toLowerCase()));
     return list;
   }
 }
 
 class StateServiceListingType {
   static Future<List<dynamic>> getSuggestions(String query) async {
-
     Map<String, String> headerss = {};
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -1937,13 +1939,14 @@ class StateServiceListingType {
         headers: headerss);
     List list = json.decode(response.body)['data'];
 
-    list.retainWhere((s) => s['lstlName'].toLowerCase().contains(query.toLowerCase()));
+    list.retainWhere(
+        (s) => s['lstlName'].toLowerCase().contains(query.toLowerCase()));
     return list;
   }
 }
+
 class StateServiceListingCategory {
   static Future<List<dynamic>> getSuggestions(String query) async {
-
     Map<String, String> headerss = {};
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -1954,13 +1957,14 @@ class StateServiceListingCategory {
         headers: headerss);
     List list = json.decode(response.body)['data'];
 
-    list.retainWhere((s) => s['lsclName'].toLowerCase().contains(query.toLowerCase()));
+    list.retainWhere(
+        (s) => s['lsclName'].toLowerCase().contains(query.toLowerCase()));
     return list;
   }
 }
+
 class StateServicePropertyType {
   static Future<List<dynamic>> getSuggestions(String query) async {
-
     Map<String, String> headerss = {};
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -1971,13 +1975,14 @@ class StateServicePropertyType {
         headers: headerss);
     List list = json.decode(response.body)['data'];
 
-    list.retainWhere((s) => s['prtlName'].toLowerCase().contains(query.toLowerCase()));
+    list.retainWhere(
+        (s) => s['prtlName'].toLowerCase().contains(query.toLowerCase()));
     return list;
   }
 }
+
 class StateServiceCertificateType {
   static Future<List<dynamic>> getSuggestions(String query) async {
-
     Map<String, String> headerss = {};
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -1988,24 +1993,25 @@ class StateServiceCertificateType {
         headers: headerss);
     List list = json.decode(response.body)['data'];
 
-    list.retainWhere((s) => s['ltlgName'].toLowerCase().contains(query.toLowerCase()));
+    list.retainWhere(
+        (s) => s['ltlgName'].toLowerCase().contains(query.toLowerCase()));
     return list;
   }
 }
+
 class StateServiceCurrencies {
   static Future<List<dynamic>> getSuggestions(String query) async {
-
     Map<String, String> headerss = {};
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     headerss['cookie'] = preferences.getString("cookie");
     print(headerss);
-    final response = await http.get(
-        "https://genius.remax.co.id/api/currency/crud",
-        headers: headerss);
+    final response = await http
+        .get("https://genius.remax.co.id/api/currency/crud", headers: headerss);
     List list = json.decode(response.body)['data'];
 
-    list.retainWhere((s) => s['mculName'].toLowerCase().contains(query.toLowerCase()));
+    list.retainWhere(
+        (s) => s['mculName'].toLowerCase().contains(query.toLowerCase()));
     return list;
   }
 }

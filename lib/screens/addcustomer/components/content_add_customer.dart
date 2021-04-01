@@ -456,6 +456,7 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
         }
       };
       var body = json.encode(dataCust);
+      print(body);
       headerss['Content-Type'] = "application/json";
       print(headerss);
 
@@ -542,6 +543,28 @@ class StateServiceProv {
     list.retainWhere((s) => s['mprvDescription'].toLowerCase().contains(query.toLowerCase()));
     return list;
   }
+
+  static Future<String> getProvNameById(String id) async {
+
+    Map<String, String> headerss = {};
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    headerss['cookie'] = preferences.getString("cookie");
+    print(headerss);
+    final response = await http.get(
+        "https://genius.remax.co.id/api/province/crud?pageSize=100",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+    String prov;
+    for(int i=0; i<list.length; i++){
+      if(list[i]['id']==id){
+        prov = list[i]['mprvDescription'];
+
+        return prov;
+      }
+    }
+  }
+
 }
 
 class StateServiceCity {
@@ -556,14 +579,29 @@ class StateServiceCity {
         "https://genius.remax.co.id/api/city/crud?pageSize=505",
         headers: headerss);
     List list = json.decode(response.body)['data'];
-//    List matches = List();
-//
-//    for (int i=0; i<list.length; i++){
-//      matches.add(list[i]['mctyDescription']);
-//    }
 
     list.retainWhere((s) => s['mctyDescription'].toLowerCase().contains(query.toLowerCase()));
     return list;
+  }
+
+  static Future<String> getCityNameById(String id) async {
+
+    Map<String, String> headerss = {};
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    headerss['cookie'] = preferences.getString("cookie");
+    print(headerss);
+    final response = await http.get(
+        "https://genius.remax.co.id/api/city/crud?pageSize=505",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+    String city;
+    for(int i=0; i<list.length; i++){
+      if(list[i]['id']==id){
+        city = list[i]['mctyDescription'];
+        return city;
+      }
+    }
   }
 }
 
@@ -579,13 +617,29 @@ class StateServiceMartial {
         "https://genius.remax.co.id/api/maritalstatus/crud",
         headers: headerss);
     List list = json.decode(response.body)['data'];
-//    List matches = List();
-//
-//    for (int i=0; i<list.length; i++){
-//      matches.add(list[i]['mmslName']);
-//    }
 
     list.retainWhere((s) => s['mmslName'].toLowerCase().contains(query.toLowerCase()));
     return list;
+  }
+
+  static Future<String> getMaritalNameById(String id) async {
+
+    Map<String, String> headerss = {};
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    headerss['cookie'] = preferences.getString("cookie");
+    print(headerss);
+    final response = await http.get(
+        "https://genius.remax.co.id/api/maritalstatus/crud?pageSize=100",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+    String marital;
+    for(int i=0; i<list.length; i++){
+      if(list[i]['id']==id){
+        marital = list[i]['mmslName'];
+
+        return marital;
+      }
+    }
   }
 }
