@@ -83,9 +83,9 @@ class _DetailPageState extends State<DetailPage> {
   }
 
   void _handleSubmitted(int id, String title, String thumbnail, String price,
-      String category) async {
+      String category, String mediaLength, String bedRoom, String bathRoom, String houseSize, String landSize) async {
     TodoItem noDoItem =
-        TodoItem(id, title, thumbnail, price, category, dateFormatted());
+        TodoItem(id, title, thumbnail, price, category, dateFormatted() , mediaLength, bedRoom, bathRoom, houseSize, landSize);
     int savedItemId = await db.saveItem(noDoItem);
 
     TodoItem addedItem = await db.getItem(savedItemId);
@@ -117,11 +117,11 @@ class _DetailPageState extends State<DetailPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
         actions: <Widget>[
-          FutureBuilder(
+          FutureBuilder<bool>(
               future: checkfav(toInt(widget.list[widget.index]['id'])),
               builder: (context, snapshot) {
                 if (snapshot.hasError) print(snapshot.error);
-                if (snapshot.data) {
+                if (snapshot.data == true) {
                   return IconButton(
                     icon: Icon(
                       Icons.favorite,
@@ -146,7 +146,14 @@ class _DetailPageState extends State<DetailPage> {
                           widget.list[widget.index]['listThumbnail'],
                           widget.list[widget.index]['listListingPrice'],
                           widget.list[widget.index]['links']
-                              ['listListingCategoryId']);
+                              ['listListingCategoryId'],
+                        imgSlider().length.toString(),
+                        widget.list[widget.index]['listBedroom'],
+                        widget.list[widget.index]['listBathroom'],
+                        widget.list[widget.index]['listBuildingSize'],
+                        widget.list[widget.index]['listLandSize'],
+
+                      );
                       // do something
                       setState(() {});
                     },

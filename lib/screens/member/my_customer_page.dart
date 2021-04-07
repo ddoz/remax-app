@@ -47,7 +47,7 @@ class _MyCustomerPageState extends State<MyCustomerPage> {
 
   Future<List> getData() async {
     final response = await http.get(
-        "https://genius.remax.co.id/api/customer/crud?pageSize=30",
+        "https://genius.remax.co.id/api/customer/crud",
         headers: headerss);
     List list = json.decode(response.body)['data'];
     return list;

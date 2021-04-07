@@ -16,6 +16,11 @@ class DatabaseHelper {
   final String columnListPrice = "price";
   final String columnListCategoryId = "category";
   final String columnDateCreated = "dateCreated";
+  final String columnMediaLenght = "medialength";
+  final String columnBedroom = "bedroom";
+  final String columnbathRoom = "bathroom";
+  final String columnHouseSize = "houseSize";
+  final String columnLandSize = "landsize";
 
   static Database _db;
 
@@ -38,7 +43,8 @@ class DatabaseHelper {
 
   void _onCreate(Database db, int version) async {
     await db.execute(
-        "CREATE TABLE $tableName(id INTEGER PRIMARY KEY, $columnListTitle TEXT, $columnListThumbnail TEXT, $columnListPrice TEXT,  $columnListCategoryId TEXT,  $columnDateCreated TEXT)");
+        "CREATE TABLE $tableName(id INTEGER PRIMARY KEY, $columnListTitle TEXT, $columnListThumbnail TEXT, $columnListPrice TEXT,  $columnListCategoryId TEXT,  $columnDateCreated TEXT,  "
+            "$columnMediaLenght TEXT,  $columnBedroom TEXT,  $columnbathRoom TEXT,  $columnHouseSize TEXT,  $columnLandSize TEXT)");
     print("Table is created");
   }
 

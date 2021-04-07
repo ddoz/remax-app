@@ -45,6 +45,7 @@ dependencies:
   shimmer: ^1.1.2
   multi_image_picker: ^4.5.5
   google_maps_flutter: ^0.5.11
+  flutter_share: ^1.0.5
 
 dev_dependencies:
   flutter_test:
