@@ -33,12 +33,16 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
   AddListingStatus _addStatus = AddListingStatus.addInfo;
 
   bool checkedValueLamudi = false;
+  String isLamudi = "0";
   bool checkedValueRumah123 = false;
+  String isRumah123 = "0";
 
   String nameUser, officeId, officeName, member;
 
   //Links
-  String ownerId,
+  String
+  agentId,
+  ownerId,
       countryId,
       provId,
       cityId,
@@ -93,7 +97,6 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
       headerss['cookie'] = preferences.getString("cookie");
 
       controllerOfficeName.text = officeName;
-      controllerAgentName.text = nameUser;
     });
   }
 
@@ -107,7 +110,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
     if (picked != null && picked != selectedPublishDate)
       setState(() {
         selectedPublishDate = picked;
-        controllerPublishDate.text = convertTanggal(selectedPublishDate);
+        //controllerPublishDate.text = convertTanggal(selectedPublishDate);
+        controllerPublishDate.text = selectedPublishDate.toString();
       });
   }
 
@@ -121,7 +125,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
     if (picked != null && picked != selectedExpiryDate)
       setState(() {
         selectedExpiryDate = picked;
-        controllerExpiryDate.text = convertTanggal(selectedExpiryDate);
+        //controllerExpiryDate.text = convertTanggal(selectedExpiryDate);
+        controllerExpiryDate.text = selectedExpiryDate.toString();
       });
   }
 
@@ -510,33 +515,40 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       height: 45,
                       decoration: BoxDecoration(
                         color: kLightGrey,
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(7),
                       ),
-                      child: Row(
-                        children: <Widget>[
-                          Expanded(
-                            child: TextField(
-                              onChanged: (value) {},
-                              controller: controllerAgentName,
-                              decoration: InputDecoration(
-                                hintText: "Agent Name",
-                                hintStyle: TextStyle(
-                                  color: kPrimaryColor.withOpacity(0.5),
-                                ),
-                                enabledBorder: InputBorder.none,
-                                focusedBorder: InputBorder.none,
-                                // surffix isn't working properly  with SVG
-                                // thats why we use row
-                                // suffixIcon: SvgPicture.asset("assets/icons/search.svg"),
+                      child: TypeAheadField(
+                          textFieldConfiguration: TextFieldConfiguration(
+                            decoration: InputDecoration(
+                              hintText: "Agent Name",
+                              hintStyle: TextStyle(
+                                color: kPrimaryColor.withOpacity(0.5),
                               ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
                             ),
+                            controller: this.controllerAgentName,
                           ),
-                          SvgPicture.asset(
-                            "assets/icons/person.svg",
-                            color: kIconColor,
-                          ),
-                        ],
-                      ),
+                          suggestionsCallback: (pattern) async {
+                            return await StateServiceAgentName.getSuggestions(
+                                pattern);
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion['mmbsNick']),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            this.controllerAgentName.text =
+                            suggestion['mmbsNick'];
+                            setState(() {
+                              agentId = suggestion['mmbsId'];
+                            });
+                          }),
                     ),
                     Container(
                       alignment: Alignment.center,
@@ -1710,6 +1722,11 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       onChanged: (newValue) {
                         setState(() {
                           checkedValueLamudi = newValue;
+                          if(checkedValueLamudi == true){
+                            isLamudi = "1";
+                          } else {
+                            isLamudi = "0";
+                          }
                         });
                       },
                       controlAffinity: ListTileControlAffinity
@@ -1722,6 +1739,11 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       onChanged: (newValue) {
                         setState(() {
                           checkedValueRumah123 = newValue;
+                          if(checkedValueRumah123 == true){
+                            isRumah123 = "1";
+                          } else {
+                            isRumah123 = "0";
+                          }
                         });
                       },
                       controlAffinity: ListTileControlAffinity
@@ -1849,6 +1871,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
       "listLandSize": controllerLandSize.text,
       "listBuildingSize": controllerBuildingSize.text,
       "listBathroom": _valBathRoom,
+      "listLamudi": isLamudi,
+      "listRumah123": isRumah123,
       "listValueSVTO": "",
       "listCreatedTime": "",
       "listIdListing": "",
@@ -1859,7 +1883,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
       "links": {
         "listCustId": ownerId,
         "listType": listingTypeId,
-        "listMmbsId": member,
+        "listMmbsId": agentId,
         "listOfficeId": officeId,
         "listCityId": cityId,
         "listProvinceId": provId,
@@ -1876,18 +1900,19 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
     };
 
     var body = json.encode(dataListing);
-    print(body);
+    //print(body);
 
     headerss['Content-Type'] = "application/json";
-    print('add listing : '+ headerss.toString());
+    //print('add listing : '+ headerss.toString());
 
     final response = await http.post("https://genius.remax.co.id/api/listing/crud",
         headers: headerss, body: body);
 
     final data = jsonDecode(response.body);
+    String listId = data['data']['listId'];
 
-
-    print(data);
+    String urlImage = "https://genius.remax.co.id/api/listing/crud/${listId}/links/listingFile";
+    print(listId);
   }
 }
 
@@ -1909,6 +1934,30 @@ class StateServiceOwner {
   }
 }
 
+class StateServiceAgentName {
+  static Future<List<dynamic>> getSuggestions(String query) async {
+    Map<String, String> headerss = {};
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    headerss['cookie'] = preferences.getString("cookie");
+    print(headerss);
+    final response = await http.get(
+        "https://genius.remax.co.id/api/membership/crud",
+        headers: headerss);
+    List list = json.decode(response.body)['data'];
+
+    list.retainWhere(
+            (s) {
+          if(s['mmbsNick']==null) {
+            s['mmbsNick'] = "null";
+          }
+          return s['mmbsNick'].toLowerCase().contains(
+              query.toLowerCase());
+        });
+    return list;
+  }
+}
+
 class StateServiceCountry {
   static Future<List<dynamic>> getSuggestions(String query) async {
     Map<String, String> headerss = {};
@@ -1917,12 +1966,19 @@ class StateServiceCountry {
     headerss['cookie'] = preferences.getString("cookie");
     print(headerss);
     final response = await http.get(
-        "https://genius.remax.co.id/api/country/crud?pageSize=505",
+        "https://genius.remax.co.id/api/country/crud/",
         headers: headerss);
     List list = json.decode(response.body)['data'];
+    print(query);
 
-    list.retainWhere((s) =>
-        s['mctrDescription'].toLowerCase().contains(query.toLowerCase()));
+    list.retainWhere(
+            (s) {
+              if(s['mctrDescription']==null) {
+                 s['mctrDescription'] = "null";
+              }
+              return s['mctrDescription'].toLowerCase().contains(
+                  query.toLowerCase());
+            });
     return list;
   }
 }
