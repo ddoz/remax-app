@@ -1,5 +1,8 @@
 import 'dart:convert';
+import 'dart:io';
+import 'dart:typed_data';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -22,6 +25,7 @@ enum AddListingStatus { addInfo, inputDetail }
 
 class _ContentAddInfoState extends State<ContentAddInfoListing> {
   Map<String, String> headerss = {};
+  Map<String, String> headerssX = {};
 
   @override
   void initState() {
@@ -40,9 +44,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
   String nameUser, officeId, officeName, member;
 
   //Links
-  String
-  agentId,
-  ownerId,
+  String agentId,
+      ownerId,
       countryId,
       provId,
       cityId,
@@ -83,8 +86,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
   TextEditingController controllerLandSize = new TextEditingController();
   TextEditingController controllerBuildingSize = new TextEditingController();
   TextEditingController controllerCurrencies = new TextEditingController();
-  TextEditingController controllerPercent =
-      new TextEditingController();
+  TextEditingController controllerPercent = new TextEditingController();
   TextEditingController controllerRupiah = new TextEditingController();
 
   getPref() async {
@@ -95,6 +97,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
       nameUser = preferences.getString("name");
       member = preferences.getString("member");
       headerss['cookie'] = preferences.getString("cookie");
+      headerssX['cookie'] = preferences.getString("cookie");
+
 
       controllerOfficeName.text = officeName;
     });
@@ -174,7 +178,6 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
     return tgl + "-" + bln + "-" + thn;
   }
 
-
   String _valBedRooms;
   List _listBedRooms = ["1", "2", "3"];
 
@@ -188,6 +191,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
   List _listHelperBathroom = ["1", "2", "3"];
 
   List<Asset> images = <Asset>[];
+  List<MultipartFile> multipartImageList = new List<MultipartFile>();
+  List<File> listFile = List<File>();
   String _error = 'No Error Dectected';
 
   Widget buildGridView() {
@@ -544,7 +549,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                           },
                           onSuggestionSelected: (suggestion) {
                             this.controllerAgentName.text =
-                            suggestion['mmbsNick'];
+                                suggestion['mmbsNick'];
                             setState(() {
                               agentId = suggestion['mmbsId'];
                             });
@@ -1722,7 +1727,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       onChanged: (newValue) {
                         setState(() {
                           checkedValueLamudi = newValue;
-                          if(checkedValueLamudi == true){
+                          if (checkedValueLamudi == true) {
                             isLamudi = "1";
                           } else {
                             isLamudi = "0";
@@ -1739,7 +1744,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       onChanged: (newValue) {
                         setState(() {
                           checkedValueRumah123 = newValue;
-                          if(checkedValueRumah123 == true){
+                          if (checkedValueRumah123 == true) {
                             isRumah123 = "1";
                           } else {
                             isRumah123 = "0";
@@ -1855,6 +1860,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
   }
 
   publishListing() async {
+    getFileList();
     Map dataListing = {
       "listStreetName": controllerStreetName.text,
       "listTitle": controllerListingTitle.text,
@@ -1895,7 +1901,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
         "listLegalTermId": certificateTypeId,
         "listCurrencyId": currenciesId,
         "listDistrictId": "",
-        "listFile" : ""
+        "listFile": ""
       }
     };
 
@@ -1903,6 +1909,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
     //print(body);
 
     headerss['Content-Type'] = "application/json";
+    headerssX['Content-Type'] = "multipart/form-data";
     //print('add listing : '+ headerss.toString());
 
     final response = await http.post("https://genius.remax.co.id/api/listing/crud",
@@ -1912,7 +1919,77 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
     String listId = data['data']['listId'];
 
     String urlImage = "https://genius.remax.co.id/api/listing/crud/${listId}/links/listingFile";
+//    String urlImage =
+//        "https://genius.remax.co.id/api/listing/crud/49673/links/listingFile";
+    postImage(urlImage);
     print(listId);
+  }
+
+  postImage(String url) async {
+    try {
+      var dio = Dio();
+      for (int i = 0; i < images.length; i++) {
+        FormData formData = new FormData.fromMap({
+          "listFile[$i]": images[i].identifier,
+        });
+        Response resp = await dio.put(url,
+            options: Options(headers: headerssX),
+            data: formData
+        );
+        print(resp);
+//        final response = await http.put(url,
+//            headers: headerssX,
+//            body: {
+//          'listFile[$i]': images[i].identifier,
+//        });
+//        print(response);
+      }
+
+//      for (Asset asset in images) {
+//        ByteData byteData = await asset.getByteData();
+//        List<int> imageData = byteData.buffer.asUint8List();
+//        MultipartFile multipartFile = new MultipartFile.fromBytes(
+//          imageData
+//        );
+//        multipartImageList.add(multipartFile);
+//      }
+//
+//      FormData formData = FormData.fromMap({
+//        "listFile[]": multipartImageList,
+//      });
+//
+//      Dio dio = new Dio();
+//      var response = await dio.post(url,
+//          options: Options(headers: headerssX),
+//          data: formData);
+//      print(response);
+
+    } catch (e) {
+      print(e);
+    }
+
+//    final response = await http.post(url, body: {
+//      'listFile[0]':listFile.,
+//    });
+
+    //print(response);
+  }
+
+  void getFileList() async {
+    listFile.clear();
+    for (int i = 0; i < images.length; i++) {
+      var path = await images[i].identifier;
+      //print(path);
+      var file = await getImageFileFromAsset(path);
+      //print(file);
+      listFile.add(file);
+    }
+    setState(() {});
+  }
+
+  Future<File> getImageFileFromAsset(String path) async {
+    final file = File(path);
+    return file;
   }
 }
 
@@ -1946,14 +2023,12 @@ class StateServiceAgentName {
         headers: headerss);
     List list = json.decode(response.body)['data'];
 
-    list.retainWhere(
-            (s) {
-          if(s['mmbsNick']==null) {
-            s['mmbsNick'] = "null";
-          }
-          return s['mmbsNick'].toLowerCase().contains(
-              query.toLowerCase());
-        });
+    list.retainWhere((s) {
+      if (s['mmbsNick'] == null) {
+        s['mmbsNick'] = "null";
+      }
+      return s['mmbsNick'].toLowerCase().contains(query.toLowerCase());
+    });
     return list;
   }
 }
@@ -1965,20 +2040,17 @@ class StateServiceCountry {
 
     headerss['cookie'] = preferences.getString("cookie");
     print(headerss);
-    final response = await http.get(
-        "https://genius.remax.co.id/api/country/crud/",
-        headers: headerss);
+    final response = await http
+        .get("https://genius.remax.co.id/api/country/crud/", headers: headerss);
     List list = json.decode(response.body)['data'];
     print(query);
 
-    list.retainWhere(
-            (s) {
-              if(s['mctrDescription']==null) {
-                 s['mctrDescription'] = "null";
-              }
-              return s['mctrDescription'].toLowerCase().contains(
-                  query.toLowerCase());
-            });
+    list.retainWhere((s) {
+      if (s['mctrDescription'] == null) {
+        s['mctrDescription'] = "null";
+      }
+      return s['mctrDescription'].toLowerCase().contains(query.toLowerCase());
+    });
     return list;
   }
 }
