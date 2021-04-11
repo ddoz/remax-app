@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
+import 'package:intl/intl.dart';
+import 'package:remax_app/screens/filter/filter_result.dart';
 import 'package:remax_app/util/constants.dart';
+import 'package:remax_app/util/typeahead_service.dart';
 
 class HeaderWithSearchBox extends StatelessWidget {
   const HeaderWithSearchBox({
@@ -132,40 +136,51 @@ class HeaderWithSearchBox extends StatelessWidget {
 }
 
 class ImageDialog extends StatefulWidget {
+
+
   @override
   _ImageDialogState createState() => _ImageDialogState();
 }
 
 class _ImageDialogState extends State<ImageDialog> {
 
-  String _valSaleRent;
-  String _valSortBy;
-
-  List _listSaleRent = ["For Sale", "For Rent"];
-  List _listSortBy = [
-    "Highest Price",
-    "Lowest Price",
-    "Newest Listing",
-    "Oldest Listing",
-    "Largest Building Size",
-    "Smallest Building Size"
-  ];
-
-  RangeValues valuesPrice = RangeValues(1, 100);
-  RangeValues valuesLandSize = RangeValues(1, 100);
-  RangeValues valuesBuilding = RangeValues(1, 100);
+  RangeValues valuesPrice = RangeValues(0, 10000000000);
+  RangeValues valuesLandSize = RangeValues(0, 10000);
+  RangeValues valuesBuilding = RangeValues(0, 10000);
   bool checkedValuePrice = false;
   bool checkedValueLandSize = false;
   bool checkedValueBuildingSize = false;
 
   double startPrice = 0.0;
-  double endPrice = 0.0;
+  double endPrice = 10000000000.0;
 
   double startLandSize = 0.0;
-  double endLandSize = 0.0;
+  double endLandSize = 10000.0;
 
   double startBuildingSize = 0.0;
-  double endBuldingSize = 0.0;
+  double endBuldingSize = 10000.0;
+
+  TextEditingController controllerSearch = new TextEditingController();
+  TextEditingController controllerListingTittle = new TextEditingController();
+  TextEditingController controllerCity = new TextEditingController();
+  TextEditingController controllerListingType = new TextEditingController();
+  TextEditingController controllerPropertyType = new TextEditingController();
+  TextEditingController controllerFacilities = new TextEditingController();
+  TextEditingController controllerRentFreq = new TextEditingController();
+  TextEditingController controllerListingStatus = new TextEditingController();
+
+  //Links
+  String listingTypeId, propertyType, facilities, rentFreq, listingStatus;
+
+  final formatter = new NumberFormat("#,###");
+
+  int toInt(String str) {
+    var myInt = int.parse(str);
+    assert(myInt is int);
+    return myInt;
+  }
+
+
 
 
   @override
@@ -215,6 +230,7 @@ class _ImageDialogState extends State<ImageDialog> {
                             child: Align(
                               alignment: Alignment.center,
                               child: TextField(
+                                controller: controllerSearch,
                                 onChanged: (value) {},
                                 decoration: InputDecoration(
                                   hintText: "Search...",
@@ -233,37 +249,45 @@ class _ImageDialogState extends State<ImageDialog> {
                     ),
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.all(10.0),
-                      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                      margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
                       height: 45,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(7),
                       ),
-                      child: DropdownButton(
-                        underline: SizedBox(),
-                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-                        isExpanded: true,
-                        hint: Text(
-                          "For Sale/Rent",
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: kPrimaryColor.withOpacity(0.5),
-                          ),
-                        ),
-                        value: _valSaleRent,
-                        items: _listSaleRent.map((value) {
-                          return DropdownMenuItem(
-                            child: Text(
-                              value,
-                              style: TextStyle(
-                                fontSize: 14.0,
+                      child: TypeAheadField(
+                          textFieldConfiguration: TextFieldConfiguration(
+                            decoration: InputDecoration(
+                              hintText: "For Sale/Rent",
+                              hintStyle: TextStyle(
+                                color: kPrimaryColor.withOpacity(0.5),
                               ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
                             ),
-                            value: value,
-                          );
-                        }).toList(),
-                      ),
+                            controller: this.controllerListingType,
+                          ),
+                          suggestionsCallback: (pattern) async {
+                            return await StateServiceCategory.getSuggestions(
+                                pattern);
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion['lsclName']),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            this.controllerListingType.text =
+                            suggestion['lsclName'];
+                            setState(() {
+                              listingTypeId = suggestion['id'];
+                            });
+                          }),
                     ),
                     Container(
                       margin: EdgeInsets.only(left: 10.0, right: 10.0),
@@ -280,6 +304,7 @@ class _ImageDialogState extends State<ImageDialog> {
                             child: Align(
                               alignment: Alignment.center,
                               child: TextField(
+                                controller: controllerListingTittle,
                                 onChanged: (value) {},
                                 decoration: InputDecoration(
                                   hintText: "Listing Title",
@@ -311,6 +336,7 @@ class _ImageDialogState extends State<ImageDialog> {
                             child: Align(
                               alignment: Alignment.center,
                               child: TextField(
+                                controller: controllerCity,
                                 onChanged: (value) {},
                                 decoration: InputDecoration(
                                   hintText: "City",
@@ -330,139 +356,172 @@ class _ImageDialogState extends State<ImageDialog> {
 
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.all(10.0),
-                      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                      margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
                       height: 45,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(7),
                       ),
-                      child: DropdownButton(
-                        underline: SizedBox(),
-                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-                        isExpanded: true,
-                        hint: Text(
-                          "Property Type",
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: kPrimaryColor.withOpacity(0.5),
-                          ),
-                        ),
-                        value: _valSaleRent,
-                        items: _listSaleRent.map((value) {
-                          return DropdownMenuItem(
-                            child: Text(
-                              value,
-                              style: TextStyle(
-                                fontSize: 14.0,
+                      child: TypeAheadField(
+                          textFieldConfiguration: TextFieldConfiguration(
+                            decoration: InputDecoration(
+                              hintText: "Property Type",
+                              hintStyle: TextStyle(
+                                color: kPrimaryColor.withOpacity(0.5),
                               ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
                             ),
-                            value: value,
-                          );
-                        }).toList(),
+                            controller: this.controllerPropertyType,
+                          ),
+                          suggestionsCallback: (pattern) async {
+                            return await StateServicePropertyType.getSuggestions(
+                                pattern);
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion['prtlName']),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            this.controllerPropertyType.text =
+                            suggestion['prtlName'];
+                            setState(() {
+                              propertyType = suggestion['id'];
+                            });
+                          }),
+                    ),
+
+                    Container(
+                      alignment: Alignment.center,
+                      margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
+                      height: 45,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(7),
                       ),
+                      child: TypeAheadField(
+                          textFieldConfiguration: TextFieldConfiguration(
+                            decoration: InputDecoration(
+                              hintText: "Facilities",
+                              hintStyle: TextStyle(
+                                color: kPrimaryColor.withOpacity(0.5),
+                              ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
+                            ),
+                            controller: this.controllerFacilities,
+                          ),
+                          suggestionsCallback: (pattern) async {
+                            return await StateServiceFacilites.getSuggestions(
+                                pattern);
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion['fctlName']),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            this.controllerFacilities.text =
+                            suggestion['fctlName'];
+                            setState(() {
+                              facilities = suggestion['id'];
+                            });
+                          }),
                     ),
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.all(10.0),
-                      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                      margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
                       height: 45,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(7),
                       ),
-                      child: DropdownButton(
-                        underline: SizedBox(),
-                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-                        isExpanded: true,
-                        hint: Text(
-                          "Facilities",
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: kPrimaryColor.withOpacity(0.5),
-                          ),
-                        ),
-                        value: _valSaleRent,
-                        items: _listSaleRent.map((value) {
-                          return DropdownMenuItem(
-                            child: Text(
-                              value,
-                              style: TextStyle(
-                                fontSize: 14.0,
+                      child: TypeAheadField(
+                          textFieldConfiguration: TextFieldConfiguration(
+                            decoration: InputDecoration(
+                              hintText: "Rent Frequency",
+                              hintStyle: TextStyle(
+                                color: kPrimaryColor.withOpacity(0.5),
                               ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
                             ),
-                            value: value,
-                          );
-                        }).toList(),
-                      ),
+                            controller: this.controllerRentFreq,
+                          ),
+                          suggestionsCallback: (pattern) async {
+                            return await StateServiceRentFreq.getSuggestions(
+                                pattern);
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion['rfqlName']),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            this.controllerRentFreq.text =
+                            suggestion['rfqlName'];
+                            setState(() {
+                              rentFreq = suggestion['id'];
+                            });
+                          }),
                     ),
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.all(10.0),
-                      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+                      margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+                      padding: EdgeInsets.symmetric(horizontal: 10.0),
                       height: 45,
                       decoration: BoxDecoration(
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(7),
                       ),
-                      child: DropdownButton(
-                        underline: SizedBox(),
-                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-                        isExpanded: true,
-                        hint: Text(
-                          "Rent Frequency",
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: kPrimaryColor.withOpacity(0.5),
-                          ),
-                        ),
-                        value: _valSaleRent,
-                        items: _listSaleRent.map((value) {
-                          return DropdownMenuItem(
-                            child: Text(
-                              value,
-                              style: TextStyle(
-                                fontSize: 14.0,
+                      child: TypeAheadField(
+                          textFieldConfiguration: TextFieldConfiguration(
+                            decoration: InputDecoration(
+                              hintText: "Listing Status",
+                              hintStyle: TextStyle(
+                                color: kPrimaryColor.withOpacity(0.5),
                               ),
+                              enabledBorder: InputBorder.none,
+                              focusedBorder: InputBorder.none,
                             ),
-                            value: value,
-                          );
-                        }).toList(),
-                      ),
-                    ),
-                    Container(
-                      alignment: Alignment.center,
-                      margin: EdgeInsets.all(10.0),
-                      padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                      height: 45,
-                      decoration: BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.circular(7),
-                      ),
-                      child: DropdownButton(
-                        underline: SizedBox(),
-                        icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-                        isExpanded: true,
-                        hint: Text(
-                          "Listing Status",
-                          style: TextStyle(
-                            fontSize: 14.0,
-                            color: kPrimaryColor.withOpacity(0.5),
+                            controller: this.controllerListingStatus,
                           ),
-                        ),
-                        value: _valSaleRent,
-                        items: _listSaleRent.map((value) {
-                          return DropdownMenuItem(
-                            child: Text(
-                              value,
-                              style: TextStyle(
-                                fontSize: 14.0,
-                              ),
-                            ),
-                            value: value,
-                          );
-                        }).toList(),
-                      ),
+                          suggestionsCallback: (pattern) async {
+                            return await StateServiceListingStatus.getSuggestions(
+                                pattern);
+                          },
+                          transitionBuilder:
+                              (context, suggestionsBox, controller) {
+                            return suggestionsBox;
+                          },
+                          itemBuilder: (context, suggestion) {
+                            return ListTile(
+                              title: Text(suggestion['lstlName']),
+                            );
+                          },
+                          onSuggestionSelected: (suggestion) {
+                            this.controllerListingStatus.text =
+                            suggestion['lstlName'];
+                            setState(() {
+                              listingStatus = suggestion['id'];
+                            });
+                          }),
                     ),
 
                     CheckboxListTile(
@@ -497,8 +556,8 @@ class _ImageDialogState extends State<ImageDialog> {
                     RangeSlider(
                         activeColor: Colors.red[700],
                         inactiveColor: Colors.grey[400],
-                        min: 1,
-                        max: 100,
+                        min: 0,
+                        max: 10000000000,
                         values: valuesPrice,
                         onChanged: (values){
                           setState(() {
@@ -509,14 +568,31 @@ class _ImageDialogState extends State<ImageDialog> {
                         }
                     ),
                     Container(
+
                       margin: EdgeInsets.only(left: 15.0, right: 15.0),
                       child: Row(
                         children: <Widget>[
-                          Text(startPrice.toString(), style: TextStyle(
+                          Text(
+                        NumberFormat.compactCurrency(
+                        locale: 'id',
+                        symbol: 'Rp ',
+                        decimalDigits: 0)
+                        .format(
+                        toInt(startPrice.toStringAsFixed(0))
+                            ), style: TextStyle(
                               color: Colors.grey
                           ),),
                           Spacer(),
-                          Text(endPrice.toString(), style: TextStyle(
+                          Text(
+
+                            NumberFormat.compactCurrency(
+                                locale: 'id',
+                                symbol: 'Rp ',
+                                decimalDigits: 0)
+                                .format(
+                                toInt(endPrice.toStringAsFixed(0))
+                            ),
+                            style: TextStyle(
                               color: Colors.grey
                           ),)
                         ],
@@ -555,8 +631,8 @@ class _ImageDialogState extends State<ImageDialog> {
                     RangeSlider(
                         activeColor: Colors.red[700],
                         inactiveColor: Colors.grey[400],
-                        min: 1,
-                        max: 100,
+                        min: 0,
+                        max: 10000,
                         values: valuesLandSize,
                         onChanged: (values){
                           setState(() {
@@ -570,11 +646,11 @@ class _ImageDialogState extends State<ImageDialog> {
                       margin: EdgeInsets.only(left: 15.0, right: 15.0),
                       child: Row(
                         children: <Widget>[
-                          Text(startLandSize.toString(), style: TextStyle(
+                          Text(startLandSize.toStringAsFixed(0), style: TextStyle(
                               color: Colors.grey
                           ),),
                           Spacer(),
-                          Text(endLandSize.toString(), style: TextStyle(
+                          Text(endLandSize.toStringAsFixed(0), style: TextStyle(
                               color: Colors.grey
                           ),)
                         ],
@@ -613,8 +689,8 @@ class _ImageDialogState extends State<ImageDialog> {
                     RangeSlider(
                         activeColor: Colors.red[700],
                         inactiveColor: Colors.grey[400],
-                        min: 1,
-                        max: 100,
+                        min: 0,
+                        max: 10000,
                         values: valuesBuilding,
                         onChanged: (values){
                           setState(() {
@@ -628,19 +704,121 @@ class _ImageDialogState extends State<ImageDialog> {
                       margin: EdgeInsets.only(left: 15.0, right: 15.0),
                       child: Row(
                         children: <Widget>[
-                          Text(startBuildingSize.toString(), style: TextStyle(
+                          Text(startBuildingSize.toStringAsFixed(0), style: TextStyle(
                               color: Colors.grey
                           ),),
                           Spacer(),
-                          Text(endBuldingSize.toString(), style: TextStyle(
+                          Text(endBuldingSize.toStringAsFixed(0), style: TextStyle(
                               color: Colors.grey
                           ),)
                         ],
                       ),
                     ),
 
-                    SizedBox(height: 50.0,)
+                    SizedBox(height: 20.0,),
 
+
+                    GestureDetector(
+                      onTap: () {
+
+//                        var queryParameters = {
+//                          'param1': 'one',
+//                          'param2': 'two',
+//                        };
+
+                        Map<String, String> queryParams = {
+                          'language': 'id_ID'
+//                          'filter[listListingPrice][<]': endPrice.toStringAsFixed(0),
+//                          'filter[listListingPrice][>]': startPrice.toStringAsFixed(0),
+//                          'filter[listLandSize][<]': endBuldingSize.toStringAsFixed(0),
+//                          'filter[listLandSize][>]': startBuildingSize.toStringAsFixed(0),
+//                          'filter[listBuildingSize][<]': startPrice.toStringAsFixed(0),
+//                          'filter[listBuildingSize][>]': startPrice.toStringAsFixed(0),
+//                          //'filter[search]': controllerSearch.text,
+//                         //'filter[listTitle]': controllerListingTittle.text,
+//                          //'filter[mctyDescription]': controllerCity.text,
+//                          'filter[listPropertyTypeId][in]': propertyType,
+//                          'filter[listFacility][in]': facilities,
+//                          'filter[listListingCategoryId][in]': listingTypeId,
+//                          'filter[listRentFreqId][in]': rentFreq,
+//                          'filter[listListingStatusId][in]': listingStatus,
+                        };
+
+                        if(checkedValuePrice==true){
+                          queryParams['filter[listListingPrice][<]'] = endPrice.toStringAsFixed(0);
+                          queryParams['filter[listListingPrice][>]'] = startPrice.toStringAsFixed(0);
+                        }
+                        if(checkedValueBuildingSize==true){
+                          queryParams['filter[listBuildingSize][<]'] = endBuldingSize.toStringAsFixed(0);
+                          queryParams['filter[listBuildingSize][>]'] = startBuildingSize.toStringAsFixed(0);
+                        }
+                        if(checkedValueLandSize==true){
+                          queryParams['filter[listLandSize][<]'] = endLandSize.toStringAsFixed(0);
+                          queryParams['filter[listLandSize][>]'] = endLandSize.toStringAsFixed(0);
+                        }
+                        if(controllerSearch.text!=""){
+                          queryParams['filter[search]'] = controllerSearch.text;
+                        }
+//                        if(controllerListingTittle.text!=""){
+//                          queryParams['filter[listTitle]'] = controllerListingTittle.text;
+//                        }
+//                        if(controllerCity.text!=""){
+//                          queryParams['filter[mctyDescription]'] = controllerCity.text;
+//                        }
+
+                        if(facilities!=null){
+                          queryParams['filter[listFacility][in]'] = facilities;
+                        }
+                        if(propertyType!=null){
+                          queryParams['filter[listPropertyTypeId][in]'] = propertyType;
+                        }
+                        if(listingTypeId!=null){
+                          queryParams['filter[listListingCategoryId][in]'] = listingTypeId;
+                        }
+                        if(rentFreq!=null){
+                          queryParams['filter[listRentFreqId][in]'] = rentFreq;
+                        }
+                        if(listingStatus!=null){
+                          queryParams['filter[listListingStatusId][in]'] = listingStatus;
+                        }
+
+
+                        String queryString = Uri(queryParameters: queryParams).query;
+                        String requestUrl = 'https://genius.remax.co.id/papi/listing' + '?' + queryString;
+
+                        print(requestUrl);
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) => new FilterResult(url: requestUrl,)));
+
+//                        var uri =
+//                        Uri.https('https://genius.remax.co.id/papi/listing', queryString);
+//                        print(uri);
+                      },
+                      child: new Container(
+                        height: 50.0,
+                        margin: EdgeInsets.only(left: 10.0, right: 10.0),
+                        child: Card(
+                          elevation: 5.0,
+                          color: kRedColor,
+                          child: Padding(
+                            padding: EdgeInsets.all(10.0),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: <Widget>[
+                                Text(
+                                  'Find',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 50.0,),
                   ],
                 ),
               ),
