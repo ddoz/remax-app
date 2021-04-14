@@ -47,6 +47,8 @@ dependencies:
   google_maps_flutter: ^0.5.11
   flutter_share: ^1.0.5
   dio: ^3.0.4
+  flutter_absolute_path: ^1.0.6
+  random_string: ^2.1.0
 
 dev_dependencies:
   flutter_test:
