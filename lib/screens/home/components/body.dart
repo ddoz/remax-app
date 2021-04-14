@@ -24,17 +24,17 @@ class _BodyState extends State<Body> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
           HeaderWithSearchBox(size: size),
-          TitleWithMoreBtn(title: "Our Approved Partner", press: () {}),
-          Partner(),
-          SizedBox(height: 20.0),
           TitleWithMoreBtn(title: "Near From You", press: () {}),
           NearMeListing(),
           SizedBox(height: 20.0),
           TitleWithLink(title: "Listing Properties", press: () {}),
           ListingProperties(),
+          SizedBox(height: 20.0),
+          TitleWithMoreBtn(title: "Our Approved Partner", press: () {}),
+          Partner(),
+          SizedBox(height: 20.0),
         ],
       ),
     );
   }
 }
-

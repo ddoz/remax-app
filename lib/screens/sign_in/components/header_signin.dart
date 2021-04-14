@@ -36,16 +36,17 @@ class HeaderSignIn extends StatelessWidget {
               child: Column(
                 children: <Widget>[
                   Container(
-                    margin: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.05),
+                    margin: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height * 0.05),
                     child: Row(
                       children: <Widget>[
                         GestureDetector(
-                          onTap: (){
+                          onTap: () {
                             Navigator.of(context).pop();
                           },
                           child: Container(
-                            height: 25.0,
-                            width: 25.0,
+                              height: 25.0,
+                              width: 25.0,
                               child: SvgPicture.asset("assets/icons/home.svg",
                                   color: Colors.white)),
                         ),
@@ -55,16 +56,23 @@ class HeaderSignIn extends StatelessWidget {
                     ),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top:  MediaQuery.of(context).size.height * 0.08),
+                    margin: EdgeInsets.only(
+                        top: MediaQuery.of(context).size.height * 0.08),
                     width: 151,
                     height: 56,
                     child: Image.asset("assets/logo/logo_remax.png"),
                   ),
                   Container(
-                    margin: EdgeInsets.only(top: 20.0, bottom: 20.0, left: 30.0, right: 30.0),
-                    child: Text('Welcome! Please fill the Usernmae and Password to Sign in into Genius System',
-                        style:
-                        TextStyle(fontSize: 14.0, color: Colors.white)),
+                    margin: EdgeInsets.only(
+                        top: 20.0, bottom: 20.0, left: 30.0, right: 30.0),
+                    child: Align(
+                      alignment: Alignment.topCenter,
+                      child: Text(
+                        'Welcome!\nPlease fill the Usernmae and Password to Sign in into Genius System',
+                        style: TextStyle(fontSize: 14.0, color: Colors.white),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
                 ],
               ),

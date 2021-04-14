@@ -1,13 +1,14 @@
 import 'dart:convert';
 import 'dart:io';
-import 'dart:typed_data';
-
+import 'package:path/path.dart' as p;
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:random_string/random_string.dart';
 import 'package:remax_app/screens/addcustomer/components/content_add_customer.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -98,7 +99,6 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
       member = preferences.getString("member");
       headerss['cookie'] = preferences.getString("cookie");
       headerssX['cookie'] = preferences.getString("cookie");
-
 
       controllerOfficeName.text = officeName;
     });
@@ -191,39 +191,56 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
   List _listHelperBathroom = ["1", "2", "3"];
 
   List<Asset> images = <Asset>[];
+  List files = [];
   List<MultipartFile> multipartImageList = new List<MultipartFile>();
   List<File> listFile = List<File>();
   String _error = 'No Error Dectected';
 
   Widget buildGridView() {
-//    return GridView.count(
-//      crossAxisCount: 3,
-//      children: List.generate(images.length, (index) {
-//        Asset asset = images[index];
-//        return AssetThumb(
-//          asset: asset,
-//          width: 300,
-//          height: 300,
-//        );
-//      }),
-//    );
+    // return GridView.count(
+    //   crossAxisCount: 3,
+    //   children: List.generate(images.length, (index) {
+    //     Asset asset = images[index];
+    //     return AssetThumb(
+    //       asset: asset,
+    //       width: 300,
+    //       height: 300,
+    //     );
+    //   }),
+    // );
     return ListView.builder(
       shrinkWrap: true,
       itemCount: images.length,
       itemBuilder: (context, i) {
-//      return Container(
-//        child: Column(
-//          children: <Widget>[
-//            Text(images[i].name, style: TextStyle(
-//              fontWeight: FontWeight.bold
-//            ),),
-//            Text(images[i].toString(), style: TextStyle(
-//            ),),
-//          ],
-//        ),
-//      );
+        Asset asset = images[i];
+        return Container(
+          child: Column(
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 18, right: 18, top: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    AssetThumb(asset: asset, width: 100, height: 100),
+                    InkWell(
+                      onTap: () {
+                        setState(() {
+                          images = List.from(images)..removeAt(i);
+                        });
+                      },
+                      child: Icon(
+                        Icons.remove_circle,
+                        color: Colors.red,
+                      ),
+                    )
+                  ],
+                ),
+              )
+            ],
+          ),
+        );
 
-        return ListTile(title: Text(images[i].name));
+        // return ListTile(title: Text(images[i].name));
       },
     );
   }
@@ -240,7 +257,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
         cupertinoOptions: CupertinoOptions(takePhotoIcon: "chat"),
         materialOptions: MaterialOptions(
           actionBarColor: "#abcdef",
-          actionBarTitle: "Example App",
+          actionBarTitle: "Remax",
           allViewTitle: "All Photos",
           useDetailsView: false,
           selectCircleStrokeColor: "#000000",
@@ -324,7 +341,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
           ),
           Container(
             padding: new EdgeInsets.only(
-                top: MediaQuery.of(context).size.height * .35),
+                top: MediaQuery.of(context).size.height * .30),
             child: Container(
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.only(
@@ -358,9 +375,9 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 10.0, left: 15.0),
+                      margin: EdgeInsets.only(top: 10.0),
                       child: Text(
-                        'Please input your listing details below (approximate time to complete this form is 3 minutes)',
+                        'Please input your listing details below\n(approximate time to complete this form is 3 minutes)',
                       ),
                     ),
                     new Align(
@@ -1897,7 +1914,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
         "listListingStatusId": listingTypeId,
         "listListingCategoryId": listingCategoryId,
         "listPropertyTypeId": propertyTypeId,
-        "listRentFreqId": listingTypeId,
+        // "listRentFreqId": listingTypeId,
         "listLegalTermId": certificateTypeId,
         "listCurrencyId": currenciesId,
         "listDistrictId": "",
@@ -1906,73 +1923,53 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
     };
 
     var body = json.encode(dataListing);
-    //print(body);
 
     headerss['Content-Type'] = "application/json";
-    headerssX['Content-Type'] = "multipart/form-data";
-    //print('add listing : '+ headerss.toString());
+    // headerssX['Content-Type'] = "multipart/form-data";
 
-    final response = await http.post("https://genius.remax.co.id/api/listing/crud",
-        headers: headerss, body: body);
+    try {
+      final response = await http.post(
+          "https://genius.remax.co.id/api/listing/crud",
+          headers: headerss,
+          body: body);
 
-    final data = jsonDecode(response.body);
-    String listId = data['data']['listId'];
+      final data = jsonDecode(response.body);
+      String listId = data['data']['listId'];
 
-    String urlImage = "https://genius.remax.co.id/api/listing/crud/${listId}/links/listingFile";
-//    String urlImage =
-//        "https://genius.remax.co.id/api/listing/crud/49673/links/listingFile";
-    postImage(urlImage);
-    print(listId);
+      String urlImage =
+          "https://genius.remax.co.id/api/listing/crud/${listId}/links/listingFile";
+      postImage(urlImage);
+    } catch (e) {
+      print(e);
+    }
   }
 
   postImage(String url) async {
     try {
       var dio = Dio();
-      for (int i = 0; i < images.length; i++) {
-        FormData formData = new FormData.fromMap({
-          "listFile[$i]": images[i].identifier,
+      var j = 1;
+      for (var i = 0; i < images.length; i++) {
+        var path =
+            await FlutterAbsolutePath.getAbsolutePath(images[i].identifier);
+        var file = await getImageFileFromAsset(path);
+        var filetype = p.extension(path);
+        var filename = randomAlphaNumeric(10);
+        var formDataPostImage = FormData.fromMap({
+          "listFile[0]": new MultipartFile.fromBytes(file.readAsBytesSync(),
+              filename: '$filename$filetype')
         });
-        Response resp = await dio.put(url,
-            options: Options(headers: headerssX),
-            data: formData
-        );
-        print(resp);
-//        final response = await http.put(url,
-//            headers: headerssX,
-//            body: {
-//          'listFile[$i]': images[i].identifier,
-//        });
-//        print(response);
+        j++;
+        try {
+          var responses = await dio.post(url,
+              options: Options(headers: headerssX), data: formDataPostImage);
+          print(responses);
+        } catch (e) {
+          print(e);
+        }
       }
-
-//      for (Asset asset in images) {
-//        ByteData byteData = await asset.getByteData();
-//        List<int> imageData = byteData.buffer.asUint8List();
-//        MultipartFile multipartFile = new MultipartFile.fromBytes(
-//          imageData
-//        );
-//        multipartImageList.add(multipartFile);
-//      }
-//
-//      FormData formData = FormData.fromMap({
-//        "listFile[]": multipartImageList,
-//      });
-//
-//      Dio dio = new Dio();
-//      var response = await dio.post(url,
-//          options: Options(headers: headerssX),
-//          data: formData);
-//      print(response);
-
     } catch (e) {
       print(e);
     }
-
-//    final response = await http.post(url, body: {
-//      'listFile[0]':listFile.,
-//    });
-
-    //print(response);
   }
 
   void getFileList() async {
@@ -2079,7 +2076,7 @@ class StateServiceListingCategory {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     headerss['cookie'] = preferences.getString("cookie");
-    print(headerss);
+
     final response = await http.get(
         "https://genius.remax.co.id/api/listingcategory/crud",
         headers: headerss);
