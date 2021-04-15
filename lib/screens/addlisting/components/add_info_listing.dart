@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
-import 'package:path/path.dart' as p;
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_absolute_path/flutter_absolute_path.dart';
@@ -8,6 +8,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
 import 'package:multi_image_picker/multi_image_picker.dart';
+import 'package:path/path.dart' as p;
 import 'package:random_string/random_string.dart';
 import 'package:remax_app/screens/addcustomer/components/content_add_customer.dart';
 import 'package:remax_app/util/constants.dart';
@@ -179,16 +180,16 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
   }
 
   String _valBedRooms;
-  List _listBedRooms = ["1", "2", "3"];
+  List _listBedRooms = ["0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
   String _valHelpersBedRoooms;
-  List _listHelpersBedroom = ["1", "2", "3"];
+  List _listHelpersBedroom = ["0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
   String _valBathRoom;
-  List _listBathRoom = ["1", "2", "3"];
+  List _listBathRoom = ["0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
   String _valHelperBathroom;
-  List _listHelperBathroom = ["1", "2", "3"];
+  List _listHelperBathroom = ["0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
   List<Asset> images = <Asset>[];
   List files = [];
@@ -1876,72 +1877,205 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
     }
   }
 
-  publishListing() async {
-    getFileList();
-    Map dataListing = {
-      "listStreetName": controllerStreetName.text,
-      "listTitle": controllerListingTitle.text,
-      "listDescription": controllerDescription.text,
-      "listBlock": controllerBlockNo.text,
-      "listHouseNumber": controllerHouseNo.text,
-      "listUrl": controllerCustomListingUrl.text,
-      "listPostalCode": controllerPostCode.text,
-      "listCoordinat": "",
-      "listListingPrice": controllerPrice.text,
-      "listPublishDate": controllerPublishDate.text,
-      "listExpiryDate": controllerExpiryDate.text,
-      "listBedroom": _valBedRooms,
-      "listLandSize": controllerLandSize.text,
-      "listBuildingSize": controllerBuildingSize.text,
-      "listBathroom": _valBathRoom,
-      "listLamudi": isLamudi,
-      "listRumah123": isRumah123,
-      "listValueSVTO": "",
-      "listCreatedTime": "",
-      "listIdListing": "",
-      "listCommissionPercentage": controllerPercent.text,
-      "listCommissionMoneter": controllerRupiah.text,
-      "listMaidRoom": _valHelpersBedRoooms,
-      "listMaidBathroom": _valHelperBathroom,
-      "links": {
-        "listCustId": ownerId,
-        "listType": listingTypeId,
-        "listMmbsId": agentId,
-        "listOfficeId": officeId,
-        "listCityId": cityId,
-        "listProvinceId": provId,
-        "listCountryId": countryId,
-        "listListingStatusId": listingTypeId,
-        "listListingCategoryId": listingCategoryId,
-        "listPropertyTypeId": propertyTypeId,
-        // "listRentFreqId": listingTypeId,
-        "listLegalTermId": certificateTypeId,
-        "listCurrencyId": currenciesId,
-        "listDistrictId": "",
-        "listFile": ""
-      }
-    };
-
-    var body = json.encode(dataListing);
-
-    headerss['Content-Type'] = "application/json";
-    // headerssX['Content-Type'] = "multipart/form-data";
-
-    try {
-      final response = await http.post(
-          "https://genius.remax.co.id/api/listing/crud",
-          headers: headerss,
-          body: body);
-
-      final data = jsonDecode(response.body);
-      String listId = data['data']['listId'];
-
-      String urlImage =
-          "https://genius.remax.co.id/api/listing/crud/${listId}/links/listingFile";
-      postImage(urlImage);
-    } catch (e) {
-      print(e);
+  String validator() {
+    String error = "kosong";
+    if (controllerPublishDate.text.isEmpty) {
+      error = "Publish Date tidak boleh kosong";
+      return error;
+    } else if (controllerExpiryDate.text.isEmpty) {
+      error = "Expiry Date tidak boleh kosong";
+      return error;
+    } else if (officeId == null) {
+      error = "Office Name tidak boleh kosong";
+      return error;
+    } else if (agentId == null) {
+      error = "Agent Name tidak boleh kosong";
+      return error;
+    } else if (controllerListingTitle.text.isEmpty) {
+      error = "Listing title tidak boleh kosong";
+      return error;
+    } else if (controllerCustomListingUrl.text.isEmpty) {
+      error = "Custom URL tidak boleh kosong";
+      return error;
+    } else if (ownerId == null) {
+      error = "Owner Name tidak boleh kosong";
+      return error;
+    } else if (controllerStreetName.text.isEmpty) {
+      error = "Street Name tidak boleh kosong";
+      return error;
+    } else if (countryId == null) {
+      error = "Country tidak boleh kosong";
+      return error;
+    } else if (provId == null) {
+      error = "Province tidak boleh kosong";
+      return error;
+    } else if (controllerHouseNo.text.isEmpty) {
+      error = "House Number tidak boleh kosong";
+      return error;
+    } else if (controllerBlockNo.text.isEmpty) {
+      error = "Block Number tidak boleh kosong";
+      return error;
+    } else if (cityId == null) {
+      error = "City tidak boleh kosong";
+      return error;
+    } else if (controllerPrice.text.isEmpty) {
+      error = "Price tidak boleh kosong";
+      return error;
+    } else if (controllerDescription.text.isEmpty) {
+      error = "Description tidak boleh kosong";
+      return error;
+    } else if (listingTypeId == null) {
+      error = "Listing Type tidak boleh kosong";
+      return error;
+    } else if (listingCategoryId == null) {
+      error = "Listing Category tidak boleh kosong";
+      return error;
+    } else if (propertyTypeId == null) {
+      error = "Property Type tidak boleh kosong";
+      return error;
+    } else if (certificateTypeId == null) {
+      error = "Certificate Type tidak boleh kosong";
+      return error;
+    } else if (controllerLandSize.text.isEmpty) {
+      error = "Land Size tidak boleh kosong";
+      return error;
+    } else if (controllerBuildingSize.text.isEmpty) {
+      error = "Building Size tidak boleh kosong";
+      return error;
+    } else if (_valBedRooms == null) {
+      error = "Bedroom tidak boleh kosong";
+      return error;
+    } else if (_valBathRoom == null) {
+      error = "Bathroom tidak boleh kosong";
+      return error;
+    } else if (_valHelperBathroom == null) {
+      error = "Helper Bathroom tidak boleh kosong";
+      return error;
+    } else if (_valHelpersBedRoooms == null) {
+      error = "Helper Bedroom tidak boleh kosong";
+      return error;
+    } else if (currenciesId == null) {
+      error = "Currencies tidak boleh kosong";
+      return error;
+    } else if (controllerPercent.text.isEmpty) {
+      error = "Commision Percent tidak boleh kosong";
+      return error;
+    } else if (controllerRupiah.text.isEmpty) {
+      error = "Commision Rupiah tidak boleh kosong";
+      return error;
+    } else {
+      return error;
     }
+  }
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          SizedBox(
+            width: 10,
+          ),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  void _showToast(BuildContext context, String message) {
+    final scaffold = Scaffold.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: new Text(message),
+        action: SnackBarAction(
+            label: 'OK', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
+
+  publishListing() async {
+    showLoaderDialog(context);
+    getFileList();
+
+    if(validator()=="kosong"){
+      Map dataListing = {
+        "listStreetName": controllerStreetName.text,
+        "listTitle": controllerListingTitle.text,
+        "listDescription": controllerDescription.text,
+        "listBlock": controllerBlockNo.text,
+        "listHouseNumber": controllerHouseNo.text,
+        "listUrl": controllerCustomListingUrl.text,
+        "listPostalCode": controllerPostCode.text,
+        "listCoordinat": "",
+        "listListingPrice": controllerPrice.text,
+        "listPublishDate": controllerPublishDate.text,
+        "listExpiryDate": controllerExpiryDate.text,
+        "listBedroom": _valBedRooms,
+        "listLandSize": controllerLandSize.text,
+        "listBuildingSize": controllerBuildingSize.text,
+        "listBathroom": _valBathRoom,
+        "listLamudi": isLamudi,
+        "listRumah123": isRumah123,
+        "listValueSVTO": "",
+        "listCreatedTime": "",
+        "listIdListing": "",
+        "listCommissionPercentage": controllerPercent.text,
+        "listCommissionMoneter": controllerRupiah.text,
+        "listMaidRoom": _valHelpersBedRoooms,
+        "listMaidBathroom": _valHelperBathroom,
+        "links": {
+          "listCustId": ownerId,
+          "listType": listingTypeId,
+          "listMmbsId": agentId,
+          "listOfficeId": officeId,
+          "listCityId": cityId,
+          "listProvinceId": provId,
+          "listCountryId": countryId,
+          "listListingStatusId": listingTypeId,
+          "listListingCategoryId": listingCategoryId,
+          "listPropertyTypeId": propertyTypeId,
+          // "listRentFreqId": listingTypeId,
+          "listLegalTermId": certificateTypeId,
+          "listCurrencyId": currenciesId,
+          "listDistrictId": "",
+          "listFile": ""
+        }
+      };
+
+      var body = json.encode(dataListing);
+
+      headerss['Content-Type'] = "application/json";
+      // headerssX['Content-Type'] = "multipart/form-data";
+
+      try {
+        final response = await http.post(
+            "https://genius.remax.co.id/api/listing/crud",
+            headers: headerss,
+            body: body);
+
+        final data = jsonDecode(response.body);
+        String listId = data['data']['listId'];
+
+        String urlImage =
+            "https://genius.remax.co.id/api/listing/crud/${listId}/links/listingFile";
+        postImage(urlImage);
+      } catch (e) {
+        print(e);
+      }
+
+    } else {
+      Navigator.pop(context);
+      _showToast(context, validator());
+    }
+
   }
 
   postImage(String url) async {
@@ -1967,8 +2101,12 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
           print(e);
         }
       }
+      Navigator.pop(context);
+      _showToast(context, "Berhasil Upload");
     } catch (e) {
       print(e);
+      Navigator.pop(context);
+      _showToast(context, "Gagal Upload, Coba Lagi");
     }
   }
 
