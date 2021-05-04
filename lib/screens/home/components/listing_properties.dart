@@ -480,6 +480,26 @@ class _ItemListState extends State<ItemList> {
                           style: new TextStyle(
                               fontSize: 12.0,
                               color: const Color(0xffDC1B2E)),
+
+                        ),
+                        Spacer(),
+                        GestureDetector(
+                          onTap: (){
+                            share(widget.data['id'], widget.data['listTitle']);
+                          },
+                          child: new Container(
+                            margin: EdgeInsets.only(
+                                left: 10.0, right: 10.0),
+                            child: new Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  children: <Widget>[
+                                    SvgPicture.asset(
+                                      "assets/icons/share.svg",
+                                    ),
+                                  ],
+                                )),
+                          ),
                         )
                       ])
                           : Row(children: <Widget>[
@@ -508,7 +528,26 @@ class _ItemListState extends State<ItemList> {
                           style: new TextStyle(
                               fontSize: 12.0,
                               color: const Color(0xff1A3668)),
-                        )
+                        ),
+                        Spacer(),
+                        GestureDetector(
+                          onTap: (){
+                            share(widget.data['id'], widget.data['listTitle']);
+                          },
+                          child: new Container(
+                            margin: EdgeInsets.only(
+                                left: 10.0, right: 10.0),
+                            child: new Align(
+                                alignment: Alignment.centerLeft,
+                                child: Row(
+                                  children: <Widget>[
+                                    SvgPicture.asset(
+                                      "assets/icons/share.svg",
+                                    ),
+                                  ],
+                                )),
+                          ),
+                        ),
                       ]),
 
 //                      Row(
@@ -562,24 +601,7 @@ class _ItemListState extends State<ItemList> {
 
                       Row(
                         children: <Widget>[
-                          GestureDetector(
-                            onTap: (){
-                              share(widget.data['id'], widget.data['listTitle']);
-                            },
-                            child: new Container(
-                              margin: EdgeInsets.only(
-                                  left: 10.0),
-                              child: new Align(
-                                  alignment: Alignment.centerLeft,
-                                  child: Row(
-                                    children: <Widget>[
-                                      SvgPicture.asset(
-                                        "assets/icons/share.svg",
-                                      ),
-                                    ],
-                                  )),
-                            ),
-                          ),
+
                           Spacer(),
                           FutureBuilder<bool>(
                               future: checkfav(toInt(widget.data['id'])),

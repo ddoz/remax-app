@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:remax_app/screens/franchise/components/content_franchise.dart';
 import 'package:remax_app/util/constants.dart';
 
 class ItemHeaderFranchise extends StatelessWidget {
@@ -279,7 +280,16 @@ class ItemHeaderFranchise extends StatelessWidget {
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(18.0),
                         side: BorderSide(color: Colors.white)),
-                    onPressed: () {},
+                    onPressed: () async {
+                      await showDialog(
+                        builder: (_) =>
+                            ImageDialogKantor(
+                            'assets/images/fr_ct_4.png',
+                            'Bootcamp',
+                            'Teknologi RE/MAX menciptakan peluang usaha yang sangat besar diantara marketing associate dan klien. Teknologi Genius milik RE/MAX dirancang agar ramah pengguna dan dapat meningkatkan efektivitas dan efisiensi usaha anda.'),
+                        context: context,
+                      );
+                    },
                     color: Colors.white,
                     textColor: kRedGradient,
                     child: Text("Miliki Kantor RE/MAX",

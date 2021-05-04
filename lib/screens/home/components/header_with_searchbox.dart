@@ -101,7 +101,7 @@ class HeaderWithSearchBox extends StatelessWidget {
                   GestureDetector(
                     onTap: () async{
                       await showDialog(
-                          builder: (_) => ImageDialog(),
+                          builder: (_) => ImageDialogFilter(),
                       context: context,
                       );
                     },
@@ -135,14 +135,14 @@ class HeaderWithSearchBox extends StatelessWidget {
   }
 }
 
-class ImageDialog extends StatefulWidget {
+class ImageDialogFilter extends StatefulWidget {
 
 
   @override
-  _ImageDialogState createState() => _ImageDialogState();
+  _ImageDialogFilterState createState() => _ImageDialogFilterState();
 }
 
-class _ImageDialogState extends State<ImageDialog> {
+class _ImageDialogFilterState extends State<ImageDialogFilter> {
 
   RangeValues valuesPrice = RangeValues(0, 10000000000);
   RangeValues valuesLandSize = RangeValues(0, 10000);
@@ -602,7 +602,7 @@ class _ImageDialogState extends State<ImageDialog> {
                     CheckboxListTile(
                       contentPadding: EdgeInsets.all(0),
                       title: Text(
-                        "Land Size", style: TextStyle(
+                        "Land Size M"+'\u00B2', style: TextStyle(
                           color: kPrimaryColor
                       ),),
                       value: checkedValueLandSize,
@@ -660,7 +660,7 @@ class _ImageDialogState extends State<ImageDialog> {
                     CheckboxListTile(
                       contentPadding: EdgeInsets.all(0),
                       title: Text(
-                        "Building Size", style: TextStyle(
+                        "Building Size M"+'\u00B2', style: TextStyle(
                           color: kPrimaryColor
                       ),),
                       value: checkedValueBuildingSize,
