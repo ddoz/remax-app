@@ -14,6 +14,10 @@ import 'package:remax_app/screens/detail/components/listing_by_office.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:remax_app/util/database_client.dart';
 import 'package:remax_app/util/date_formatter.dart';
+import 'package:remax_app/screens/detail/components/listing_by_agent.dart';
+
+
+
 
 class DetailPage extends StatefulWidget {
   List list;
@@ -756,7 +760,13 @@ class _DetailPageState extends State<DetailPage> {
 
 
                     ListingByProfil(),
-                    BtnListingByAgent(),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) => new ListingByAgentPage(
+                              url: "https://genius.remax.co.id/papi/listing?filter[listMmbsId]="+widget.list[widget.index]['links']['listMmbsId'])));
+                      },
+                        child: BtnListingByAgent()),
                     Container(
                       margin: EdgeInsets.all(15.0),
                       child: Column(
@@ -769,7 +779,7 @@ class _DetailPageState extends State<DetailPage> {
                         ],
                       ),
                     ),
-                    ListingByOffice()
+                    ListingByOffice(listMmbsId: widget.list[widget.index]['links']['listMmbsId'])
                   ],
                 ),
               ),

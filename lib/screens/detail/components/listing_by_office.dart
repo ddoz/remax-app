@@ -15,6 +15,11 @@ import 'package:remax_app/util/date_formatter.dart';
 import '../detail_page.dart';
 
 class ListingByOffice extends StatefulWidget {
+
+  String listMmbsId;
+
+  ListingByOffice({this.listMmbsId});
+
   @override
   _ListingByOfficeState createState() => _ListingByOfficeState();
 }
@@ -24,7 +29,7 @@ class _ListingByOfficeState extends State<ListingByOffice> {
   int _current = 0;
 
   Future<List> getData() async {
-    final response = await http.get("https://genius.remax.co.id/papi/listing");
+    final response = await http.get("https://genius.remax.co.id/papi/listing?filter[listMmbsId]="+widget.listMmbsId);
 
     List list = json.decode(response.body)['data'];
     return list;
@@ -585,7 +590,7 @@ class _ItemListState extends State<ItemList> {
                       image: DecorationImage(
                           image: widget.data['listThumbnail'] != null
                               ? NetworkImage('https://genius.remax.co.id/papi/' +
-                              widget.data['listThumbnail'])
+                              widget.data['listThumbnail']+'?size=256,256')
                               : NetworkImage('-'),
                           fit: BoxFit.cover),
                     ),

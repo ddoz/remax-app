@@ -289,7 +289,7 @@ class _ItemListState extends State<ItemList> {
                       image: DecorationImage(
                           image: widget.data['listThumbnail'] != null
                               ? NetworkImage('https://genius.remax.co.id/papi/' +
-                              widget.data['listThumbnail'])
+                              widget.data['listThumbnail']+'?size=512,512')
                               : NetworkImage('-'),
                           fit: BoxFit.cover),
                     ),

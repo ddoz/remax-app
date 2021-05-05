@@ -283,10 +283,7 @@ class ItemHeaderFranchise extends StatelessWidget {
                     onPressed: () async {
                       await showDialog(
                         builder: (_) =>
-                            ImageDialogKantor(
-                            'assets/images/fr_ct_4.png',
-                            'Bootcamp',
-                            'Teknologi RE/MAX menciptakan peluang usaha yang sangat besar diantara marketing associate dan klien. Teknologi Genius milik RE/MAX dirancang agar ramah pengguna dan dapat meningkatkan efektivitas dan efisiensi usaha anda.'),
+                            ImageDialogKantor(),
                         context: context,
                       );
                     },

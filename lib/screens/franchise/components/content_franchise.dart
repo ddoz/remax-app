@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:remax_app/screens/agents/components/content_slide.dart';
 import 'package:remax_app/util/constants.dart';
@@ -317,14 +318,128 @@ class ImageDialog extends StatelessWidget {
   }
 }
 
+class ImageDialogKantor extends StatefulWidget {
+  @override
+  _ImageDialogKantorState createState() => _ImageDialogKantorState();
+}
+
+class _ImageDialogKantorState extends State<ImageDialogKantor> {
+
+  TextEditingController controllerName = new TextEditingController();
+  TextEditingController controllerEmail = new TextEditingController();
+  TextEditingController controllerPhone = new TextEditingController();
+  TextEditingController controllerDomisili = new TextEditingController();
+  TextEditingController controllerMessage = new TextEditingController();
+
+  showLoaderDialog(BuildContext context) {
+    AlertDialog alert = AlertDialog(
+      content: new Row(
+        children: [
+          CircularProgressIndicator(),
+          SizedBox(
+            width: 10,
+          ),
+          Container(
+              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+        ],
+      ),
+    );
+    showDialog(
+      barrierDismissible: false,
+      context: context,
+      builder: (BuildContext context) {
+        return alert;
+      },
+    );
+  }
+
+  void _showToast(BuildContext context, String message) {
+
+    Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        timeInSecForIosWeb: 1,
+        backgroundColor: Colors.grey,
+        textColor: Colors.white,
+        fontSize: 16.0
+    );
+
+  }
+
+  String validator() {
+    String error = "kosong";
+    if (controllerName.text.isEmpty) {
+      error = "Nama Tidak Boleh Kosong";
+      return error;
+    } else if (controllerEmail.text.isEmpty) {
+      error = "Email tidak boleh kosong";
+      return error;
+    } else if (controllerPhone.text.isEmpty) {
+      error = "Phone tidak boleh kosong";
+      return error;
+    } else if (controllerMessage.text.isEmpty) {
+      error = "Message tidak boleh kosong";
+      return error;
+    } else {
+      return error;
+    }
+
+  }
+
+  addData() async {
+    print("addData");
+    showLoaderDialog(context);
+    if(validator()=="kosong"){
+      Map dataListing = {
+        "infsCustomerBody": controllerMessage.text,
+        "infsCustomerEmail": controllerEmail.text,
+        "infsCustomerName": controllerName.text,
+        "infsCustomerPhone": controllerPhone.text,
+        "infsToken":"prodesend27701"
+      };
+
+      var body = json.encode(dataListing);
+
+      try {
+        final response = await http.post(
+            "https://genius.remax.co.id/papi/inquiryfranchise/crud",
+            body: body);
+
+        final data = jsonDecode(response.body);
+
+        String message = data['status']['message'];
+
+        print(data);
+
+        Navigator.pop(context);
+
+        _showToast(context, message);
 
 
-class ImageDialogKantor extends StatelessWidget {
-  final String assets;
-  final String judul;
-  final String deskripsi;
 
-  ImageDialogKantor(this.assets, this.judul, this.deskripsi);
+        controllerName.text = "";
+        controllerEmail.text = "";
+        controllerPhone.text = "";
+        controllerDomisili.text = "";
+        controllerMessage.text = "";
+
+
+
+
+        print(validator());
+
+      } catch (e) {
+        print(e);
+      }
+
+    } else {
+      Navigator.pop(context);
+      _showToast(context, validator());
+      print(validator());
+    }
+
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -365,6 +480,7 @@ class ImageDialogKantor extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: TextField(
+                          controller: controllerName,
                           onChanged: (value) {},
                           decoration: InputDecoration(
                             hintText: "Name",
@@ -397,6 +513,7 @@ class ImageDialogKantor extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: TextField(
+                          controller: controllerEmail,
                           onChanged: (value) {},
                           decoration: InputDecoration(
                             hintText: "Email",
@@ -429,7 +546,9 @@ class ImageDialogKantor extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: TextField(
+                          controller: controllerPhone,
                           onChanged: (value) {},
+                          keyboardType: TextInputType.phone,
                           decoration: InputDecoration(
                             hintText: "Phone",
                             hintStyle: TextStyle(
@@ -461,6 +580,7 @@ class ImageDialogKantor extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: TextField(
+                          controller: controllerDomisili,
                           onChanged: (value) {},
                           decoration: InputDecoration(
                             hintText: "Domisili",
@@ -492,6 +612,7 @@ class ImageDialogKantor extends StatelessWidget {
                     children: <Widget>[
                       Expanded(
                         child: TextField(
+                          controller: controllerMessage,
                           onChanged: (value) {},
                           decoration: InputDecoration(
                             hintText: "Message",
@@ -510,23 +631,28 @@ class ImageDialogKantor extends StatelessWidget {
                     ],
                   ),
                 ),
-                new Container(
-                  margin: EdgeInsets.all(10.0),
-                  child: Card(
-                    color: kAppBarColorTheme,
-                    child: Padding(
-                      padding: EdgeInsets.all(10.0),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: <Widget>[
-                          Text(
-                            'Join',
-                            style: TextStyle(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold),
-                          ),
-                        ],
+                GestureDetector(
+                  onTap: (){
+                    addData();
+                  },
+                  child: new Container(
+                    margin: EdgeInsets.all(10.0),
+                    child: Card(
+                      color: kAppBarColorTheme,
+                      child: Padding(
+                        padding: EdgeInsets.all(10.0),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: <Widget>[
+                            Text(
+                              'Join',
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -560,4 +686,10 @@ class ImageDialogKantor extends StatelessWidget {
       ),
     );
   }
+
+
+
+
 }
+
+

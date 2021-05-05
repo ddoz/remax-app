@@ -414,7 +414,7 @@ class _ItemListState extends State<ItemList> {
                             image: widget.list[i]['listThumbnail'] != null
                                 ? NetworkImage(
                                 'https://genius.remax.co.id/papi/' +
-                                    widget.list[i]['listThumbnail'])
+                                    widget.list[i]['listThumbnail']+'?size=256,256')
                                 : NetworkImage('-'),
                             fit: BoxFit.cover),
                       ),
