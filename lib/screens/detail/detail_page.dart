@@ -14,6 +14,10 @@ import 'package:remax_app/screens/detail/components/listing_by_office.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:remax_app/util/database_client.dart';
 import 'package:remax_app/util/date_formatter.dart';
+import 'package:remax_app/screens/detail/components/listing_by_agent.dart';
+
+
+
 
 class DetailPage extends StatefulWidget {
   List list;
@@ -591,43 +595,8 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                       ),
                     ),
-                    new Container(
-                      width: MediaQuery.of(context).size.width,
-                      margin:
-                          EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0),
-                      child: Image.asset('assets/images/banner.jpg'),
-                      // decoration: BoxDecoration(
-                      //   image: DecorationImage(
-                      //       image: Image.asset(
-                      //           'assets/asd/asd'),
-                      //       fit: BoxFit.fill),
-                      // ),
-                    ),
-                    new Container(
-                      margin: EdgeInsets.all(8.0),
-                      child: Card(
-                        color: kPrimaryColor,
-                        child: Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                'Apply KPR For This Listing',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Icon(
-                                Icons.navigate_next,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+
+
                     new Container(
                       margin:
                           EdgeInsets.only(top: 15.0, left: 15.0, bottom: 10.0),
@@ -750,8 +719,54 @@ class _DetailPageState extends State<DetailPage> {
                         ),
                       ),
                     ),
+
+                    new Container(
+                      width: MediaQuery.of(context).size.width,
+                      margin:
+                      EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0),
+                      child: Image.asset('assets/images/banner.jpg'),
+                      // decoration: BoxDecoration(
+                      //   image: DecorationImage(
+                      //       image: Image.asset(
+                      //           'assets/asd/asd'),
+                      //       fit: BoxFit.fill),
+                      // ),
+                    ),
+                    new Container(
+                      margin: EdgeInsets.all(8.0),
+                      child: Card(
+                        color: kPrimaryColor,
+                        child: Padding(
+                          padding: EdgeInsets.all(10.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: <Widget>[
+                              Text(
+                                'Apply KPR For This Listing',
+                                style: TextStyle(
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              ),
+                              Icon(
+                                Icons.navigate_next,
+                                color: Colors.white,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+
+
                     ListingByProfil(),
-                    BtnListingByAgent(),
+                    GestureDetector(
+                      onTap: (){
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) => new ListingByAgentPage(
+                              url: "https://genius.remax.co.id/papi/listing?filter[listMmbsId]="+widget.list[widget.index]['links']['listMmbsId'])));
+                      },
+                        child: BtnListingByAgent()),
                     Container(
                       margin: EdgeInsets.all(15.0),
                       child: Column(
@@ -764,7 +779,7 @@ class _DetailPageState extends State<DetailPage> {
                         ],
                       ),
                     ),
-                    ListingByOffice()
+                    ListingByOffice(listMmbsId: widget.list[widget.index]['links']['listMmbsId'])
                   ],
                 ),
               ),

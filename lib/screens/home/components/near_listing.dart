@@ -716,7 +716,7 @@ class _ItemListState extends State<ItemList> {
                     image: DecorationImage(
                         image: widget.data['listThumbnail'] != null
                             ? NetworkImage('https://genius.remax.co.id/papi/' +
-                                widget.data['listThumbnail'])
+                                widget.data['listThumbnail']+'?size=512,512')
                             : NetworkImage('-'),
                         fit: BoxFit.cover),
                   ),
@@ -837,7 +837,7 @@ class _ItemListState extends State<ItemList> {
                               children: <Widget>[
                                 new Container(
                                   margin: EdgeInsets.only(
-                                      left: 15.0, right: 15.0, top: 5.0),
+                                      left: 15.0, right: 5.0, top: 5.0),
                                   child: new Align(
                                       alignment: Alignment.centerLeft,
                                       child: Row(
@@ -905,7 +905,7 @@ class _ItemListState extends State<ItemList> {
                               children: <Widget>[
                                 new Container(
                                   margin: EdgeInsets.only(
-                                      left: 10.0, right: 10.0, top: 5.0),
+                                      left: 10.0, right: 5.0, top: 5.0),
                                   child: new Align(
                                       alignment: Alignment.centerLeft,
                                       child: Row(
@@ -962,90 +962,96 @@ class _ItemListState extends State<ItemList> {
                                 ),
                               ],
                             ),
-                          ],
-                        ),
-                        Row(
-                          children: <Widget>[
-                            GestureDetector(
-                              onTap: (){
-                                share(widget.data['id'], widget.data['listTitle']);
-                              },
-                              child: new Container(
-                                margin: EdgeInsets.only(
-                                    left: 10.0),
-                                child: new Align(
-                                    alignment: Alignment.centerLeft,
-                                    child: Row(
-                                      children: <Widget>[
-                                        SvgPicture.asset(
-                                          "assets/icons/share.svg",
-                                        ),
-                                      ],
-                                    )),
+                            Center(
+                              child: Container(
+                                child: Align(
+                                  child: GestureDetector(
+                                    onTap: (){
+                                      share(widget.data['id'], widget.data['listTitle']);
+                                    },
+                                    child: new Container(
+                                      margin: EdgeInsets.only(
+                                          left: 10.0),
+                                      child: SvgPicture.asset(
+                                        "assets/icons/share.svg",
+                                      ),
+                                    ),
+                                  ),
+                                  alignment: Alignment.centerRight,
+                                ),
+                                margin: EdgeInsets.only(right: 10.0, top:10.0),
                               ),
                             ),
-                            Spacer(),
-                            FutureBuilder(
-                                future: checkfav(toInt(widget.data['id'])),
-                                builder: (context, snapshot) {
-                                  if (snapshot.hasError) print(snapshot.error);
-                                  if (snapshot.data) {
-                                    return GestureDetector(
+                          ],
+                        ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: <Widget>[
+                            Align(
+                              alignment: Alignment.centerRight,
+                              child: FutureBuilder(
+                                  future: checkfav(toInt(widget.data['id'])),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError) print(snapshot.error);
+                                    if (snapshot.data) {
+                                      return GestureDetector(
+                                          onTap: (){
+                                            _deletefav(toInt(widget.data['id']));
+                                            // do something
+                                            setState(() {});
+                                          },
+                                          child: Card(
+                                            margin: EdgeInsets.only(right: 10.0),
+                                            elevation: 2.0,
+                                            color: kRedColor,
+                                            child: Container(
+                                              margin: EdgeInsets.all(6.0),
+                                              child: Icon(
+                                                Icons.favorite,
+                                                color: Colors.white,
+                                                size: 15.0,
+                                              ),
+                                            ),
+                                            shape: CircleBorder(),
+                                          ),
+                                        );
+                                    } else {
+                                      return GestureDetector(
                                         onTap: (){
-                                          _deletefav(toInt(widget.data['id']));
+                                          _handleSubmitted(
+                                            toInt(widget.data['id']),
+                                            widget.data['listTitle'],
+                                            widget.data['listThumbnail'],
+                                            widget.data['listListingPrice'],
+                                            widget.data['links']
+                                            ['listListingCategoryId'],
+                                            listMedia.length.toString(),
+                                            widget.data['listBedroom'],
+                                            widget.data['listBathroom'],
+                                            widget.data['listBuildingSize'],
+                                            widget.data['listLandSize'],
+                                          );
                                           // do something
                                           setState(() {});
                                         },
                                         child: Card(
                                           margin: EdgeInsets.only(right: 10.0),
                                           elevation: 2.0,
-                                          color: kRedColor,
+                                          //fillColor: Colors.white,
                                           child: Container(
                                             margin: EdgeInsets.all(6.0),
                                             child: Icon(
-                                              Icons.favorite,
-                                              color: Colors.white,
+                                              Icons.favorite_border,
                                               size: 15.0,
                                             ),
                                           ),
                                           shape: CircleBorder(),
                                         ),
                                       );
-                                  } else {
-                                    return GestureDetector(
-                                      onTap: (){
-                                        _handleSubmitted(
-                                          toInt(widget.data['id']),
-                                          widget.data['listTitle'],
-                                          widget.data['listThumbnail'],
-                                          widget.data['listListingPrice'],
-                                          widget.data['links']
-                                          ['listListingCategoryId'],
-                                          listMedia.length.toString(),
-                                          widget.data['listBedroom'],
-                                          widget.data['listBathroom'],
-                                          widget.data['listBuildingSize'],
-                                          widget.data['listLandSize'],
-                                        );
-                                        // do something
-                                        setState(() {});
-                                      },
-                                      child: Card(
-                                        margin: EdgeInsets.only(right: 10.0),
-                                        elevation: 2.0,
-                                        //fillColor: Colors.white,
-                                        child: Container(
-                                          margin: EdgeInsets.all(6.0),
-                                          child: Icon(
-                                            Icons.favorite_border,
-                                            size: 15.0,
-                                          ),
-                                        ),
-                                        shape: CircleBorder(),
-                                      ),
-                                    );
-                                  }
-                                }),
+                                    }
+                                  }),
+                            ),
 
                           ],
                         ),

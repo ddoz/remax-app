@@ -5,6 +5,7 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:remax_app/screens/agents/components/content_slide.dart';
+import 'package:remax_app/screens/franchise/components/content_franchise.dart';
 import 'package:remax_app/util/constants.dart';
 
 class ContentAgents extends StatefulWidget {
@@ -93,10 +94,7 @@ class _ContentAgentsState extends State<ContentAgents> {
                               width: 1),
                           onPressed: () async {
                             await showDialog(
-                              builder: (_) => ImageDialog(
-                                  'assets/images/fr_ct_3.png',
-                                  'Momentum',
-                                  'Usaha RE/MAX didasarkan dengan konsep kewirausahaan mandiri. Usaha yang sangat menggiurkan ini dapat dibangun menjadi usaha yang sangat besar dan luas dan dapat diwariskan ke generasi penerus. Walaupun berjalan dalam konsep kewirausahawaan, bersama RE/MAX anda tidak akan pernah sendirian. RE/MAX selalu siap untuk memberikan dukungan, pelatihan, dan bimbingan yang berkesinambungan agar anda mencapai cita-cita anda.'),
+                              builder: (_) => ImageDialogKantor(),
                               context: context,
                             );
                           },

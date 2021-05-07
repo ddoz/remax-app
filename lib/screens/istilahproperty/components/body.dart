@@ -8,13 +8,6 @@ class Body extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     // it enable scrolling on small device
 
-    return SingleChildScrollView(
-      child: Column(
-        children: <Widget>[
-          //HeaderAbout(size: size),
-          ContentIstilah(),
-        ],
-      ),
-    );
+    return ContentIstilah();
   }
 }

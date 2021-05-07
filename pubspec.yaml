@@ -50,6 +50,7 @@ dependencies:
   flutter_absolute_path: ^1.0.6
   random_string: ^2.1.0
   geolocator: ^6.2.1
+  fluttertoast: ^7.1.8
 
 dev_dependencies:
   flutter_test:
