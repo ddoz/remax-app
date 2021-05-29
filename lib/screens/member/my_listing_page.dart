@@ -87,7 +87,7 @@ class _MyListingPageState extends State<MyListingPage> {
       print(message);
       _showToast(context, message);
       signOut();
-      Navigator.of(context).pop;
+      //Navigator.of(context).pop;
       Navigator.of(context).push(new MaterialPageRoute(
           builder: (BuildContext context) => new SignInPage()));
 
