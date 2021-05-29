@@ -5,6 +5,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:remax_app/screens/addlisting/addlisting_page.dart';
+import 'package:remax_app/screens/login_page.dart';
+import 'package:remax_app/screens/main_drawer.dart';
+import 'package:remax_app/screens/sign_in/sign_in_page.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:remax_app/util/session.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,6 +23,8 @@ class MyListingPage extends StatefulWidget {
   _MyListingPageState createState() => _MyListingPageState();
 }
 
+enum LoginStatus { notSignIn, signIn }
+
 class _MyListingPageState extends State<MyListingPage> {
 
 
@@ -27,6 +32,17 @@ class _MyListingPageState extends State<MyListingPage> {
   Map<String, String> headerss = {};
 
 //  TabController tabController;
+
+  LoginStatus _loginStatus = LoginStatus.notSignIn;
+
+  signOut() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      preferences.setInt("value", null);
+      preferences.commit();
+      _loginStatus = LoginStatus.notSignIn;
+    });
+  }
 
 
   getPref() async {
@@ -45,12 +61,56 @@ class _MyListingPageState extends State<MyListingPage> {
     // TODO: implement initState
     super.initState();
     getPref();
+    cekSession();
+  }
+
+  void _showToast(BuildContext context, String message) {
+    final scaffold = Scaffold.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: new Text(message),
+        action: SnackBarAction(
+            label: 'OK', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
+
+  cekSession() async{
+    final response = await http.get(
+        "https://genius.remax.co.id/api/listing/crud?sort=-listId",
+        headers: headerss);
+
+    final data = jsonDecode(response.body);
+    String message = "Terjadi Kesalahan, ";
+    if (data['status'].containsKey('error')) {
+      message = message + data['status']['error']['message'];
+      print(message);
+      _showToast(context, message);
+      signOut();
+      Navigator.of(context).pop;
+      Navigator.of(context).push(new MaterialPageRoute(
+          builder: (BuildContext context) => new SignInPage()));
+
+    }
   }
 
   Future<List> getData() async {
     final response = await http.get(
         "https://genius.remax.co.id/api/listing/crud?sort=-listId",
         headers: headerss);
+
+//    final data = jsonDecode(response.body);
+//    String message = "Terjadi Kesalahan, ";
+//    if (data['status'].containsKey('error')) {
+//      message = message + data['status']['error']['message'];
+//      print(message);
+//      signOut();
+//      Navigator.of(context).pop;
+//      Navigator.of(context).push(new MaterialPageRoute(
+//          builder: (BuildContext context) => new SignInPage()));
+//
+//    }
+
     List list = json.decode(response.body)['data'];
     return list;
   }
