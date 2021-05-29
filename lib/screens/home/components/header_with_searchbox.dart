@@ -84,6 +84,14 @@ class HeaderWithSearchBox extends StatelessWidget {
                   SizedBox(width: 5.0),
                   Expanded(
                     child: TextField(
+                      textInputAction: TextInputAction.go,
+                      onSubmitted: (value) {
+
+                        String requestUrl = "https://genius.remax.co.id/papi/listing?language=id_ID&filter[search]="+value;
+                        print(requestUrl);
+                        Navigator.of(context).push(new MaterialPageRoute(
+                            builder: (BuildContext context) => new FilterResult(url: requestUrl,)));
+                      },
                       onChanged: (value) {},
                       decoration: InputDecoration(
                         hintText: "Search Location..",

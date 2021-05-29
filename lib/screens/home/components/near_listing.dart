@@ -54,7 +54,7 @@ class _NearMeListingState extends State<NearMeListing> {
                       initialPage: 0,
                       height: 210,
                       enlargeCenterPage: false,
-                      autoPlay: false,
+                      autoPlay: true,
                       reverse: false,
                       viewportFraction: 1.0,
                       enableInfiniteScroll: true,

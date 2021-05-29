@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:remax_app/screens/addcustomer/add_customer_page.dart';
+import 'package:remax_app/screens/sign_in/sign_in_page.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,6 +16,8 @@ class MyCustomerPage extends StatefulWidget {
   @override
   _MyCustomerPageState createState() => _MyCustomerPageState();
 }
+
+enum LoginStatus { notSignIn, signIn }
 
 class _MyCustomerPageState extends State<MyCustomerPage> {
 
@@ -43,6 +46,47 @@ class _MyCustomerPageState extends State<MyCustomerPage> {
     super.initState();
     getPref();
     print(headerss);
+  }
+
+  LoginStatus _loginStatus = LoginStatus.notSignIn;
+
+  signOut() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      preferences.setInt("value", null);
+      preferences.commit();
+      _loginStatus = LoginStatus.notSignIn;
+    });
+  }
+
+  void _showToast(BuildContext context, String message) {
+    final scaffold = Scaffold.of(context);
+    scaffold.showSnackBar(
+      SnackBar(
+        content: new Text(message),
+        action: SnackBarAction(
+            label: 'OK', onPressed: scaffold.hideCurrentSnackBar),
+      ),
+    );
+  }
+
+  cekSession() async{
+    final response = await http.get(
+        "https://genius.remax.co.id/api/listing/crud?sort=-listId",
+        headers: headerss);
+
+    final data = jsonDecode(response.body);
+    String message = "Terjadi Kesalahan, ";
+    if (data['status'].containsKey('error')) {
+      message = message + data['status']['error']['message'];
+      print(message);
+      _showToast(context, message);
+      signOut();
+      Navigator.of(context).pop;
+      Navigator.of(context).push(new MaterialPageRoute(
+          builder: (BuildContext context) => new SignInPage()));
+
+    }
   }
 
   Future<List> getData() async {

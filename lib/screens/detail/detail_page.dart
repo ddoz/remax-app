@@ -732,31 +732,31 @@ class _DetailPageState extends State<DetailPage> {
                       //       fit: BoxFit.fill),
                       // ),
                     ),
-                    new Container(
-                      margin: EdgeInsets.all(8.0),
-                      child: Card(
-                        color: kPrimaryColor,
-                        child: Padding(
-                          padding: EdgeInsets.all(10.0),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                'Apply KPR For This Listing',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.bold),
-                              ),
-                              Icon(
-                                Icons.navigate_next,
-                                color: Colors.white,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+//                    new Container(
+//                      margin: EdgeInsets.all(8.0),
+//                      child: Card(
+//                        color: kPrimaryColor,
+//                        child: Padding(
+//                          padding: EdgeInsets.all(10.0),
+//                          child: Row(
+//                            mainAxisAlignment: MainAxisAlignment.center,
+//                            crossAxisAlignment: CrossAxisAlignment.center,
+//                            children: <Widget>[
+//                              Text(
+//                                'Apply KPR For This Listing',
+//                                style: TextStyle(
+//                                    color: Colors.white,
+//                                    fontWeight: FontWeight.bold),
+//                              ),
+//                              Icon(
+//                                Icons.navigate_next,
+//                                color: Colors.white,
+//                              ),
+//                            ],
+//                          ),
+//                        ),
+//                      ),
+//                    ),
 
 
                     ListingByProfil(),

@@ -480,17 +480,17 @@ class _MainDrawerState extends State<MainDrawer> {
                         margin: EdgeInsets.only(left: 50.0, bottom: 10.0),
                         child: Text("Istilah Property")),
                   ),
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).push(new MaterialPageRoute(
-                          builder: (BuildContext context) =>
-                              new AjukanKprPage()));
-                    },
-                    child: Container(
-                        margin: EdgeInsets.only(left: 50.0, bottom: 10.0),
-                        child: Text("Ajukan KPR")),
-                  ),
+//                  GestureDetector(
+//                    onTap: () {
+//                      Navigator.of(context).pop();
+//                      Navigator.of(context).push(new MaterialPageRoute(
+//                          builder: (BuildContext context) =>
+//                              new AjukanKprPage()));
+//                    },
+//                    child: Container(
+//                        margin: EdgeInsets.only(left: 50.0, bottom: 10.0),
+//                        child: Text("Ajukan KPR")),
+//                  ),
                 ],
               ),
             ),

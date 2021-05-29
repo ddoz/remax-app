@@ -14,6 +14,7 @@ import 'package:remax_app/util/constants.dart';
 import 'package:remax_app/model/todo_item.dart';
 import 'package:remax_app/util/database_client.dart';
 import 'package:remax_app/util/date_formatter.dart';
+import 'package:remax_app/screens/filter/filter_result.dart';
 
 
 class Listing extends StatefulWidget {
@@ -140,7 +141,7 @@ class _ListingState extends State<Listing> {
 //      child: SingleChildScrollView(
       child: Column(children: <Widget>[
         Container(
-          margin: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+          margin: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0, bottom: 10.0),
           alignment: Alignment.center,
           padding: EdgeInsets.only(left: kDefaultPadding, right: 5.0),
           height: 45,
@@ -161,6 +162,13 @@ class _ListingState extends State<Listing> {
                 child: Align(
                   alignment: Alignment.center,
                   child: TextField(
+                    textInputAction: TextInputAction.go,
+                    onSubmitted: (value) {
+                      String requestUrl = "https://genius.remax.co.id/papi/listing?language=id_ID&filter[search]="+value;
+                      print(requestUrl);
+                      Navigator.of(context).push(new MaterialPageRoute(
+                          builder: (BuildContext context) => new FilterResult(url: requestUrl)));
+                    },
                     onChanged: (value) {},
                     decoration: InputDecoration(
                       hintText: "Search Your Properties..",
@@ -193,89 +201,89 @@ class _ListingState extends State<Listing> {
             ],
           ),
         ),
-        Container(
-          margin: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
-          child: Row(
-            children: <Widget>[
-              Container(
-                width: MediaQuery.of(context).size.width * 0.45,
-                alignment: Alignment.center,
-                margin: EdgeInsets.only(top: 10),
-                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                height: 45,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(7),
-                ),
-                child: DropdownButton(
-                  underline: SizedBox(),
-                  icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-                  isExpanded: true,
-                  hint: Text(
-                    "Sale/Rent",
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      color: kPrimaryColor.withOpacity(0.5),
-                    ),
-                  ),
-                  value: _valSaleRent,
-                  items: _listSaleRent.map((value) {
-                    return DropdownMenuItem(
-                      child: Text(
-                        value,
-                        style: TextStyle(
-                          fontSize: 14.0,
-                        ),
-                      ),
-                      value: value,
-                    );
-                  }).toList(),
-                ),
-              ),
-              Spacer(),
-              Container(
-                width: MediaQuery.of(context).size.width * 0.45,
-                alignment: Alignment.center,
-                margin: EdgeInsets.only(top: 10),
-                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
-                height: 45,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(7),
-                ),
-                child: DropdownButton(
-                  underline: SizedBox(),
-                  icon: SvgPicture.asset("assets/icons/dropdown.svg"),
-                  isExpanded: true,
-                  hint: Text(
-                    "Sort By",
-                    style: TextStyle(
-                      fontSize: 14.0,
-                      color: kPrimaryColor.withOpacity(0.5),
-                    ),
-                  ),
-                  value: _valSortBy,
-                  items: _listSortBy.map((value) {
-                    return DropdownMenuItem(
-                      child: Text(
-                        value,
-                        style: TextStyle(
-                          fontSize: 14.0,
-                        ),
-                      ),
-                      value: value,
-                    );
-                  }).toList(),
-//                  onChanged: (value) {
-//                    setState(() {
-//                      _valTypeOfWork = value;
-//                    });
-//                  },
-                ),
-              ),
-            ],
-          ),
-        ),
+//        Container(
+//          margin: EdgeInsets.only(left: 10.0, right: 10.0, bottom: 10.0),
+//          child: Row(
+//            children: <Widget>[
+//              Container(
+//                width: MediaQuery.of(context).size.width * 0.45,
+//                alignment: Alignment.center,
+//                margin: EdgeInsets.only(top: 10),
+//                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+//                height: 45,
+//                decoration: BoxDecoration(
+//                  color: Colors.white,
+//                  borderRadius: BorderRadius.circular(7),
+//                ),
+//                child: DropdownButton(
+//                  underline: SizedBox(),
+//                  icon: SvgPicture.asset("assets/icons/dropdown.svg"),
+//                  isExpanded: true,
+//                  hint: Text(
+//                    "Sale/Rent",
+//                    style: TextStyle(
+//                      fontSize: 14.0,
+//                      color: kPrimaryColor.withOpacity(0.5),
+//                    ),
+//                  ),
+//                  value: _valSaleRent,
+//                  items: _listSaleRent.map((value) {
+//                    return DropdownMenuItem(
+//                      child: Text(
+//                        value,
+//                        style: TextStyle(
+//                          fontSize: 14.0,
+//                        ),
+//                      ),
+//                      value: value,
+//                    );
+//                  }).toList(),
+//                ),
+//              ),
+//              Spacer(),
+//              Container(
+//                width: MediaQuery.of(context).size.width * 0.45,
+//                alignment: Alignment.center,
+//                margin: EdgeInsets.only(top: 10),
+//                padding: EdgeInsets.symmetric(horizontal: kDefaultPadding),
+//                height: 45,
+//                decoration: BoxDecoration(
+//                  color: Colors.white,
+//                  borderRadius: BorderRadius.circular(7),
+//                ),
+//                child: DropdownButton(
+//                  underline: SizedBox(),
+//                  icon: SvgPicture.asset("assets/icons/dropdown.svg"),
+//                  isExpanded: true,
+//                  hint: Text(
+//                    "Sort By",
+//                    style: TextStyle(
+//                      fontSize: 14.0,
+//                      color: kPrimaryColor.withOpacity(0.5),
+//                    ),
+//                  ),
+//                  value: _valSortBy,
+//                  items: _listSortBy.map((value) {
+//                    return DropdownMenuItem(
+//                      child: Text(
+//                        value,
+//                        style: TextStyle(
+//                          fontSize: 14.0,
+//                        ),
+//                      ),
+//                      value: value,
+//                    );
+//                  }).toList(),
+////                  onChanged: (value) {
+////                    setState(() {
+////                      _valTypeOfWork = value;
+////                    });
+////                  },
+//                ),
+//              ),
+//            ],
+//          ),
+//        ),
         firstLoad == false
             ? new Expanded(
                 child: Column(

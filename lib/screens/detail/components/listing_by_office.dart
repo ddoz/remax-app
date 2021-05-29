@@ -59,7 +59,7 @@ class _ListingByOfficeState extends State<ListingByOffice> {
                     carouselSlider = CarouselSlider(
                       initialPage: 0,
                       enlargeCenterPage: true,
-                      autoPlay: false,
+                      autoPlay: true,
                       reverse: false,
                       viewportFraction: 1.0,
                       enableInfiniteScroll: true,
