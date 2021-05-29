@@ -14,6 +14,7 @@ class HeaderWithSearchBox extends StatelessWidget {
   }) : super(key: key);
 
   final Size size;
+  final String dropdownValue = 'One';
 
   @override
   Widget build(BuildContext context) {
@@ -50,10 +51,36 @@ class HeaderWithSearchBox extends StatelessWidget {
                     height: 56,
                     child: Image.asset("assets/logo/logo_remax.png"),
                   ),
-                  IconButton(
-                    icon: Image.asset("assets/icons/language_choose.png"),
-                    onPressed: () {},
-                  ),
+                  Row(children: <Widget>[
+                    DropdownButton<String>(
+                      //value: dropdownValue,
+                      icon: Image.asset("assets/icons/language_choose.png"),
+                      iconSize: 24,
+                      elevation: 16,
+                      style: const TextStyle(color: Colors.black),
+                      underline: Container(
+                        height: 2,
+                        color: Colors.transparent,
+                      ),
+                      onChanged: (newValue) {
+//                      setState(() {
+//                        dropdownValue = newValue!;
+//                      });
+                      print(newValue);
+                      },
+                      items: <String>['Indonesian', 'English']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+//                    IconButton(
+//                      icon: Image.asset("assets/icons/language_choose.png"),
+//                      onPressed: () {},
+//                    ),
+                  ]),
                 ],
               ),
             ),
@@ -80,17 +107,23 @@ class HeaderWithSearchBox extends StatelessWidget {
               ),
               child: Row(
                 children: <Widget>[
-                  SvgPicture.asset("assets/icons/location.svg", color: kIconColor,),
+                  SvgPicture.asset(
+                    "assets/icons/location.svg",
+                    color: kIconColor,
+                  ),
                   SizedBox(width: 5.0),
                   Expanded(
                     child: TextField(
                       textInputAction: TextInputAction.go,
                       onSubmitted: (value) {
-
-                        String requestUrl = "https://genius.remax.co.id/papi/listing?language=id_ID&filter[search]="+value;
+                        String requestUrl =
+                            "https://genius.remax.co.id/papi/listing?language=id_ID&filter[search]=" +
+                                value;
                         print(requestUrl);
                         Navigator.of(context).push(new MaterialPageRoute(
-                            builder: (BuildContext context) => new FilterResult(url: requestUrl,)));
+                            builder: (BuildContext context) => new FilterResult(
+                                  url: requestUrl,
+                                )));
                       },
                       onChanged: (value) {},
                       decoration: InputDecoration(
@@ -107,10 +140,10 @@ class HeaderWithSearchBox extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () async{
+                    onTap: () async {
                       await showDialog(
-                          builder: (_) => ImageDialogFilter(),
-                      context: context,
+                        builder: (_) => ImageDialogFilter(),
+                        context: context,
                       );
                     },
                     child: Container(
@@ -123,14 +156,14 @@ class HeaderWithSearchBox extends StatelessWidget {
                             topRight: const Radius.circular(50.0),
                           )),
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
-                        SvgPicture.asset(
-                          "assets/icons/filters.svg",
-                          height: 12.0,
-                        ),
-                      ]),
+                            SvgPicture.asset(
+                              "assets/icons/filters.svg",
+                              height: 12.0,
+                            ),
+                          ]),
                     ),
                   ),
                 ],
@@ -144,14 +177,11 @@ class HeaderWithSearchBox extends StatelessWidget {
 }
 
 class ImageDialogFilter extends StatefulWidget {
-
-
   @override
   _ImageDialogFilterState createState() => _ImageDialogFilterState();
 }
 
 class _ImageDialogFilterState extends State<ImageDialogFilter> {
-
   RangeValues valuesPrice = RangeValues(0, 10000000000);
   RangeValues valuesLandSize = RangeValues(0, 10000);
   RangeValues valuesBuilding = RangeValues(0, 10000);
@@ -188,9 +218,6 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
     return myInt;
   }
 
-
-
-
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -217,9 +244,11 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+                      margin:
+                          EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
                       alignment: Alignment.center,
-                      padding: EdgeInsets.only(left: kDefaultPadding, right: 5.0),
+                      padding:
+                          EdgeInsets.only(left: kDefaultPadding, right: 5.0),
                       height: 45,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -257,7 +286,8 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                     ),
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+                      margin: EdgeInsets.only(
+                          top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
                       padding: EdgeInsets.symmetric(horizontal: 10.0),
                       height: 45,
                       decoration: BoxDecoration(
@@ -291,7 +321,7 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                           },
                           onSuggestionSelected: (suggestion) {
                             this.controllerListingType.text =
-                            suggestion['lsclName'];
+                                suggestion['lsclName'];
                             setState(() {
                               listingTypeId = suggestion['id'];
                             });
@@ -300,7 +330,8 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                     Container(
                       margin: EdgeInsets.only(left: 10.0, right: 10.0),
                       alignment: Alignment.center,
-                      padding: EdgeInsets.only(left: kDefaultPadding, right: 5.0),
+                      padding:
+                          EdgeInsets.only(left: kDefaultPadding, right: 5.0),
                       height: 45,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -330,9 +361,11 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                       ),
                     ),
                     Container(
-                      margin: EdgeInsets.only(left: 10.0, right: 10.0, top:10.0),
+                      margin:
+                          EdgeInsets.only(left: 10.0, right: 10.0, top: 10.0),
                       alignment: Alignment.center,
-                      padding: EdgeInsets.only(left: kDefaultPadding, right: 5.0),
+                      padding:
+                          EdgeInsets.only(left: kDefaultPadding, right: 5.0),
                       height: 45,
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -361,10 +394,10 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                         ],
                       ),
                     ),
-
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+                      margin: EdgeInsets.only(
+                          top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
                       padding: EdgeInsets.symmetric(horizontal: 10.0),
                       height: 45,
                       decoration: BoxDecoration(
@@ -384,8 +417,8 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                             controller: this.controllerPropertyType,
                           ),
                           suggestionsCallback: (pattern) async {
-                            return await StateServicePropertyType.getSuggestions(
-                                pattern);
+                            return await StateServicePropertyType
+                                .getSuggestions(pattern);
                           },
                           transitionBuilder:
                               (context, suggestionsBox, controller) {
@@ -398,16 +431,16 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                           },
                           onSuggestionSelected: (suggestion) {
                             this.controllerPropertyType.text =
-                            suggestion['prtlName'];
+                                suggestion['prtlName'];
                             setState(() {
                               propertyType = suggestion['id'];
                             });
                           }),
                     ),
-
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+                      margin: EdgeInsets.only(
+                          top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
                       padding: EdgeInsets.symmetric(horizontal: 10.0),
                       height: 45,
                       decoration: BoxDecoration(
@@ -441,7 +474,7 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                           },
                           onSuggestionSelected: (suggestion) {
                             this.controllerFacilities.text =
-                            suggestion['fctlName'];
+                                suggestion['fctlName'];
                             setState(() {
                               facilities = suggestion['id'];
                             });
@@ -449,7 +482,8 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                     ),
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+                      margin: EdgeInsets.only(
+                          top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
                       padding: EdgeInsets.symmetric(horizontal: 10.0),
                       height: 45,
                       decoration: BoxDecoration(
@@ -483,7 +517,7 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                           },
                           onSuggestionSelected: (suggestion) {
                             this.controllerRentFreq.text =
-                            suggestion['rfqlName'];
+                                suggestion['rfqlName'];
                             setState(() {
                               rentFreq = suggestion['id'];
                             });
@@ -491,7 +525,8 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                     ),
                     Container(
                       alignment: Alignment.center,
-                      margin: EdgeInsets.only(top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
+                      margin: EdgeInsets.only(
+                          top: 10.0, bottom: 10.0, left: 10.0, right: 10.0),
                       padding: EdgeInsets.symmetric(horizontal: 10.0),
                       height: 45,
                       decoration: BoxDecoration(
@@ -511,8 +546,8 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                             controller: this.controllerListingStatus,
                           ),
                           suggestionsCallback: (pattern) async {
-                            return await StateServiceListingStatus.getSuggestions(
-                                pattern);
+                            return await StateServiceListingStatus
+                                .getSuggestions(pattern);
                           },
                           transitionBuilder:
                               (context, suggestionsBox, controller) {
@@ -525,39 +560,40 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                           },
                           onSuggestionSelected: (suggestion) {
                             this.controllerListingStatus.text =
-                            suggestion['lstlName'];
+                                suggestion['lstlName'];
                             setState(() {
                               listingStatus = suggestion['id'];
                             });
                           }),
                     ),
-
                     CheckboxListTile(
                       contentPadding: EdgeInsets.all(0),
                       title: Text(
-                        "Price", style: TextStyle(
-                          color: kPrimaryColor
-                      ),),
+                        "Price",
+                        style: TextStyle(color: kPrimaryColor),
+                      ),
                       value: checkedValuePrice,
                       onChanged: (newValue) {
                         setState(() {
                           checkedValuePrice = newValue;
                         });
                       },
-                      controlAffinity:
-                      ListTileControlAffinity.leading, //  <-- leading Checkbox
+                      controlAffinity: ListTileControlAffinity
+                          .leading, //  <-- leading Checkbox
                     ),
                     Container(
                       margin: EdgeInsets.only(left: 15.0, right: 15.0),
                       child: Row(
                         children: <Widget>[
-                          Text('Min', style: TextStyle(
-                              color: Colors.grey
-                          ),),
+                          Text(
+                            'Min',
+                            style: TextStyle(color: Colors.grey),
+                          ),
                           Spacer(),
-                          Text('Max', style: TextStyle(
-                              color: Colors.grey
-                          ),)
+                          Text(
+                            'Max',
+                            style: TextStyle(color: Colors.grey),
+                          )
                         ],
                       ),
                     ),
@@ -567,72 +603,65 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                         min: 0,
                         max: 10000000000,
                         values: valuesPrice,
-                        onChanged: (values){
+                        onChanged: (values) {
                           setState(() {
                             this.valuesPrice = values;
                             startPrice = values.start;
                             endPrice = values.end;
                           });
-                        }
-                    ),
+                        }),
                     Container(
-
                       margin: EdgeInsets.only(left: 15.0, right: 15.0),
                       child: Row(
                         children: <Widget>[
                           Text(
-                        NumberFormat.compactCurrency(
-                        locale: 'id',
-                        symbol: 'Rp ',
-                        decimalDigits: 0)
-                        .format(
-                        toInt(startPrice.toStringAsFixed(0))
-                            ), style: TextStyle(
-                              color: Colors.grey
-                          ),),
+                            NumberFormat.compactCurrency(
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
+                                .format(toInt(startPrice.toStringAsFixed(0))),
+                            style: TextStyle(color: Colors.grey),
+                          ),
                           Spacer(),
                           Text(
-
                             NumberFormat.compactCurrency(
-                                locale: 'id',
-                                symbol: 'Rp ',
-                                decimalDigits: 0)
-                                .format(
-                                toInt(endPrice.toStringAsFixed(0))
-                            ),
-                            style: TextStyle(
-                              color: Colors.grey
-                          ),)
+                                    locale: 'id',
+                                    symbol: 'Rp ',
+                                    decimalDigits: 0)
+                                .format(toInt(endPrice.toStringAsFixed(0))),
+                            style: TextStyle(color: Colors.grey),
+                          )
                         ],
                       ),
                     ),
-
                     CheckboxListTile(
                       contentPadding: EdgeInsets.all(0),
                       title: Text(
-                        "Land Size M"+'\u00B2', style: TextStyle(
-                          color: kPrimaryColor
-                      ),),
+                        "Land Size M" + '\u00B2',
+                        style: TextStyle(color: kPrimaryColor),
+                      ),
                       value: checkedValueLandSize,
                       onChanged: (newValue) {
                         setState(() {
                           checkedValueLandSize = newValue;
                         });
                       },
-                      controlAffinity:
-                      ListTileControlAffinity.leading, //  <-- leading Checkbox
+                      controlAffinity: ListTileControlAffinity
+                          .leading, //  <-- leading Checkbox
                     ),
                     Container(
                       margin: EdgeInsets.only(left: 15.0, right: 15.0),
                       child: Row(
                         children: <Widget>[
-                          Text('Min', style: TextStyle(
-                              color: Colors.grey
-                          ),),
+                          Text(
+                            'Min',
+                            style: TextStyle(color: Colors.grey),
+                          ),
                           Spacer(),
-                          Text('Max', style: TextStyle(
-                              color: Colors.grey
-                          ),)
+                          Text(
+                            'Max',
+                            style: TextStyle(color: Colors.grey),
+                          )
                         ],
                       ),
                     ),
@@ -642,55 +671,57 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                         min: 0,
                         max: 10000,
                         values: valuesLandSize,
-                        onChanged: (values){
+                        onChanged: (values) {
                           setState(() {
                             this.valuesLandSize = values;
                             startLandSize = values.start;
                             endLandSize = values.end;
                           });
-                        }
-                    ),
+                        }),
                     Container(
                       margin: EdgeInsets.only(left: 15.0, right: 15.0),
                       child: Row(
                         children: <Widget>[
-                          Text(startLandSize.toStringAsFixed(0), style: TextStyle(
-                              color: Colors.grey
-                          ),),
+                          Text(
+                            startLandSize.toStringAsFixed(0),
+                            style: TextStyle(color: Colors.grey),
+                          ),
                           Spacer(),
-                          Text(endLandSize.toStringAsFixed(0), style: TextStyle(
-                              color: Colors.grey
-                          ),)
+                          Text(
+                            endLandSize.toStringAsFixed(0),
+                            style: TextStyle(color: Colors.grey),
+                          )
                         ],
                       ),
                     ),
-
                     CheckboxListTile(
                       contentPadding: EdgeInsets.all(0),
                       title: Text(
-                        "Building Size M"+'\u00B2', style: TextStyle(
-                          color: kPrimaryColor
-                      ),),
+                        "Building Size M" + '\u00B2',
+                        style: TextStyle(color: kPrimaryColor),
+                      ),
                       value: checkedValueBuildingSize,
                       onChanged: (newValue) {
                         setState(() {
                           checkedValueBuildingSize = newValue;
                         });
                       },
-                      controlAffinity:
-                      ListTileControlAffinity.leading, //  <-- leading Checkbox
+                      controlAffinity: ListTileControlAffinity
+                          .leading, //  <-- leading Checkbox
                     ),
                     Container(
                       margin: EdgeInsets.only(left: 15.0, right: 15.0),
                       child: Row(
                         children: <Widget>[
-                          Text('Min', style: TextStyle(
-                              color: Colors.grey
-                          ),),
+                          Text(
+                            'Min',
+                            style: TextStyle(color: Colors.grey),
+                          ),
                           Spacer(),
-                          Text('Max', style: TextStyle(
-                              color: Colors.grey
-                          ),)
+                          Text(
+                            'Max',
+                            style: TextStyle(color: Colors.grey),
+                          )
                         ],
                       ),
                     ),
@@ -700,35 +731,34 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                         min: 0,
                         max: 10000,
                         values: valuesBuilding,
-                        onChanged: (values){
+                        onChanged: (values) {
                           setState(() {
                             this.valuesBuilding = values;
                             startBuildingSize = values.start;
                             endBuldingSize = values.end;
                           });
-                        }
-                    ),
+                        }),
                     Container(
                       margin: EdgeInsets.only(left: 15.0, right: 15.0),
                       child: Row(
                         children: <Widget>[
-                          Text(startBuildingSize.toStringAsFixed(0), style: TextStyle(
-                              color: Colors.grey
-                          ),),
+                          Text(
+                            startBuildingSize.toStringAsFixed(0),
+                            style: TextStyle(color: Colors.grey),
+                          ),
                           Spacer(),
-                          Text(endBuldingSize.toStringAsFixed(0), style: TextStyle(
-                              color: Colors.grey
-                          ),)
+                          Text(
+                            endBuldingSize.toStringAsFixed(0),
+                            style: TextStyle(color: Colors.grey),
+                          )
                         ],
                       ),
                     ),
-
-                    SizedBox(height: 20.0,),
-
-
+                    SizedBox(
+                      height: 20.0,
+                    ),
                     GestureDetector(
                       onTap: () {
-
 //                        var queryParameters = {
 //                          'param1': 'one',
 //                          'param2': 'two',
@@ -752,19 +782,25 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
 //                          'filter[listListingStatusId][in]': listingStatus,
                         };
 
-                        if(checkedValuePrice==true){
-                          queryParams['filter[listListingPrice][<]'] = endPrice.toStringAsFixed(0);
-                          queryParams['filter[listListingPrice][>]'] = startPrice.toStringAsFixed(0);
+                        if (checkedValuePrice == true) {
+                          queryParams['filter[listListingPrice][<]'] =
+                              endPrice.toStringAsFixed(0);
+                          queryParams['filter[listListingPrice][>]'] =
+                              startPrice.toStringAsFixed(0);
                         }
-                        if(checkedValueBuildingSize==true){
-                          queryParams['filter[listBuildingSize][<]'] = endBuldingSize.toStringAsFixed(0);
-                          queryParams['filter[listBuildingSize][>]'] = startBuildingSize.toStringAsFixed(0);
+                        if (checkedValueBuildingSize == true) {
+                          queryParams['filter[listBuildingSize][<]'] =
+                              endBuldingSize.toStringAsFixed(0);
+                          queryParams['filter[listBuildingSize][>]'] =
+                              startBuildingSize.toStringAsFixed(0);
                         }
-                        if(checkedValueLandSize==true){
-                          queryParams['filter[listLandSize][<]'] = endLandSize.toStringAsFixed(0);
-                          queryParams['filter[listLandSize][>]'] = endLandSize.toStringAsFixed(0);
+                        if (checkedValueLandSize == true) {
+                          queryParams['filter[listLandSize][<]'] =
+                              endLandSize.toStringAsFixed(0);
+                          queryParams['filter[listLandSize][>]'] =
+                              endLandSize.toStringAsFixed(0);
                         }
-                        if(controllerSearch.text!=""){
+                        if (controllerSearch.text != "") {
                           queryParams['filter[search]'] = controllerSearch.text;
                         }
 //                        if(controllerListingTittle.text!=""){
@@ -774,29 +810,37 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
 //                          queryParams['filter[mctyDescription]'] = controllerCity.text;
 //                        }
 
-                        if(facilities!=null){
+                        if (facilities != null) {
                           queryParams['filter[listFacility][in]'] = facilities;
                         }
-                        if(propertyType!=null){
-                          queryParams['filter[listPropertyTypeId][in]'] = propertyType;
+                        if (propertyType != null) {
+                          queryParams['filter[listPropertyTypeId][in]'] =
+                              propertyType;
                         }
-                        if(listingTypeId!=null){
-                          queryParams['filter[listListingCategoryId][in]'] = listingTypeId;
+                        if (listingTypeId != null) {
+                          queryParams['filter[listListingCategoryId][in]'] =
+                              listingTypeId;
                         }
-                        if(rentFreq!=null){
+                        if (rentFreq != null) {
                           queryParams['filter[listRentFreqId][in]'] = rentFreq;
                         }
-                        if(listingStatus!=null){
-                          queryParams['filter[listListingStatusId][in]'] = listingStatus;
+                        if (listingStatus != null) {
+                          queryParams['filter[listListingStatusId][in]'] =
+                              listingStatus;
                         }
 
-
-                        String queryString = Uri(queryParameters: queryParams).query;
-                        String requestUrl = 'https://genius.remax.co.id/papi/listing' + '?' + queryString;
+                        String queryString =
+                            Uri(queryParameters: queryParams).query;
+                        String requestUrl =
+                            'https://genius.remax.co.id/papi/listing' +
+                                '?' +
+                                queryString;
 
                         print(requestUrl);
                         Navigator.of(context).push(new MaterialPageRoute(
-                            builder: (BuildContext context) => new FilterResult(url: requestUrl,)));
+                            builder: (BuildContext context) => new FilterResult(
+                                  url: requestUrl,
+                                )));
 
 //                        var uri =
 //                        Uri.https('https://genius.remax.co.id/papi/listing', queryString);
@@ -826,7 +870,9 @@ class _ImageDialogFilterState extends State<ImageDialogFilter> {
                         ),
                       ),
                     ),
-                    SizedBox(height: 50.0,),
+                    SizedBox(
+                      height: 50.0,
+                    ),
                   ],
                 ),
               ),
