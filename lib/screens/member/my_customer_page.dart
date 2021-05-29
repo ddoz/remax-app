@@ -45,6 +45,7 @@ class _MyCustomerPageState extends State<MyCustomerPage> {
     // TODO: implement initState
     super.initState();
     getPref();
+    cekSession();
     print(headerss);
   }
 
