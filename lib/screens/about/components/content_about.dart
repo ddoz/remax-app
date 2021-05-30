@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:http/http.dart' as http;
 import 'package:remax_app/util/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ContentAbout extends StatefulWidget {
   @override
@@ -11,8 +12,27 @@ class ContentAbout extends StatefulWidget {
 }
 
 class _ContentAboutState extends State<ContentAbout> {
+
+
+  String bahasa = "id_ID";
+
+  getPrefBahasa() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      bahasa = preferences.getString("bahasa");
+      print(bahasa);
+    });
+  }
+
+
+  @override
+  void initState() {
+    super.initState();
+    getPrefBahasa();
+  }
+
   Future<List<dynamic>> getDataMemberFoto() async {
-    final response = await http.get("https://genius.remax.co.id/papi/webabout");
+    final response = await http.get("https://genius.remax.co.id/papi/webabout?language=$bahasa");
     List<dynamic> data = json.decode(response.body)['data'];
     return data;
   }
