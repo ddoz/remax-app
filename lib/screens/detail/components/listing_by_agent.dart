@@ -9,7 +9,7 @@ import 'package:remax_app/model/todo_item.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:remax_app/util/database_client.dart';
 import 'package:remax_app/util/date_formatter.dart';
-
+import 'package:shimmer/shimmer.dart';
 import '../detail_page.dart';
 
 class ListingByAgentPage extends StatefulWidget {
@@ -22,6 +22,71 @@ class ListingByAgentPage extends StatefulWidget {
 }
 
 class _ListingByAgentPageState extends State<ListingByAgentPage> {
+
+  ScrollController _scrollController = ScrollController();
+  int page = 1;
+
+  bool isLoading = false;
+  bool firstLoad = true;
+
+  List list = new List();
+
+  @override
+  void initState() {
+    super.initState();
+    getProp();
+    print(getProp());
+    _scrollController.addListener(() {
+      if (_scrollController.position.pixels ==
+          _scrollController.position.maxScrollExtent) {
+        setState(() {
+          isLoading = true;
+        });
+        page++;
+        getNext(page);
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
+  getProp() async {
+    final response = await http.get(widget.url);
+    if (response.statusCode == 200) {
+      List liss = json.decode(response.body)['data'];
+      for (int i = 0; i < liss.length; i++) {
+        setState(() {
+          firstLoad = false;
+          list.add(liss[i]);
+        });
+      }
+    } else {
+      Exception('Failed to load data');
+    }
+  }
+
+  getNext(int page) async {
+    String url = widget.url + "&pageNumber=$page";
+    print(url);
+    final response = await http.get(url);
+    if (response.statusCode == 200) {
+      List liss = json.decode(response.body)['data'];
+      for (int i = 0; i < liss.length; i++) {
+        setState(() {
+          list.add(liss[i]);
+          isLoading = false;
+        });
+      }
+    } else {
+      Exception('Failed to load data');
+    }
+  }
+
+
   Future<List> getData() async {
     final response = await http.get(widget.url);
     List list = json.decode(response.body)['data'];
@@ -43,27 +108,58 @@ class _ListingByAgentPageState extends State<ListingByAgentPage> {
         centerTitle: true,
         backgroundColor: Colors.white,
       ),
-      body: new FutureBuilder<List>(
-        future: getData(),
-        builder: (context, snapshot) {
-          if (snapshot.hasError) print(snapshot.error);
-          return snapshot.hasData
-              ? new ItemList(
-            list: snapshot.data,
+      body: Column(
+        children: <Widget>[
+          firstLoad == false
+              ? new Expanded(
+              child: list.length == 0
+                  ? Center(child: Text("No Data Available"))
+                  : Column(
+                children: [
+                  Expanded(
+                    child: new ItemList(
+                      list: list,
+                      controller: _scrollController,
+                    ),
+                  ),
+                  isLoading == true
+                      ? new Center(
+                    child: new CircularProgressIndicator(),
+                  )
+                      : new SizedBox(),
+                ],
+              ))
+              : Column(
+            children: [
+              Center(child: new LoadingShimmerEffectAgent()),
+              Center(child: new LoadingShimmerEffectAgent()),
+            ],
           )
-              : new Center(
-            child: new CircularProgressIndicator(),
-          );
-        },
-      ),
+        ],
+      )
+//
+//      new FutureBuilder<List>(
+//        future: getData(),
+//        builder: (context, snapshot) {
+//          if (snapshot.hasError) print(snapshot.error);
+//          return snapshot.hasData
+//              ? new ItemList(
+//                  list: snapshot.data,
+//                )
+//              : new Center(
+//                  child: new CircularProgressIndicator(),
+//                );
+//        },
+//      ),
     );
   }
 }
 
 class ItemList extends StatefulWidget {
   List list;
+  ScrollController controller;
 
-  ItemList({this.list});
+  ItemList({this.list, this.controller});
 
   @override
   _ItemListState createState() => _ItemListState();
@@ -122,6 +218,7 @@ class _ItemListState extends State<ItemList> {
   Widget build(BuildContext context) {
     return new ListView.builder(
       shrinkWrap: true,
+      controller: widget.controller,
 //      physics: NeverScrollableScrollPhysics(),
       itemCount: widget.list == null ? 0 : widget.list.length,
       itemBuilder: (context, int i) {
@@ -132,9 +229,9 @@ class _ItemListState extends State<ItemList> {
           child: new GestureDetector(
             onTap: () => Navigator.of(context).push(new MaterialPageRoute(
                 builder: (BuildContext context) => new DetailPage(
-                  list: widget.list,
-                  index: i,
-                ))),
+                      list: widget.list,
+                      index: i,
+                    ))),
             child: new Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -148,12 +245,13 @@ class _ItemListState extends State<ItemList> {
 //                    padding: EdgeInsets.all(80),
                       decoration: BoxDecoration(
                         borderRadius:
-                        new BorderRadius.all(const Radius.circular(10.0)),
+                            new BorderRadius.all(const Radius.circular(10.0)),
                         image: DecorationImage(
                             image: widget.list[i]['listThumbnail'] != null
                                 ? NetworkImage(
-                                'https://genius.remax.co.id/papi/' +
-                                    widget.list[i]['listThumbnail']+'?size=256,256')
+                                    'https://genius.remax.co.id/papi/' +
+                                        widget.list[i]['listThumbnail'] +
+                                        '?size=256,256')
                                 : NetworkImage('-'),
                             fit: BoxFit.cover),
                       ),
@@ -208,61 +306,61 @@ class _ItemListState extends State<ItemList> {
                         ),
                         widget.list[i]['links']['listListingCategoryId'] == "1"
                             ? Row(children: <Widget>[
-                          Container(
-                            margin:
-                            EdgeInsets.only(left: 10.0, right: 10.0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: new Text(
-                                NumberFormat.compactCurrency(
-                                    locale: 'id',
-                                    symbol: 'Rp ',
-                                    decimalDigits: 0)
-                                    .format(toInt(widget.list[i]
-                                ['listListingPrice'])),
-                                style: new TextStyle(
-                                  fontSize: 21.0,
-                                  color: const Color(0xffDC1B2E),
-                                  fontWeight: FontWeight.bold,
+                                Container(
+                                  margin:
+                                      EdgeInsets.only(left: 10.0, right: 10.0),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: new Text(
+                                      NumberFormat.compactCurrency(
+                                              locale: 'id',
+                                              symbol: 'Rp ',
+                                              decimalDigits: 0)
+                                          .format(toInt(widget.list[i]
+                                              ['listListingPrice'])),
+                                      style: new TextStyle(
+                                        fontSize: 21.0,
+                                        color: const Color(0xffDC1B2E),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
-                          new Text(
-                            "(DIJUAL)",
-                            style: new TextStyle(
-                                fontSize: 12.0,
-                                color: const Color(0xffDC1B2E)),
-                          )
-                        ])
+                                new Text(
+                                  "(DIJUAL)",
+                                  style: new TextStyle(
+                                      fontSize: 12.0,
+                                      color: const Color(0xffDC1B2E)),
+                                )
+                              ])
                             : Row(children: <Widget>[
-                          Container(
-                            margin:
-                            EdgeInsets.only(left: 10.0, right: 10.0),
-                            child: Align(
-                              alignment: Alignment.centerLeft,
-                              child: new Text(
-                                NumberFormat.compactCurrency(
-                                    locale: 'id',
-                                    symbol: 'Rp ',
-                                    decimalDigits: 0)
-                                    .format(toInt(widget.list[i]
-                                ['listListingPrice'])),
-                                style: new TextStyle(
-                                  fontSize: 21.0,
-                                  color: const Color(0xff1A3668),
-                                  fontWeight: FontWeight.bold,
+                                Container(
+                                  margin:
+                                      EdgeInsets.only(left: 10.0, right: 10.0),
+                                  child: Align(
+                                    alignment: Alignment.centerLeft,
+                                    child: new Text(
+                                      NumberFormat.compactCurrency(
+                                              locale: 'id',
+                                              symbol: 'Rp ',
+                                              decimalDigits: 0)
+                                          .format(toInt(widget.list[i]
+                                              ['listListingPrice'])),
+                                      style: new TextStyle(
+                                        fontSize: 21.0,
+                                        color: const Color(0xff1A3668),
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
                                 ),
-                              ),
-                            ),
-                          ),
-                          new Text(
-                            "(DISEWAKAN)",
-                            style: new TextStyle(
-                                fontSize: 12.0,
-                                color: const Color(0xff1A3668)),
-                          )
-                        ]),
+                                new Text(
+                                  "(DISEWAKAN)",
+                                  style: new TextStyle(
+                                      fontSize: 12.0,
+                                      color: const Color(0xff1A3668)),
+                                )
+                              ]),
                         Row(
                           children: <Widget>[
                             new Container(
@@ -280,15 +378,15 @@ class _ItemListState extends State<ItemList> {
                                       ),
                                       widget.list[i]['listBedroom'] != null
                                           ? new Text(
-                                        widget.list[i]['listBedroom'],
-                                        style: new TextStyle(
-                                          fontSize: 10.0,
-                                        ),
-                                      )
+                                              widget.list[i]['listBedroom'],
+                                              style: new TextStyle(
+                                                fontSize: 10.0,
+                                              ),
+                                            )
                                           : new Text('-',
-                                          style: new TextStyle(
-                                            fontSize: 10.0,
-                                          ))
+                                              style: new TextStyle(
+                                                fontSize: 10.0,
+                                              ))
                                     ],
                                   )),
                             ),
@@ -307,15 +405,15 @@ class _ItemListState extends State<ItemList> {
                                       ),
                                       widget.list[i]['listBathroom'] != null
                                           ? new Text(
-                                        widget.list[i]['listBathroom'],
-                                        style: new TextStyle(
-                                          fontSize: 10.0,
-                                        ),
-                                      )
+                                              widget.list[i]['listBathroom'],
+                                              style: new TextStyle(
+                                                fontSize: 10.0,
+                                              ),
+                                            )
                                           : new Text('-',
-                                          style: new TextStyle(
-                                            fontSize: 10.0,
-                                          ))
+                                              style: new TextStyle(
+                                                fontSize: 10.0,
+                                              ))
                                     ],
                                   )),
                             ),
@@ -334,17 +432,17 @@ class _ItemListState extends State<ItemList> {
                                       ),
                                       widget.list[i]['listBuildingSize'] != null
                                           ? new Text(
-                                        widget.list[i]
-                                        ['listBuildingSize'] +
-                                            '(m2)',
-                                        style: new TextStyle(
-                                          fontSize: 10.0,
-                                        ),
-                                      )
+                                              widget.list[i]
+                                                      ['listBuildingSize'] +
+                                                  '(m2)',
+                                              style: new TextStyle(
+                                                fontSize: 10.0,
+                                              ),
+                                            )
                                           : new Text('-',
-                                          style: new TextStyle(
-                                            fontSize: 10.0,
-                                          ))
+                                              style: new TextStyle(
+                                                fontSize: 10.0,
+                                              ))
                                     ],
                                   )),
                             ),
@@ -363,16 +461,16 @@ class _ItemListState extends State<ItemList> {
                                       ),
                                       widget.list[i]['listLandSize'] != null
                                           ? new Text(
-                                        widget.list[i]['listLandSize'] +
-                                            '(m2)',
-                                        style: new TextStyle(
-                                          fontSize: 10.0,
-                                        ),
-                                      )
+                                              widget.list[i]['listLandSize'] +
+                                                  '(m2)',
+                                              style: new TextStyle(
+                                                fontSize: 10.0,
+                                              ),
+                                            )
                                           : new Text('-',
-                                          style: new TextStyle(
-                                            fontSize: 10.0,
-                                          ))
+                                              style: new TextStyle(
+                                                fontSize: 10.0,
+                                              ))
                                     ],
                                   )),
                             ),
@@ -434,7 +532,7 @@ class _ItemListState extends State<ItemList> {
                                           widget.list[i]['listThumbnail'],
                                           widget.list[i]['listListingPrice'],
                                           widget.list[i]['links']
-                                          ['listListingCategoryId'],
+                                              ['listListingCategoryId'],
                                           listMedia.length.toString(),
                                           widget.list[i]['listBedroom'],
                                           widget.list[i]['listBathroom'],
@@ -471,6 +569,80 @@ class _ItemListState extends State<ItemList> {
           ),
         );
       },
+    );
+  }
+}
+
+
+class LoadingShimmerEffectAgent extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.only(left: 15.0, right: 15.0),
+      height: 180,
+      child: Card(
+        shape:
+        RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        child: Row(
+          children: <Widget>[
+            Shimmer.fromColors(
+              baseColor: Colors.grey[300],
+              highlightColor: Colors.grey[100],
+              child: Container(
+                decoration: BoxDecoration(
+                    color: Colors.grey,
+                    borderRadius:
+                    new BorderRadius.all(const Radius.circular(10.0))),
+                height: 180,
+                width: 120,
+              ),
+            ),
+            Column(
+              children: <Widget>[
+                Shimmer.fromColors(
+                  baseColor: Colors.grey[300],
+                  highlightColor: Colors.grey[100],
+                  child: Container(
+                    margin: EdgeInsets.only(top: 30.0, left: 10.0),
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius:
+                        new BorderRadius.all(const Radius.circular(4.0))),
+                    height: 30,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                  ),
+                ),
+                Shimmer.fromColors(
+                  baseColor: Colors.grey[300],
+                  highlightColor: Colors.grey[100],
+                  child: Container(
+                    margin: EdgeInsets.only(top: 10.0, left: 10.0),
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius:
+                        new BorderRadius.all(const Radius.circular(4.0))),
+                    height: 30,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                  ),
+                ),
+                Shimmer.fromColors(
+                  baseColor: Colors.grey[300],
+                  highlightColor: Colors.grey[100],
+                  child: Container(
+                    margin: EdgeInsets.only(top: 10.0, left: 10.0),
+                    decoration: BoxDecoration(
+                        color: Colors.grey,
+                        borderRadius:
+                        new BorderRadius.all(const Radius.circular(4.0))),
+                    height: 50,
+                    width: MediaQuery.of(context).size.width * 0.5,
+                  ),
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
     );
   }
 }

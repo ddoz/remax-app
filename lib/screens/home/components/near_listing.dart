@@ -12,6 +12,7 @@ import 'package:remax_app/util/constants.dart';
 import 'package:remax_app/util/database_client.dart';
 import 'package:remax_app/util/date_formatter.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class NearMeListing extends StatefulWidget {
   @override
@@ -23,8 +24,17 @@ class _NearMeListingState extends State<NearMeListing> {
   int _current = 0;
   final CarouselController _controller = CarouselController();
 
+  String bahasa = "id_ID";
+
+  getPrefBahasa() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      bahasa = preferences.getString("bahasa");
+    });
+  }
+
   Future<List> getData() async {
-    final response = await http.get("https://genius.remax.co.id/papi/listing");
+    final response = await http.get("https://genius.remax.co.id/papi/listing?language=$bahasa");
 
     List list = json.decode(response.body)['data'];
     return list;
@@ -39,6 +49,16 @@ class _NearMeListingState extends State<NearMeListing> {
     _controller.nextPage(
         duration: Duration(milliseconds: 300), curve: Curves.decelerate);
   }
+
+  savePrefBahasa(String bahasa) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      preferences.setString("bahasa", bahasa);
+      preferences.commit();
+    });
+  }
+
+
 
   @override
   Widget build(BuildContext context) {

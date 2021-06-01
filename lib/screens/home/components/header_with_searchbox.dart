@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:remax_app/screens/filter/filter_result.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:remax_app/util/typeahead_service.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HeaderWithSearchBox extends StatelessWidget {
   const HeaderWithSearchBox({
@@ -15,6 +16,18 @@ class HeaderWithSearchBox extends StatelessWidget {
 
   final Size size;
   final String dropdownValue = 'One';
+
+
+  savePrefBahasa(String bahasa) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+//    setState(() {
+//      preferences.setString("bahasa", bahasa);
+//      preferences.commit();
+//    });
+    preferences.setString("bahasa", bahasa);
+    preferences.commit();
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -67,6 +80,11 @@ class HeaderWithSearchBox extends StatelessWidget {
 //                        dropdownValue = newValue!;
 //                      });
                       print(newValue);
+                      if(newValue == "Indonesian"){
+                        savePrefBahasa("id_ID");
+                      } else {
+                        savePrefBahasa("en");
+                      }
                       },
                       items: <String>['Indonesian', 'English']
                           .map<DropdownMenuItem<String>>((String value) {

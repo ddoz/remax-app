@@ -15,6 +15,7 @@ import 'package:remax_app/model/todo_item.dart';
 import 'package:remax_app/util/database_client.dart';
 import 'package:remax_app/util/date_formatter.dart';
 import 'package:remax_app/screens/filter/filter_result.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 
 class Listing extends StatefulWidget {
@@ -38,9 +39,19 @@ class _ListingState extends State<Listing> {
 
   List list = new List();
 
+  String bahasa = "id_ID";
+
+  getPrefBahasa() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    setState(() {
+      bahasa = preferences.getString("bahasa");
+    });
+  }
+
   @override
   void initState() {
     super.initState();
+    getPrefBahasa();
     getProp();
     print(getProp());
     _scrollController.addListener(() {
@@ -63,7 +74,7 @@ class _ListingState extends State<Listing> {
 
   getProp() async {
     final response = await http.get(
-        "https://genius.remax.co.id/papi/listing?sort=-listId&pageSize=20&filter[listType]=3");
+        "https://genius.remax.co.id/papi/listing?language=$bahasa&sort=-listId&pageSize=20&filter[listType]=3");
     if (response.statusCode == 200) {
       List liss = json.decode(response.body)['data'];
       for (int i = 0; i < liss.length; i++) {
