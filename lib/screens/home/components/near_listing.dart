@@ -21,6 +21,7 @@ class NearMeListing extends StatefulWidget {
 class _NearMeListingState extends State<NearMeListing> {
   CarouselSlider carouselSlider;
   int _current = 0;
+  final CarouselController _controller = CarouselController();
 
   Future<List> getData() async {
     final response = await http.get("https://genius.remax.co.id/papi/listing");
@@ -30,12 +31,12 @@ class _NearMeListingState extends State<NearMeListing> {
   }
 
   goToPrevious() {
-    carouselSlider.previousPage(
+    _controller.previousPage(
         duration: Duration(milliseconds: 300), curve: Curves.ease);
   }
 
   goToNext() {
-    carouselSlider.nextPage(
+    _controller.nextPage(
         duration: Duration(milliseconds: 300), curve: Curves.decelerate);
   }
 
@@ -51,22 +52,24 @@ class _NearMeListingState extends State<NearMeListing> {
                   alignment: Alignment.center,
                   children: <Widget>[
                     carouselSlider = CarouselSlider(
-                      initialPage: 0,
-                      height: 210,
-                      enlargeCenterPage: false,
-                      autoPlay: true,
-                      reverse: false,
-                      viewportFraction: 1.0,
-                      enableInfiniteScroll: true,
-                      autoPlayInterval: Duration(seconds: 5),
-                      autoPlayAnimationDuration: Duration(milliseconds: 300),
-                      pauseAutoPlayOnTouch: Duration(seconds: 10),
-                      scrollDirection: Axis.horizontal,
-                      onPageChanged: (index) {
-                        setState(() {
-                          _current = index;
-                        });
-                      },
+                      carouselController: _controller,
+                      options: CarouselOptions(
+                        initialPage: 0,
+                        height: 210,
+                        enlargeCenterPage: false,
+                        autoPlay: true,
+                        reverse: false,
+                        viewportFraction: 1.0,
+                        enableInfiniteScroll: true,
+                        autoPlayInterval: Duration(seconds: 5),
+                        autoPlayAnimationDuration: Duration(milliseconds: 300),
+                        scrollDirection: Axis.horizontal,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _current = index;
+                          });
+                        },
+                      ),
                       items: snapshot.data.map((data) {
                         return ItemList(
                           data: data,
@@ -681,8 +684,7 @@ class _ItemListState extends State<ItemList> {
         title: 'Share',
         text: judul,
         linkUrl: 'https://remax.co.id/property/${idListing}',
-        chooserTitle: 'Choose application'
-    );
+        chooserTitle: 'Choose application');
   }
 
   @override
@@ -716,7 +718,8 @@ class _ItemListState extends State<ItemList> {
                     image: DecorationImage(
                         image: widget.data['listThumbnail'] != null
                             ? NetworkImage('https://genius.remax.co.id/papi/' +
-                                widget.data['listThumbnail']+'?size=512,512')
+                                widget.data['listThumbnail'] +
+                                '?size=512,512')
                             : NetworkImage('-'),
                         fit: BoxFit.cover),
                   ),
@@ -966,12 +969,12 @@ class _ItemListState extends State<ItemList> {
                               child: Container(
                                 child: Align(
                                   child: GestureDetector(
-                                    onTap: (){
-                                      share(widget.data['id'], widget.data['listTitle']);
+                                    onTap: () {
+                                      share(widget.data['id'],
+                                          widget.data['listTitle']);
                                     },
                                     child: new Container(
-                                      margin: EdgeInsets.only(
-                                          left: 10.0),
+                                      margin: EdgeInsets.only(left: 10.0),
                                       child: SvgPicture.asset(
                                         "assets/icons/share.svg",
                                       ),
@@ -979,7 +982,7 @@ class _ItemListState extends State<ItemList> {
                                   ),
                                   alignment: Alignment.centerRight,
                                 ),
-                                margin: EdgeInsets.only(right: 10.0, top:10.0),
+                                margin: EdgeInsets.only(right: 10.0, top: 10.0),
                               ),
                             ),
                           ],
@@ -993,39 +996,40 @@ class _ItemListState extends State<ItemList> {
                               child: FutureBuilder(
                                   future: checkfav(toInt(widget.data['id'])),
                                   builder: (context, snapshot) {
-                                    if (snapshot.hasError) print(snapshot.error);
+                                    if (snapshot.hasError)
+                                      print(snapshot.error);
                                     if (snapshot.data) {
                                       return GestureDetector(
-                                          onTap: (){
-                                            _deletefav(toInt(widget.data['id']));
-                                            // do something
-                                            setState(() {});
-                                          },
-                                          child: Card(
-                                            margin: EdgeInsets.only(right: 10.0),
-                                            elevation: 2.0,
-                                            color: kRedColor,
-                                            child: Container(
-                                              margin: EdgeInsets.all(6.0),
-                                              child: Icon(
-                                                Icons.favorite,
-                                                color: Colors.white,
-                                                size: 15.0,
-                                              ),
+                                        onTap: () {
+                                          _deletefav(toInt(widget.data['id']));
+                                          // do something
+                                          setState(() {});
+                                        },
+                                        child: Card(
+                                          margin: EdgeInsets.only(right: 10.0),
+                                          elevation: 2.0,
+                                          color: kRedColor,
+                                          child: Container(
+                                            margin: EdgeInsets.all(6.0),
+                                            child: Icon(
+                                              Icons.favorite,
+                                              color: Colors.white,
+                                              size: 15.0,
                                             ),
-                                            shape: CircleBorder(),
                                           ),
-                                        );
+                                          shape: CircleBorder(),
+                                        ),
+                                      );
                                     } else {
                                       return GestureDetector(
-                                        onTap: (){
+                                        onTap: () {
                                           _handleSubmitted(
                                             toInt(widget.data['id']),
                                             widget.data['listTitle'],
                                             widget.data['listThumbnail'],
                                             widget.data['listListingPrice'],
                                             widget.data['links']
-                                            ['listListingCategoryId'],
+                                                ['listListingCategoryId'],
                                             listMedia.length.toString(),
                                             widget.data['listBedroom'],
                                             widget.data['listBathroom'],
@@ -1052,7 +1056,6 @@ class _ItemListState extends State<ItemList> {
                                     }
                                   }),
                             ),
-
                           ],
                         ),
                       ],
