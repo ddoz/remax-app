@@ -24,7 +24,7 @@ class HeaderSignIn extends StatelessWidget {
               right: kDefaultPadding,
               bottom: 36 + kDefaultPadding,
             ),
-            height: 400,
+            height: 500,
             decoration: BoxDecoration(
                 image: DecorationImage(
               image: new AssetImage(

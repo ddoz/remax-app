@@ -1,4 +1,4 @@
-package com.harvdev.remax_app
+package id.co.intelligence.remax
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -98,7 +98,8 @@ class _DetailFavPageState extends State<DetailFavPage> {
     List<dynamic> data =
         json.decode(response.body)['data']['links']['mmbsFile'];
 
-    String image = "https://genius.remax.co.id/papi/Membership/crud/${datadd['links']['listMmbsId']}/links/MembershipFile/${data[0]}?size=256,256";
+    String image =
+        "https://genius.remax.co.id/papi/Membership/crud/${datadd['links']['listMmbsId']}/links/MembershipFile/${data[0]}?size=256,256";
     return image;
   }
 
@@ -459,7 +460,6 @@ class _DetailFavPageState extends State<DetailFavPage> {
                                 ],
                               ),
                             ),
-
                             new Container(
                               margin: EdgeInsets.only(left: 15.0, right: 15.0),
                               child: new Align(
@@ -670,7 +670,6 @@ class _DetailFavPageState extends State<DetailFavPage> {
                                 ),
                               ),
                             ),
-
                             Container(
                               width: double.infinity,
                               margin: EdgeInsets.all(15.0),
@@ -686,12 +685,13 @@ class _DetailFavPageState extends State<DetailFavPage> {
                                         child: Text('Listing By:')),
                                     Row(
                                       children: <Widget>[
-                                            new FutureBuilder<String>(
-                                              future: getDataMemberFoto(),
-                                              builder: (context, snapshot) {
-                                                if (snapshot.hasError) print(snapshot.error);
-                                                return snapshot.hasData
-                                                    ? Container(
+                                        new FutureBuilder<String>(
+                                          future: getDataMemberFoto(),
+                                          builder: (context, snapshot) {
+                                            if (snapshot.hasError)
+                                              print(snapshot.error);
+                                            return snapshot.hasData
+                                                ? Container(
                                                     margin: EdgeInsets.all(10),
                                                     width: 80.0,
                                                     height: 80.0,
@@ -700,8 +700,9 @@ class _DetailFavPageState extends State<DetailFavPage> {
                                                         image: new DecorationImage(
                                                             fit: BoxFit.cover,
                                                             image: NetworkImage(
-                                                                snapshot.data))))
-                                                    : Container(
+                                                                snapshot
+                                                                    .data))))
+                                                : Container(
                                                     margin: EdgeInsets.all(10),
                                                     width: 80.0,
                                                     height: 80.0,
@@ -711,8 +712,8 @@ class _DetailFavPageState extends State<DetailFavPage> {
                                                             fit: BoxFit.cover,
                                                             image: NetworkImage(
                                                                 'https://remax.co.id/images/baloon.png?size=256,256'))));
-                                              },
-                                            ),
+                                          },
+                                        ),
                                         new FutureBuilder<Map<String, dynamic>>(
                                           future: getDataMember(),
                                           builder: (context, snapshot) {
@@ -917,9 +918,11 @@ class ImageDialog extends StatelessWidget {
           Align(
             alignment: Alignment.center,
             child: CarouselSlider(
-              viewportFraction: 1.0,
-              enableInfiniteScroll: false,
-              height: MediaQuery.of(context).size.height,
+              options: CarouselOptions(
+                viewportFraction: 1.0,
+                enableInfiniteScroll: false,
+                height: MediaQuery.of(context).size.height,
+              ),
               items: list.map((i) {
                 return Builder(
                   builder: (BuildContext context) {

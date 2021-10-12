@@ -12,7 +12,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'detail_edit_customer.dart';
 
 class MyCustomerPage extends StatefulWidget {
-
   @override
   _MyCustomerPageState createState() => _MyCustomerPageState();
 }
@@ -20,13 +19,11 @@ class MyCustomerPage extends StatefulWidget {
 enum LoginStatus { notSignIn, signIn }
 
 class _MyCustomerPageState extends State<MyCustomerPage> {
-
   String name = "", member = "";
 
 //  TabController tabController;
 
   Map<String, String> headerss = {};
-
 
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -36,7 +33,6 @@ class _MyCustomerPageState extends State<MyCustomerPage> {
       setState(() {
         headerss['cookie'] = preferences.getString("cookie");
       });
-
     });
   }
 
@@ -71,7 +67,7 @@ class _MyCustomerPageState extends State<MyCustomerPage> {
     );
   }
 
-  cekSession() async{
+  cekSession() async {
     final response = await http.get(
         "https://genius.remax.co.id/api/listing/crud?sort=-listId",
         headers: headerss);
@@ -86,14 +82,12 @@ class _MyCustomerPageState extends State<MyCustomerPage> {
       Navigator.of(context).pop;
       Navigator.of(context).push(new MaterialPageRoute(
           builder: (BuildContext context) => new SignInPage()));
-
     }
   }
 
   Future<List> getData() async {
-    final response = await http.get(
-        "https://genius.remax.co.id/api/customer/crud",
-        headers: headerss);
+    final response = await http
+        .get("https://genius.remax.co.id/api/customer/crud", headers: headerss);
     List list = json.decode(response.body)['data'];
     return list;
   }
@@ -119,7 +113,7 @@ class _MyCustomerPageState extends State<MyCustomerPage> {
             Icons.add,
             color: Colors.white,
           ),
-          onPressed: (){
+          onPressed: () {
             Navigator.of(context).push(new MaterialPageRoute(
                 builder: (BuildContext context) => new AddCustomerPage()));
           },
@@ -130,7 +124,8 @@ class _MyCustomerPageState extends State<MyCustomerPage> {
           child: Column(
             children: [
               new Container(
-                margin: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0, bottom: 10.0),
+                margin: EdgeInsets.only(
+                    top: 10.0, left: 10.0, right: 10.0, bottom: 10.0),
                 alignment: Alignment.center,
                 padding: EdgeInsets.only(left: kDefaultPadding, right: 5.0),
                 height: 45,
@@ -167,7 +162,6 @@ class _MyCustomerPageState extends State<MyCustomerPage> {
                   ],
                 ),
               ),
-
               Expanded(
                 child: new FutureBuilder<List>(
                   future: getData(),
@@ -208,13 +202,14 @@ class ItemList extends StatelessWidget {
       itemCount: list == null ? 0 : list.length,
       itemBuilder: (context, i) {
         return new Container(
-          padding: const EdgeInsets.only(left:10.0, right: 10.0, top: 5.0, bottom: 5.0),
+          padding: const EdgeInsets.only(
+              left: 10.0, right: 10.0, top: 5.0, bottom: 5.0),
           child: new GestureDetector(
             onTap: () => Navigator.of(context).push(new MaterialPageRoute(
                 builder: (BuildContext context) => new DetailEditCustomer(
-                  list: list,
-                  index: i,
-                ))),
+                      list: list,
+                      index: i,
+                    ))),
             child: new Card(
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(10.0),
@@ -222,22 +217,20 @@ class ItemList extends StatelessWidget {
               child: Row(
                 children: [
                   Container(
-                    margin: EdgeInsets.all(10.0),
+                      margin: EdgeInsets.all(10.0),
                       width: 50.0,
                       height: 50.0,
                       decoration: new BoxDecoration(
                           shape: BoxShape.circle,
                           image: new DecorationImage(
-                              fit: BoxFit.fill,
-                              image: AssetImage("assets/images/profile.png"),
-                          )
-                      )),
+                            fit: BoxFit.fill,
+                            image: AssetImage("assets/images/profile.png"),
+                          ))),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: <Widget>[
                       Container(
-                        margin: EdgeInsets.only(
-                            right: 10.0, top: 10.0),
+                        margin: EdgeInsets.only(right: 10.0, top: 10.0),
                         child: Align(
                           alignment: Alignment.centerLeft,
                           child: new Text(
@@ -253,8 +246,8 @@ class ItemList extends StatelessWidget {
                       ),
                       list[i]['custAddress'] != null
                           ? Container(
-                              margin: EdgeInsets.only(
-                                 right: 10.0, bottom: 10.0),
+                              margin:
+                                  EdgeInsets.only(right: 10.0, bottom: 10.0),
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: new Text(
@@ -268,7 +261,10 @@ class ItemList extends StatelessWidget {
                             )
                           : Container(
                               margin: EdgeInsets.only(
-                                  left: 10.0, right: 10.0, top: 10.0, bottom: 5.0),
+                                  left: 10.0,
+                                  right: 10.0,
+                                  top: 10.0,
+                                  bottom: 5.0),
                               child: Align(
                                 alignment: Alignment.centerLeft,
                                 child: new Text(

@@ -1,15 +1,9 @@
-import 'dart:convert';
+
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'package:remax_app/screens/detail/detail_page.dart';
 import 'package:remax_app/screens/gallery_page.dart';
 import 'package:remax_app/screens/home/home_screen.dart';
 import 'package:remax_app/screens/home_page.dart';
-import 'package:remax_app/screens/member/create_listing_page.dart';
-import 'package:remax_app/screens/search/search_screen.dart';
-import 'package:remax_app/sidebar/sidebar.dart';
-import 'package:remax_app/slider_try.dart';
 
 void main() {
   runApp(MyApp());

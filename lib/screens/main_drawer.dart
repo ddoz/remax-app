@@ -9,6 +9,7 @@ import 'package:remax_app/screens/favourite/favourite_page.dart';
 import 'package:remax_app/screens/franchise/franchise_page.dart';
 import 'package:remax_app/screens/istilahproperty/istilah_property.dart';
 import 'package:remax_app/screens/member/my_customer_page.dart';
+import 'package:remax_app/screens/tracker/tracker_page.dart';
 import 'package:remax_app/screens/search/search_screen.dart';
 import 'package:remax_app/screens/sign_in/sign_in_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -309,10 +310,19 @@ class _MainDrawerState extends State<MainDrawer> {
   signOut() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
-      preferences.setInt("value", null);
+      preferences.setInt("value", 0);
       preferences.commit();
       _loginStatus = LoginStatus.notSignIn;
     });
+  }
+
+  getPrefBahasa() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    if (preferences.getString("bahasa") != null) {
+      if (preferences.getString("bahasa") == "Indonesian") {
+      } else {}
+    }
   }
 
   @override
@@ -320,6 +330,7 @@ class _MainDrawerState extends State<MainDrawer> {
     // TODO: implement initState
     super.initState();
     getPref();
+    getPrefBahasa();
   }
 
   @override
@@ -495,8 +506,6 @@ class _MainDrawerState extends State<MainDrawer> {
               ),
             ),
 
-
-
             GestureDetector(
               onTap: () {
                 Navigator.of(context).pop();
@@ -543,47 +552,72 @@ class _MainDrawerState extends State<MainDrawer> {
 
             _loginStatus == LoginStatus.signIn
                 ? GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(new MaterialPageRoute(
-                    builder: (BuildContext context) => new MyListingPage()));
-              },
-              child: Container(
-                margin: EdgeInsets.only(left: 30.0, bottom: 20.0),
-                child: Row(children: <Widget>[
-                  SvgPicture.asset("assets/icons/listings.svg"),
-                  SizedBox(
-                    width: 20.0,
-                  ),
-                  Text('My Listings'),
-                ]),
-              ),
-            )
+                    onTap: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).push(new MaterialPageRoute(
+                          builder: (BuildContext context) =>
+                              new MyListingPage()));
+                    },
+                    child: Container(
+                      margin: EdgeInsets.only(left: 30.0, bottom: 20.0),
+                      child: Row(children: <Widget>[
+                        SvgPicture.asset("assets/icons/listings.svg"),
+                        SizedBox(
+                          width: 20.0,
+                        ),
+                        Text('My Listings'),
+                      ]),
+                    ),
+                  )
                 : SizedBox(
-              height: 5.0,
-            ),
+                    height: 5.0,
+                  ),
 
             _loginStatus == LoginStatus.signIn
-                ? GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(new MaterialPageRoute(
-                    builder: (BuildContext context) => new MyCustomerPage()));
-              },
-              child: Container(
-                margin: EdgeInsets.only(left: 30.0),
-                child: Row(children: <Widget>[
-                  SvgPicture.asset("assets/icons/customers.svg"),
-                  SizedBox(
-                    width: 20.0,
-                  ),
-                  Text('My Customers'),
-                ]),
-              ),
-            )
+                ? Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                          Navigator.of(context).push(new MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  new MyCustomerPage()));
+                        },
+                        child: Container(
+                          margin: EdgeInsets.only(left: 30.0),
+                          child: Row(children: <Widget>[
+                            SvgPicture.asset("assets/icons/customers.svg"),
+                            SizedBox(
+                              width: 20.0,
+                            ),
+                            Text('My Customers'),
+                          ]),
+                        ),
+                      ),
+                      // SizedBox(height: 15.0),
+                      // GestureDetector(
+                      //   onTap: () {
+                      //     Navigator.of(context).pop();
+                      //     Navigator.of(context).push(new MaterialPageRoute(
+                      //         builder: (BuildContext context) =>
+                      //             new TrackerPage()));
+                      //   },
+                      //   child: Container(
+                      //     margin: EdgeInsets.only(left: 30.0),
+                      //     child: Row(children: <Widget>[
+                      //       SvgPicture.asset("assets/icons/customers.svg"),
+                      //       SizedBox(
+                      //         width: 20.0,
+                      //       ),
+                      //       Text('Tracker'),
+                      //     ]),
+                      //   ),
+                      // ),
+                    ],
+                  )
                 : SizedBox(
-              height: 5.0,
-            ),
+                    height: 5.0,
+                  ),
 
             _loginStatus == LoginStatus.signIn
                 ? SizedBox()
@@ -606,7 +640,8 @@ class _MainDrawerState extends State<MainDrawer> {
                   ),
 
             Container(
-              margin: EdgeInsets.only(top: 30.0, left: 25, right: 25, bottom: 30),
+              margin:
+                  EdgeInsets.only(top: 30.0, left: 25, right: 25, bottom: 30),
               color: Colors.grey,
               child: SizedBox(
                   height: 1, width: MediaQuery.of(context).size.width * 0.7),

@@ -57,7 +57,7 @@ class _FilterResultState extends State<FilterResult> {
     final response = await http.get(widget.url);
     if (response.statusCode == 200) {
       List liss = json.decode(response.body)['data'];
-      if (liss == null){
+      if (liss == null) {
         setState(() {
           firstLoad = false;
           list.isEmpty;
@@ -70,7 +70,6 @@ class _FilterResultState extends State<FilterResult> {
           });
         }
       }
-
     } else {
       Exception('Failed to load data');
     }
@@ -234,6 +233,27 @@ class _ItemListState extends State<ItemList> {
         text: judul,
         linkUrl: 'https://remax.co.id/property/${idListing}',
         chooserTitle: 'Choose application');
+  }
+
+  Future<String> getDataKota(String idKota) async {
+    final response =
+        await http.get("https://genius.remax.co.id/papi/City/$idKota");
+    String prov = json.decode(response.body)['data']['mctyDescription'];
+    return prov;
+  }
+
+  Future<String> getDataProv(String idProv) async {
+    final response =
+        await http.get("https://genius.remax.co.id/papi/Province/$idProv");
+    String prov = json.decode(response.body)['data']['mprvDescription'];
+    return prov;
+  }
+
+  Future<String> getDataNegara(String idNegara) async {
+    final response =
+        await http.get("https://genius.remax.co.id/papi/Country/$idNegara");
+    String prov = json.decode(response.body)['data']['mctrDescription'];
+    return prov;
   }
 
   @override
@@ -496,6 +516,72 @@ class _ItemListState extends State<ItemList> {
                                   )),
                             ),
                           ],
+                        ),
+                        new Container(
+                          margin: EdgeInsets.only(top: 10.0, left: 15.0),
+                          child: new Row(
+                            children: <Widget>[
+                              new Container(
+                                  child: SvgPicture.asset(
+                                "assets/icons/domisili.svg",
+                                color: kRedColor,
+                              )),
+                              new SizedBox(
+                                width: 4.0,
+                              ),
+                              new FutureBuilder<String>(
+                                future: getDataKota(
+                                    widget.list[i]['links']['listCityId']),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasError) print(snapshot.error);
+                                  return snapshot.hasData
+                                      ? new Text(snapshot.data,
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold))
+                                      : new Text("Loading....",
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: const Color(0xff767472)));
+                                },
+                              ),
+                              new FutureBuilder<String>(
+                                future: getDataProv(
+                                    widget.list[i]['links']['listProvinceId']),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasError) print(snapshot.error);
+                                  return snapshot.hasData
+                                      ? new Text(', ' + snapshot.data,
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold))
+                                      : new Text("Loading....",
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: const Color(0xff767472)));
+                                },
+                              ),
+                              // new FutureBuilder<String>(
+                              //   future: getDataNegara(
+                              //       widget.data['links']['listCountryId']),
+                              //   builder: (context, snapshot) {
+                              //     if (snapshot.hasError) print(snapshot.error);
+                              //     return snapshot.hasData
+                              //         ? new Text(', ' + snapshot.data,
+                              //             style: new TextStyle(
+                              //                 fontSize: 12.0,
+                              //                 fontWeight: FontWeight.bold))
+                              //         : new Text("Loading....",
+                              //             style: new TextStyle(
+                              //                 fontSize: 12.0,
+                              //                 fontWeight: FontWeight.bold,
+                              //                 color: const Color(0xff767472)));
+                              //   },
+                              // ),
+                            ],
+                          ),
                         ),
                         Row(
                           children: <Widget>[

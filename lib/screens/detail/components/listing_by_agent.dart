@@ -22,7 +22,6 @@ class ListingByAgentPage extends StatefulWidget {
 }
 
 class _ListingByAgentPageState extends State<ListingByAgentPage> {
-
   ScrollController _scrollController = ScrollController();
   int page = 1;
 
@@ -86,7 +85,6 @@ class _ListingByAgentPageState extends State<ListingByAgentPage> {
     }
   }
 
-
   Future<List> getData() async {
     final response = await http.get(widget.url);
     List list = json.decode(response.body)['data'];
@@ -97,46 +95,46 @@ class _ListingByAgentPageState extends State<ListingByAgentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        iconTheme: IconThemeData(
-          color: kAppBarColorTheme, //change your color here
+        appBar: AppBar(
+          iconTheme: IconThemeData(
+            color: kAppBarColorTheme, //change your color here
+          ),
+          title: Text(
+            "Listing By Agent",
+            style: TextStyle(color: kAppBarColorTheme),
+          ),
+          centerTitle: true,
+          backgroundColor: Colors.white,
         ),
-        title: Text(
-          "Listing By Agent",
-          style: TextStyle(color: kAppBarColorTheme),
-        ),
-        centerTitle: true,
-        backgroundColor: Colors.white,
-      ),
-      body: Column(
-        children: <Widget>[
-          firstLoad == false
-              ? new Expanded(
-              child: list.length == 0
-                  ? Center(child: Text("No Data Available"))
-                  : Column(
-                children: [
-                  Expanded(
-                    child: new ItemList(
-                      list: list,
-                      controller: _scrollController,
-                    ),
-                  ),
-                  isLoading == true
-                      ? new Center(
-                    child: new CircularProgressIndicator(),
+        body: Column(
+          children: <Widget>[
+            firstLoad == false
+                ? new Expanded(
+                    child: list.length == 0
+                        ? Center(child: Text("No Data Available"))
+                        : Column(
+                            children: [
+                              Expanded(
+                                child: new ItemList(
+                                  list: list,
+                                  controller: _scrollController,
+                                ),
+                              ),
+                              isLoading == true
+                                  ? new Center(
+                                      child: new CircularProgressIndicator(),
+                                    )
+                                  : new SizedBox(),
+                            ],
+                          ))
+                : Column(
+                    children: [
+                      Center(child: new LoadingShimmerEffectAgent()),
+                      Center(child: new LoadingShimmerEffectAgent()),
+                    ],
                   )
-                      : new SizedBox(),
-                ],
-              ))
-              : Column(
-            children: [
-              Center(child: new LoadingShimmerEffectAgent()),
-              Center(child: new LoadingShimmerEffectAgent()),
-            ],
-          )
-        ],
-      )
+          ],
+        )
 //
 //      new FutureBuilder<List>(
 //        future: getData(),
@@ -151,7 +149,7 @@ class _ListingByAgentPageState extends State<ListingByAgentPage> {
 //                );
 //        },
 //      ),
-    );
+        );
   }
 }
 
@@ -212,6 +210,27 @@ class _ItemListState extends State<ItemList> {
         text: judul,
         linkUrl: 'https://remax.co.id/property/${idListing}',
         chooserTitle: 'Choose application');
+  }
+
+  Future<String> getDataKota(String idKota) async {
+    final response =
+        await http.get("https://genius.remax.co.id/papi/City/$idKota");
+    String prov = json.decode(response.body)['data']['mctyDescription'];
+    return prov;
+  }
+
+  Future<String> getDataProv(String idProv) async {
+    final response =
+        await http.get("https://genius.remax.co.id/papi/Province/$idProv");
+    String prov = json.decode(response.body)['data']['mprvDescription'];
+    return prov;
+  }
+
+  Future<String> getDataNegara(String idNegara) async {
+    final response =
+        await http.get("https://genius.remax.co.id/papi/Country/$idNegara");
+    String prov = json.decode(response.body)['data']['mctrDescription'];
+    return prov;
   }
 
   @override
@@ -476,6 +495,72 @@ class _ItemListState extends State<ItemList> {
                             ),
                           ],
                         ),
+                        new Container(
+                          margin: EdgeInsets.only(top: 10.0, left: 15.0),
+                          child: new Row(
+                            children: <Widget>[
+                              new Container(
+                                  child: SvgPicture.asset(
+                                "assets/icons/domisili.svg",
+                                color: kRedColor,
+                              )),
+                              new SizedBox(
+                                width: 4.0,
+                              ),
+                              new FutureBuilder<String>(
+                                future: getDataKota(
+                                    widget.list[i]['links']['listCityId']),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasError) print(snapshot.error);
+                                  return snapshot.hasData
+                                      ? new Text(snapshot.data,
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold))
+                                      : new Text("Loading....",
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: const Color(0xff767472)));
+                                },
+                              ),
+                              new FutureBuilder<String>(
+                                future: getDataProv(
+                                    widget.list[i]['links']['listProvinceId']),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasError) print(snapshot.error);
+                                  return snapshot.hasData
+                                      ? new Text(', ' + snapshot.data,
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold))
+                                      : new Text("Loading....",
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: const Color(0xff767472)));
+                                },
+                              ),
+                              // new FutureBuilder<String>(
+                              //   future: getDataNegara(
+                              //       widget.data['links']['listCountryId']),
+                              //   builder: (context, snapshot) {
+                              //     if (snapshot.hasError) print(snapshot.error);
+                              //     return snapshot.hasData
+                              //         ? new Text(', ' + snapshot.data,
+                              //             style: new TextStyle(
+                              //                 fontSize: 12.0,
+                              //                 fontWeight: FontWeight.bold))
+                              //         : new Text("Loading....",
+                              //             style: new TextStyle(
+                              //                 fontSize: 12.0,
+                              //                 fontWeight: FontWeight.bold,
+                              //                 color: const Color(0xff767472)));
+                              //   },
+                              // ),
+                            ],
+                          ),
+                        ),
                         Row(
                           children: <Widget>[
                             GestureDetector(
@@ -573,7 +658,6 @@ class _ItemListState extends State<ItemList> {
   }
 }
 
-
 class LoadingShimmerEffectAgent extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -582,7 +666,7 @@ class LoadingShimmerEffectAgent extends StatelessWidget {
       height: 180,
       child: Card(
         shape:
-        RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         child: Row(
           children: <Widget>[
             Shimmer.fromColors(
@@ -592,7 +676,7 @@ class LoadingShimmerEffectAgent extends StatelessWidget {
                 decoration: BoxDecoration(
                     color: Colors.grey,
                     borderRadius:
-                    new BorderRadius.all(const Radius.circular(10.0))),
+                        new BorderRadius.all(const Radius.circular(10.0))),
                 height: 180,
                 width: 120,
               ),
@@ -607,7 +691,7 @@ class LoadingShimmerEffectAgent extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.grey,
                         borderRadius:
-                        new BorderRadius.all(const Radius.circular(4.0))),
+                            new BorderRadius.all(const Radius.circular(4.0))),
                     height: 30,
                     width: MediaQuery.of(context).size.width * 0.5,
                   ),
@@ -620,7 +704,7 @@ class LoadingShimmerEffectAgent extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.grey,
                         borderRadius:
-                        new BorderRadius.all(const Radius.circular(4.0))),
+                            new BorderRadius.all(const Radius.circular(4.0))),
                     height: 30,
                     width: MediaQuery.of(context).size.width * 0.5,
                   ),
@@ -633,7 +717,7 @@ class LoadingShimmerEffectAgent extends StatelessWidget {
                     decoration: BoxDecoration(
                         color: Colors.grey,
                         borderRadius:
-                        new BorderRadius.all(const Radius.circular(4.0))),
+                            new BorderRadius.all(const Radius.circular(4.0))),
                     height: 50,
                     width: MediaQuery.of(context).size.width * 0.5,
                   ),

@@ -15,7 +15,6 @@ import 'package:remax_app/util/date_formatter.dart';
 import '../detail_page.dart';
 
 class ListingByOffice extends StatefulWidget {
-
   String listMmbsId;
 
   ListingByOffice({this.listMmbsId});
@@ -26,22 +25,25 @@ class ListingByOffice extends StatefulWidget {
 
 class _ListingByOfficeState extends State<ListingByOffice> {
   CarouselSlider carouselSlider;
+  final CarouselController _controller = CarouselController();
   int _current = 0;
 
   Future<List> getData() async {
-    final response = await http.get("https://genius.remax.co.id/papi/listing?filter[listMmbsId]="+widget.listMmbsId);
+    final response = await http.get(
+        "https://genius.remax.co.id/papi/listing?filter[listMmbsId]=" +
+            widget.listMmbsId);
 
     List list = json.decode(response.body)['data'];
     return list;
   }
 
   goToPrevious() {
-    carouselSlider.previousPage(
+    _controller.previousPage(
         duration: Duration(milliseconds: 300), curve: Curves.ease);
   }
 
   goToNext() {
-    carouselSlider.nextPage(
+    _controller.nextPage(
         duration: Duration(milliseconds: 300), curve: Curves.decelerate);
   }
 
@@ -57,21 +59,22 @@ class _ListingByOfficeState extends State<ListingByOffice> {
                   alignment: Alignment.center,
                   children: <Widget>[
                     carouselSlider = CarouselSlider(
-                      initialPage: 0,
-                      enlargeCenterPage: true,
-                      autoPlay: true,
-                      reverse: false,
-                      viewportFraction: 1.0,
-                      enableInfiniteScroll: true,
-                      autoPlayInterval: Duration(seconds: 5),
-                      autoPlayAnimationDuration: Duration(milliseconds: 300),
-                      pauseAutoPlayOnTouch: Duration(seconds: 10),
-                      scrollDirection: Axis.horizontal,
-                      onPageChanged: (index) {
-                        setState(() {
-                          _current = index;
-                        });
-                      },
+                      options: CarouselOptions(
+                        initialPage: 0,
+                        enlargeCenterPage: true,
+                        autoPlay: true,
+                        reverse: false,
+                        viewportFraction: 1.0,
+                        enableInfiniteScroll: true,
+                        autoPlayInterval: Duration(seconds: 5),
+                        autoPlayAnimationDuration: Duration(milliseconds: 300),
+                        scrollDirection: Axis.horizontal,
+                        onPageChanged: (index, reason) {
+                          setState(() {
+                            _current = index;
+                          });
+                        },
+                      ),
                       items: snapshot.data.map((data) {
                         return ItemList(
                           data: data,
@@ -497,7 +500,6 @@ class _ListingByOfficeState extends State<ListingByOffice> {
 //}
 
 class ItemList extends StatefulWidget {
-
   dynamic data;
   int index;
   List list;
@@ -509,7 +511,6 @@ class ItemList extends StatefulWidget {
 }
 
 class _ItemListState extends State<ItemList> {
-
   int toInt(String str) {
     var myInt = int.parse(str);
     assert(myInt is int);
@@ -555,8 +556,28 @@ class _ItemListState extends State<ItemList> {
         title: 'Share',
         text: judul,
         linkUrl: 'https://remax.co.id/property/${idListing}',
-        chooserTitle: 'Choose application'
-    );
+        chooserTitle: 'Choose application');
+  }
+
+  Future<String> getDataKota(String idKota) async {
+    final response =
+        await http.get("https://genius.remax.co.id/papi/City/$idKota");
+    String prov = json.decode(response.body)['data']['mctyDescription'];
+    return prov;
+  }
+
+  Future<String> getDataProv(String idProv) async {
+    final response =
+        await http.get("https://genius.remax.co.id/papi/Province/$idProv");
+    String prov = json.decode(response.body)['data']['mprvDescription'];
+    return prov;
+  }
+
+  Future<String> getDataNegara(String idNegara) async {
+    final response =
+        await http.get("https://genius.remax.co.id/papi/Country/$idNegara");
+    String prov = json.decode(response.body)['data']['mctrDescription'];
+    return prov;
   }
 
   @override
@@ -571,9 +592,9 @@ class _ItemListState extends State<ItemList> {
         child: new GestureDetector(
           onTap: () => Navigator.of(context).push(new MaterialPageRoute(
               builder: (BuildContext context) => new DetailPage(
-                list: widget.list,
-                index: widget.index,
-              ))),
+                    list: widget.list,
+                    index: widget.index,
+                  ))),
           child: new Card(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10.0),
@@ -586,11 +607,13 @@ class _ItemListState extends State<ItemList> {
                     height: 180,
                     decoration: BoxDecoration(
                       borderRadius:
-                      new BorderRadius.all(const Radius.circular(10.0)),
+                          new BorderRadius.all(const Radius.circular(10.0)),
                       image: DecorationImage(
                           image: widget.data['listThumbnail'] != null
-                              ? NetworkImage('https://genius.remax.co.id/papi/' +
-                              widget.data['listThumbnail']+'?size=256,256')
+                              ? NetworkImage(
+                                  'https://genius.remax.co.id/papi/' +
+                                      widget.data['listThumbnail'] +
+                                      '?size=256,256')
                               : NetworkImage('-'),
                           fit: BoxFit.cover),
                     ),
@@ -600,8 +623,7 @@ class _ItemListState extends State<ItemList> {
                       color: Colors.black.withOpacity(0.7),
                       borderRadius: new BorderRadius.only(
                           bottomRight: Radius.circular(10.0),
-                          topLeft: Radius.circular(10.0)
-                      ),
+                          topLeft: Radius.circular(10.0)),
                     ),
                     padding: EdgeInsets.all(5.0),
                     child: Row(
@@ -649,61 +671,61 @@ class _ItemListState extends State<ItemList> {
                           ),
                           widget.data['links']['listListingCategoryId'] == "1"
                               ? Row(children: <Widget>[
-                            Container(
-                              margin:
-                              EdgeInsets.only(left: 10.0, right: 10.0),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: new Text(
-                                  NumberFormat.compactCurrency(
-                                      locale: 'id',
-                                      symbol: 'Rp ',
-                                      decimalDigits: 0)
-                                      .format(
-                                      toInt(widget.data['listListingPrice'])),
-                                  style: new TextStyle(
-                                    fontSize: 21.0,
-                                    color: const Color(0xffDC1B2E),
-                                    fontWeight: FontWeight.bold,
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        left: 10.0, right: 10.0),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: new Text(
+                                        NumberFormat.compactCurrency(
+                                                locale: 'id',
+                                                symbol: 'Rp ',
+                                                decimalDigits: 0)
+                                            .format(toInt(widget
+                                                .data['listListingPrice'])),
+                                        style: new TextStyle(
+                                          fontSize: 21.0,
+                                          color: const Color(0xffDC1B2E),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            new Text(
-                              "DIJUAL",
-                              style: new TextStyle(
-                                  fontSize: 12.0,
-                                  color: const Color(0xffDC1B2E)),
-                            )
-                          ])
+                                  new Text(
+                                    "DIJUAL",
+                                    style: new TextStyle(
+                                        fontSize: 12.0,
+                                        color: const Color(0xffDC1B2E)),
+                                  )
+                                ])
                               : Row(children: <Widget>[
-                            Container(
-                              margin:
-                              EdgeInsets.only(left: 10.0, right: 10.0),
-                              child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: new Text(
-                                  NumberFormat.compactCurrency(
-                                      locale: 'id',
-                                      symbol: 'Rp ',
-                                      decimalDigits: 0)
-                                      .format(
-                                      toInt(widget.data['listListingPrice'])),
-                                  style: new TextStyle(
-                                    fontSize: 21.0,
-                                    color: const Color(0xff1A3668),
-                                    fontWeight: FontWeight.bold,
+                                  Container(
+                                    margin: EdgeInsets.only(
+                                        left: 10.0, right: 10.0),
+                                    child: Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: new Text(
+                                        NumberFormat.compactCurrency(
+                                                locale: 'id',
+                                                symbol: 'Rp ',
+                                                decimalDigits: 0)
+                                            .format(toInt(widget
+                                                .data['listListingPrice'])),
+                                        style: new TextStyle(
+                                          fontSize: 21.0,
+                                          color: const Color(0xff1A3668),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            ),
-                            new Text(
-                              "DISEWAKAN",
-                              style: new TextStyle(
-                                  fontSize: 12.0,
-                                  color: const Color(0xff1A3668)),
-                            )
-                          ]),
+                                  new Text(
+                                    "DISEWAKAN",
+                                    style: new TextStyle(
+                                        fontSize: 12.0,
+                                        color: const Color(0xff1A3668)),
+                                  )
+                                ]),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.start,
                             crossAxisAlignment: CrossAxisAlignment.start,
@@ -726,20 +748,24 @@ class _ItemListState extends State<ItemList> {
                                             SizedBox(
                                               width: 5.0,
                                             ),
-                                            widget.data['listBuildingSize'] != null
+                                            widget.data['listBuildingSize'] !=
+                                                    null
                                                 ? new Text(
-                                              widget.data['listBuildingSize'] +
-                                                  '(m2)',
-                                              style: new TextStyle(
-                                                fontSize: 10.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            )
+                                                    widget.data[
+                                                            'listBuildingSize'] +
+                                                        '(m2)',
+                                                    style: new TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  )
                                                 : new Text('-',
-                                                style: new TextStyle(
-                                                  fontSize: 10.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ))
+                                                    style: new TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ))
                                           ],
                                         )),
                                   ),
@@ -747,8 +773,8 @@ class _ItemListState extends State<ItemList> {
                                     height: 5.0,
                                   ),
                                   new Container(
-                                    margin:
-                                    EdgeInsets.only(left: 15.0, right: 15.0),
+                                    margin: EdgeInsets.only(
+                                        left: 15.0, right: 15.0),
                                     child: new Align(
                                         alignment: Alignment.centerLeft,
                                         child: Row(
@@ -762,17 +788,19 @@ class _ItemListState extends State<ItemList> {
                                             ),
                                             widget.data['listBedroom'] != null
                                                 ? new Text(
-                                              widget.data['listBedroom'],
-                                              style: new TextStyle(
-                                                fontSize: 10.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            )
+                                                    widget.data['listBedroom'],
+                                                    style: new TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  )
                                                 : new Text('-',
-                                                style: new TextStyle(
-                                                  fontSize: 10.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ))
+                                                    style: new TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ))
                                           ],
                                         )),
                                   ),
@@ -798,17 +826,21 @@ class _ItemListState extends State<ItemList> {
                                             ),
                                             widget.data['listLandSize'] != null
                                                 ? new Text(
-                                              widget.data['listLandSize'] + '(m2)',
-                                              style: new TextStyle(
-                                                fontSize: 10.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            )
+                                                    widget.data[
+                                                            'listLandSize'] +
+                                                        '(m2)',
+                                                    style: new TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  )
                                                 : new Text('-',
-                                                style: new TextStyle(
-                                                  fontSize: 10.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ))
+                                                    style: new TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ))
                                           ],
                                         )),
                                   ),
@@ -828,17 +860,19 @@ class _ItemListState extends State<ItemList> {
                                             ),
                                             widget.data['listBathroom'] != null
                                                 ? new Text(
-                                              widget.data['listBathroom'],
-                                              style: new TextStyle(
-                                                fontSize: 10.0,
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                            )
+                                                    widget.data['listBathroom'],
+                                                    style: new TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ),
+                                                  )
                                                 : new Text('-',
-                                                style: new TextStyle(
-                                                  fontSize: 10.0,
-                                                  fontWeight: FontWeight.bold,
-                                                ))
+                                                    style: new TextStyle(
+                                                      fontSize: 10.0,
+                                                      fontWeight:
+                                                          FontWeight.bold,
+                                                    ))
                                           ],
                                         )),
                                   ),
@@ -846,15 +880,85 @@ class _ItemListState extends State<ItemList> {
                               ),
                             ],
                           ),
+                          new Container(
+                            margin: EdgeInsets.only(top: 10.0, left: 15.0),
+                            child: new Row(
+                              children: <Widget>[
+                                new Container(
+                                    child: SvgPicture.asset(
+                                  "assets/icons/domisili.svg",
+                                  color: kRedColor,
+                                )),
+                                new SizedBox(
+                                  width: 4.0,
+                                ),
+                                new FutureBuilder<String>(
+                                  future: getDataKota(
+                                      widget.data['links']['listCityId']),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError)
+                                      print(snapshot.error);
+                                    return snapshot.hasData
+                                        ? new Text(snapshot.data,
+                                            style: new TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.bold))
+                                        : new Text("Loading....",
+                                            style: new TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.bold,
+                                                color:
+                                                    const Color(0xff767472)));
+                                  },
+                                ),
+                                new FutureBuilder<String>(
+                                  future: getDataProv(
+                                      widget.data['links']['listProvinceId']),
+                                  builder: (context, snapshot) {
+                                    if (snapshot.hasError)
+                                      print(snapshot.error);
+                                    return snapshot.hasData
+                                        ? new Text(', ' + snapshot.data,
+                                            style: new TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.bold))
+                                        : new Text("Loading....",
+                                            style: new TextStyle(
+                                                fontSize: 12.0,
+                                                fontWeight: FontWeight.bold,
+                                                color:
+                                                    const Color(0xff767472)));
+                                  },
+                                ),
+                                // new FutureBuilder<String>(
+                                //   future: getDataNegara(
+                                //       widget.data['links']['listCountryId']),
+                                //   builder: (context, snapshot) {
+                                //     if (snapshot.hasError) print(snapshot.error);
+                                //     return snapshot.hasData
+                                //         ? new Text(', ' + snapshot.data,
+                                //             style: new TextStyle(
+                                //                 fontSize: 12.0,
+                                //                 fontWeight: FontWeight.bold))
+                                //         : new Text("Loading....",
+                                //             style: new TextStyle(
+                                //                 fontSize: 12.0,
+                                //                 fontWeight: FontWeight.bold,
+                                //                 color: const Color(0xff767472)));
+                                //   },
+                                // ),
+                              ],
+                            ),
+                          ),
                           Row(
                             children: <Widget>[
                               GestureDetector(
-                                onTap: (){
-                                  share(widget.data['id'], widget.data['listTitle']);
+                                onTap: () {
+                                  share(widget.data['id'],
+                                      widget.data['listTitle']);
                                 },
                                 child: new Container(
-                                  margin: EdgeInsets.only(
-                                      left: 10.0),
+                                  margin: EdgeInsets.only(left: 10.0),
                                   child: new Align(
                                       alignment: Alignment.centerLeft,
                                       child: Row(
@@ -870,10 +974,11 @@ class _ItemListState extends State<ItemList> {
                               FutureBuilder(
                                   future: checkfav(toInt(widget.data['id'])),
                                   builder: (context, snapshot) {
-                                    if (snapshot.hasError) print(snapshot.error);
+                                    if (snapshot.hasError)
+                                      print(snapshot.error);
                                     if (snapshot.data) {
                                       return GestureDetector(
-                                        onTap: (){
+                                        onTap: () {
                                           _deletefav(toInt(widget.data['id']));
                                           // do something
                                           setState(() {});
@@ -895,14 +1000,14 @@ class _ItemListState extends State<ItemList> {
                                       );
                                     } else {
                                       return GestureDetector(
-                                        onTap: (){
+                                        onTap: () {
                                           _handleSubmitted(
                                             toInt(widget.data['id']),
                                             widget.data['listTitle'],
                                             widget.data['listThumbnail'],
                                             widget.data['listListingPrice'],
                                             widget.data['links']
-                                            ['listListingCategoryId'],
+                                                ['listListingCategoryId'],
                                             listMedia.length.toString(),
                                             widget.data['listBedroom'],
                                             widget.data['listBathroom'],
@@ -928,7 +1033,6 @@ class _ItemListState extends State<ItemList> {
                                       );
                                     }
                                   }),
-
                             ],
                           ),
                         ],
@@ -945,4 +1049,3 @@ class _ItemListState extends State<ItemList> {
     );
   }
 }
-

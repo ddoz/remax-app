@@ -1,10 +1,7 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:remax_app/screens/about/components/body.dart';
 import 'package:remax_app/sidebar/navigation_bloc.dart';
 import 'package:remax_app/util/constants.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class AboutPage extends StatefulWidget with NavigationStates {
   @override
@@ -16,7 +13,7 @@ class _AboutPageState extends State<AboutPage> {
   void initState() {
     super.initState();
     // Enable hybrid composition.
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    // if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
   @override

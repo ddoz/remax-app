@@ -3,6 +3,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import 'package:remax_app/screens/favourite/detail_favorit.dart';
 
+
 class TodoItem extends StatelessWidget {
   String _itemTitle;
   String _itemThumbnail;

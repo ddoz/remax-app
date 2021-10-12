@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:remax_app/util/constants.dart';
 
 class Partner extends StatelessWidget {
+  final CarouselController _controller = CarouselController();
   final List<String> imgList = [
     'https://genius.remax.co.id/papi/Bank/crud/64/links/mbnkFileId/215721',
     'https://genius.remax.co.id/papi/Bank/crud/63/links/mbnkFileId/214295',
@@ -36,16 +37,19 @@ class Partner extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             CarouselSlider(
-                initialPage: 0,
-                height: 80,
-                viewportFraction: 0.4,
-                enlargeCenterPage: true,
-                reverse: false,
-                autoPlay: true,
-                autoPlayInterval: Duration(seconds: 4),
-                autoPlayAnimationDuration: Duration(milliseconds: 800),
-                autoPlayCurve: Curves.fastOutSlowIn,
-                enableInfiniteScroll: true,
+                carouselController: _controller,
+                options: CarouselOptions(
+                  initialPage: 0,
+                  height: 80,
+                  viewportFraction: 0.4,
+                  enlargeCenterPage: true,
+                  reverse: false,
+                  autoPlay: true,
+                  autoPlayInterval: Duration(seconds: 4),
+                  autoPlayAnimationDuration: Duration(milliseconds: 800),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enableInfiniteScroll: true,
+                ),
                 items: imgList.map((i) {
                   return Builder(
                     builder: (BuildContext context) {

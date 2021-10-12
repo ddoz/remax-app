@@ -16,9 +16,6 @@ import 'package:remax_app/util/database_client.dart';
 import 'package:remax_app/util/date_formatter.dart';
 import 'package:remax_app/screens/detail/components/listing_by_agent.dart';
 
-
-
-
 class DetailPage extends StatefulWidget {
   List list;
   int index;
@@ -86,10 +83,19 @@ class _DetailPageState extends State<DetailPage> {
     return myInt;
   }
 
-  void _handleSubmitted(int id, String title, String thumbnail, String price,
-      String category, String mediaLength, String bedRoom, String bathRoom, String houseSize, String landSize) async {
-    TodoItem noDoItem =
-        TodoItem(id, title, thumbnail, price, category, dateFormatted() , mediaLength, bedRoom, bathRoom, houseSize, landSize);
+  void _handleSubmitted(
+      int id,
+      String title,
+      String thumbnail,
+      String price,
+      String category,
+      String mediaLength,
+      String bedRoom,
+      String bathRoom,
+      String houseSize,
+      String landSize) async {
+    TodoItem noDoItem = TodoItem(id, title, thumbnail, price, category,
+        dateFormatted(), mediaLength, bedRoom, bathRoom, houseSize, landSize);
     int savedItemId = await db.saveItem(noDoItem);
 
     TodoItem addedItem = await db.getItem(savedItemId);
@@ -145,18 +151,17 @@ class _DetailPageState extends State<DetailPage> {
                     ),
                     onPressed: () {
                       _handleSubmitted(
-                          toInt(widget.list[widget.index]['id']),
-                          widget.list[widget.index]['listTitle'],
-                          widget.list[widget.index]['listThumbnail'],
-                          widget.list[widget.index]['listListingPrice'],
-                          widget.list[widget.index]['links']
-                              ['listListingCategoryId'],
+                        toInt(widget.list[widget.index]['id']),
+                        widget.list[widget.index]['listTitle'],
+                        widget.list[widget.index]['listThumbnail'],
+                        widget.list[widget.index]['listListingPrice'],
+                        widget.list[widget.index]['links']
+                            ['listListingCategoryId'],
                         imgSlider().length.toString(),
                         widget.list[widget.index]['listBedroom'],
                         widget.list[widget.index]['listBathroom'],
                         widget.list[widget.index]['listBuildingSize'],
                         widget.list[widget.index]['listLandSize'],
-
                       );
                       // do something
                       setState(() {});
@@ -596,7 +601,6 @@ class _DetailPageState extends State<DetailPage> {
                       ),
                     ),
 
-
                     new Container(
                       margin:
                           EdgeInsets.only(top: 15.0, left: 15.0, bottom: 10.0),
@@ -723,7 +727,7 @@ class _DetailPageState extends State<DetailPage> {
                     new Container(
                       width: MediaQuery.of(context).size.width,
                       margin:
-                      EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0),
+                          EdgeInsets.only(top: 15.0, left: 15.0, right: 15.0),
                       child: Image.asset('assets/images/banner.jpg'),
                       // decoration: BoxDecoration(
                       //   image: DecorationImage(
@@ -758,14 +762,17 @@ class _DetailPageState extends State<DetailPage> {
 //                      ),
 //                    ),
 
-
                     ListingByProfil(),
                     GestureDetector(
-                      onTap: (){
-                        Navigator.of(context).push(new MaterialPageRoute(
-                            builder: (BuildContext context) => new ListingByAgentPage(
-                              url: "https://genius.remax.co.id/papi/listing?filter[listMmbsId]="+widget.list[widget.index]['links']['listMmbsId'])));
-                      },
+                        onTap: () {
+                          Navigator.of(context).push(new MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  new ListingByAgentPage(
+                                      url:
+                                          "https://genius.remax.co.id/papi/listing?filter[listMmbsId]=" +
+                                              widget.list[widget.index]['links']
+                                                  ['listMmbsId'])));
+                        },
                         child: BtnListingByAgent()),
                     Container(
                       margin: EdgeInsets.all(15.0),
@@ -779,7 +786,9 @@ class _DetailPageState extends State<DetailPage> {
                         ],
                       ),
                     ),
-                    ListingByOffice(listMmbsId: widget.list[widget.index]['links']['listMmbsId'])
+                    ListingByOffice(
+                        listMmbsId: widget.list[widget.index]['links']
+                            ['listMmbsId'])
                   ],
                 ),
               ),
@@ -835,32 +844,26 @@ class _DetailPageState extends State<DetailPage> {
                   future: getDataMember(),
                   builder: (context, snapshot) {
                     if (snapshot.hasError) print(snapshot.error);
-                    if (snapshot.hasData)  {
+                    if (snapshot.hasData) {
                       String lastname = snapshot.data['mmbsLastName'];
-                      if(lastname == null){
+                      if (lastname == null) {
                         lastname = "";
                       }
                       return Container(
-
-                            child: Column(children: <Widget>[
-                            new Text(
-                                    snapshot.data['mmbsFirstName'] +
-                                        ' ' +
-                                        lastname,
-                                    textAlign: TextAlign.center,
-                                  softWrap: true,
-                              overflow: TextOverflow.ellipsis,
-
-                                ),
-
-                            ]),
-                          );
+                        child: Column(children: <Widget>[
+                          new Text(
+                            snapshot.data['mmbsFirstName'] + ' ' + lastname,
+                            textAlign: TextAlign.center,
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ]),
+                      );
                     } else {
                       return new Text("Loading....",
-                            textAlign: TextAlign.center,
-                            style: new TextStyle(
-                                fontSize: 15.0,
-                                color: const Color(0xff767472)));
+                          textAlign: TextAlign.center,
+                          style: new TextStyle(
+                              fontSize: 15.0, color: const Color(0xff767472)));
                     }
                   },
                 ),
@@ -994,7 +997,6 @@ class ImageDialog extends StatelessWidget {
 
   ImageDialog(this.list, this.url);
 
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -1004,9 +1006,11 @@ class ImageDialog extends StatelessWidget {
           Align(
             alignment: Alignment.center,
             child: CarouselSlider(
-              viewportFraction: 1.0,
-              enableInfiniteScroll: false,
-              height: MediaQuery.of(context).size.height,
+              options: CarouselOptions(
+                viewportFraction: 1.0,
+                enableInfiniteScroll: false,
+                height: MediaQuery.of(context).size.height,
+              ),
               items: list.map((i) {
                 return Builder(
                   builder: (BuildContext context) {
@@ -1021,7 +1025,8 @@ class ImageDialog extends StatelessWidget {
                               image: Container(
                                 child: ClipRRect(child: Image.network(url + i)),
                               ),
-                              zoomedBackgroundColor: Colors.black.withOpacity(0.1),
+                              zoomedBackgroundColor:
+                                  Colors.black.withOpacity(0.1),
                               resetDuration: const Duration(milliseconds: 100),
                               maxScale: 2.5,
                             ),

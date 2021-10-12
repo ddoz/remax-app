@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:remax_app/screens/contactus/components/body.dart';
 import 'package:remax_app/sidebar/navigation_bloc.dart';
 import 'package:remax_app/util/constants.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class ContactUsPage extends StatefulWidget  with NavigationStates {
   @override
@@ -17,7 +16,7 @@ class _ContactUsPageState extends State<ContactUsPage> {
   void initState() {
     super.initState();
     // Enable hybrid composition.
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    // if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
   @override

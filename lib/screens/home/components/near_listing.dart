@@ -4,6 +4,8 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:remax_app/model/todo_item.dart';
@@ -13,6 +15,7 @@ import 'package:remax_app/util/database_client.dart';
 import 'package:remax_app/util/date_formatter.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+// import 'package:geolocator/models/location_accuracy.dart' as location_accuracy;
 
 class NearMeListing extends StatefulWidget {
   @override
@@ -26,6 +29,45 @@ class _NearMeListingState extends State<NearMeListing> {
 
   String bahasa = "id_ID";
 
+  String latitude;
+  String longitude;
+
+  @override
+  void initState() {
+    super.initState();
+    // getCurrentLocation();
+  }
+
+  // void getCurrentLocation() async {
+  //   var locator = new Geolocator();
+  //   var position = await locator.getCurrentPosition(
+  //       desiredAccuracy: LocationAccuracy.high);
+
+  //   var lat = position.latitude;
+  //   var lon = position.longitude;
+
+  //   print("latlong $lat-$lon");
+  //   print(_boundsFromLatLngList(lat, lon));
+  // }
+
+  LatLngBounds _boundsFromLatLngList(lat, lon) {
+    double x0, x1, y0, y1;
+    if (x0 == null) {
+      x0 = x1 = lat;
+      y0 = y1 = lon;
+    } else {
+      if (lat > (x1 ?? 0)) x1 = lat;
+      if (lon < x0) x0 = lat;
+      if (lat > (y1 ?? 0)) y1 = lon;
+      if (lon < (y0 ?? double.infinity)) y0 = lon;
+    }
+
+    return LatLngBounds(
+      northeast: LatLng(x1 ?? 0, y1 ?? 0),
+      southwest: LatLng(x0 ?? 0, y0 ?? 0),
+    );
+  }
+
   getPrefBahasa() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
@@ -34,8 +76,8 @@ class _NearMeListingState extends State<NearMeListing> {
   }
 
   Future<List> getData() async {
-    final response = await http.get("https://genius.remax.co.id/papi/listing?language=$bahasa");
-
+    final response = await http
+        .get("https://genius.remax.co.id/papi/listing?language=$bahasa&filter[listIdListing][>]=100");
     List list = json.decode(response.body)['data'];
     return list;
   }
@@ -57,8 +99,6 @@ class _NearMeListingState extends State<NearMeListing> {
       preferences.commit();
     });
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -707,6 +747,27 @@ class _ItemListState extends State<ItemList> {
         chooserTitle: 'Choose application');
   }
 
+  Future<String> getDataKota(String idKota) async {
+    final response =
+        await http.get("https://genius.remax.co.id/papi/City/$idKota");
+    String prov = json.decode(response.body)['data']['mctyDescription'];
+    return prov;
+  }
+
+  Future<String> getDataProv(String idProv) async {
+    final response =
+        await http.get("https://genius.remax.co.id/papi/Province/$idProv");
+    String prov = json.decode(response.body)['data']['mprvDescription'];
+    return prov;
+  }
+
+  Future<String> getDataNegara(String idNegara) async {
+    final response =
+        await http.get("https://genius.remax.co.id/papi/Country/$idNegara");
+    String prov = json.decode(response.body)['data']['mctrDescription'];
+    return prov;
+  }
+
   @override
   Widget build(BuildContext context) {
     listMedia = widget.data['links']['listFile'];
@@ -1006,6 +1067,72 @@ class _ItemListState extends State<ItemList> {
                               ),
                             ),
                           ],
+                        ),
+                        new Container(
+                          margin: EdgeInsets.only(top: 10.0, left: 15.0),
+                          child: new Row(
+                            children: <Widget>[
+                              new Container(
+                                  child: SvgPicture.asset(
+                                "assets/icons/domisili.svg",
+                                color: kRedColor,
+                              )),
+                              new SizedBox(
+                                width: 4.0,
+                              ),
+                              new FutureBuilder<String>(
+                                future: getDataKota(
+                                    widget.data['links']['listCityId']),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasError) print(snapshot.error);
+                                  return snapshot.hasData
+                                      ? new Text(snapshot.data,
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold))
+                                      : new Text("Loading....",
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: const Color(0xff767472)));
+                                },
+                              ),
+                              new FutureBuilder<String>(
+                                future: getDataProv(
+                                    widget.data['links']['listProvinceId']),
+                                builder: (context, snapshot) {
+                                  if (snapshot.hasError) print(snapshot.error);
+                                  return snapshot.hasData
+                                      ? new Text(', ' + snapshot.data,
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold))
+                                      : new Text("Loading....",
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: const Color(0xff767472)));
+                                },
+                              ),
+                              // new FutureBuilder<String>(
+                              //   future: getDataNegara(
+                              //       widget.data['links']['listCountryId']),
+                              //   builder: (context, snapshot) {
+                              //     if (snapshot.hasError) print(snapshot.error);
+                              //     return snapshot.hasData
+                              //         ? new Text(', ' + snapshot.data,
+                              //             style: new TextStyle(
+                              //                 fontSize: 12.0,
+                              //                 fontWeight: FontWeight.bold))
+                              //         : new Text("Loading....",
+                              //             style: new TextStyle(
+                              //                 fontSize: 12.0,
+                              //                 fontWeight: FontWeight.bold,
+                              //                 color: const Color(0xff767472)));
+                              //   },
+                              // ),
+                            ],
+                          ),
                         ),
                         Column(
                           crossAxisAlignment: CrossAxisAlignment.end,

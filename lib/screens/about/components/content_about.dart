@@ -12,27 +12,56 @@ class ContentAbout extends StatefulWidget {
 }
 
 class _ContentAboutState extends State<ContentAbout> {
-
-
   String bahasa = "id_ID";
+  String visi = "Visi";
+  String misi = "Misi";
+
+  String label_visi = "";
+  String label_misi = "";
+  String visi_indo =
+      "Menjadi yang terbaik di bidang real estat dengan menciptakan peluang, memberikan layanan terbaik, dan mencapai hasil maksimal";
+  String misi_indo = "Terpercaya, Profesional, Handal";
+
+  String visi_english =
+      "To be the best in real estate by creating opportunities, providing best services and achieving maximum results";
+  String misi_english = "Trusted, Professional, Skillful";
+
+  String konten_visi = "";
+  String konten_misi = "";
 
   getPrefBahasa() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      bahasa = preferences.getString("bahasa");
-      print(bahasa);
-    });
+    konten_visi = visi_english;
+    konten_misi = misi_english;
+    label_visi = "Vission";
+    label_misi = "Mission";
+    if (preferences.getString("bahasa") != null) {
+      if (preferences.getString("bahasa") == "Indonesian") {
+        konten_visi = visi_indo;
+        konten_misi = misi_indo;
+        label_visi = "Visi";
+        label_misi = "Misi";
+      } else {
+        konten_visi = visi_english;
+        konten_misi = misi_english;
+        label_visi = "Vission";
+        label_misi = "Mission";
+      }
+      setState(() {
+        bahasa = preferences.getString("bahasa");
+      });
+    }
   }
-
 
   @override
   void initState() {
-    super.initState();
     getPrefBahasa();
+    super.initState();
   }
 
   Future<List<dynamic>> getDataMemberFoto() async {
-    final response = await http.get("https://genius.remax.co.id/papi/webabout?language=$bahasa");
+    final response = await http
+        .get("https://genius.remax.co.id/papi/webabout?language=$bahasa");
     List<dynamic> data = json.decode(response.body)['data'];
     return data;
   }
@@ -147,7 +176,7 @@ class _ContentAboutState extends State<ContentAbout> {
                         child: new Align(
                           alignment: Alignment.centerLeft,
                           child: new Text(
-                            'Vision & Mission',
+                            "$label_visi & $label_misi",
                             style: new TextStyle(
                                 fontSize: 24.0,
                                 color: kPrimaryColor,
@@ -181,7 +210,7 @@ class _ContentAboutState extends State<ContentAbout> {
                         child: new Align(
                           alignment: Alignment.centerLeft,
                           child: new Text(
-                            'Vision',
+                            '$label_visi',
                             style: new TextStyle(
                                 fontSize: 16.0,
                                 color: kRedColor,
@@ -191,15 +220,13 @@ class _ContentAboutState extends State<ContentAbout> {
                       ),
                       Container(
                           margin: EdgeInsets.all(15.0),
-                          child: Html(
-                              data:
-                                  'To be the best in real estate by creating opportunities, providing best services and achieving maximum results')),
+                          child: Html(data: '$konten_visi')),
                       new Container(
                         margin: EdgeInsets.only(top: 10.0, left: 15.0),
                         child: new Align(
                           alignment: Alignment.centerLeft,
                           child: new Text(
-                            'Mission',
+                            '$label_misi',
                             style: new TextStyle(
                                 fontSize: 16.0,
                                 color: kRedColor,
@@ -209,9 +236,7 @@ class _ContentAboutState extends State<ContentAbout> {
                       ),
                       Container(
                           margin: EdgeInsets.all(15.0),
-                          child: Html(
-                              data:
-                                  'To create an environment for people to be as successful as they want to be')),
+                          child: Html(data: '$konten_misi')),
                     ],
                   )
                 : new Center(

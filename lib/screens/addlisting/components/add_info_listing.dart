@@ -180,23 +180,46 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
   }
 
   String _valBedRooms;
-  List _listBedRooms = ["0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  List _listBedRooms = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
   String _valHelpersBedRoooms;
-  List _listHelpersBedroom = ["0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  List _listHelpersBedroom = [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10"
+  ];
 
   String _valBathRoom;
-  List _listBathRoom = ["0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  List _listBathRoom = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
   String _valHelperBathroom;
-  List _listHelperBathroom = ["0","1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
+  List _listHelperBathroom = [
+    "0",
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6",
+    "7",
+    "8",
+    "9",
+    "10"
+  ];
 
   List<Asset> images = <Asset>[];
   List files = [];
-  List<MultipartFile> multipartImageList = new List<MultipartFile>();
-  List<File> listFile = List<File>();
-  String _error = 'No Error Dectected';
-
+  List<MultipartFile> multipartImageList = [];
+  List<File> listFile = [];
+  String _error = 'No Error Detected';
   Widget buildGridView() {
     // return GridView.count(
     //   crossAxisCount: 3,
@@ -2005,7 +2028,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
     showLoaderDialog(context);
     getFileList();
 
-    if(validator()=="kosong"){
+    if (validator() == "kosong") {
       Map dataListing = {
         "listStreetName": controllerStreetName.text,
         "listTitle": controllerListingTitle.text,
@@ -2070,12 +2093,10 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
       } catch (e) {
         print(e);
       }
-
     } else {
       Navigator.pop(context);
       _showToast(context, validator());
     }
-
   }
 
   postImage(String url) async {
@@ -2094,8 +2115,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
         });
         j++;
         try {
-          var responses = await dio.post(url,
-              options: Options(headers: headerssX), data: formDataPostImage);
+          var responses =
+              await http.post(url, headers: headerssX, body: formDataPostImage);
           print(responses);
         } catch (e) {
           print(e);

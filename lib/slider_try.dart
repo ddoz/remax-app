@@ -17,6 +17,8 @@ class CarouselDemo extends StatefulWidget {
 }
 
 class CarouselDemoState extends State<CarouselDemo> {
+  String reason = '';
+  final CarouselController _controller = CarouselController();
   //
   CarouselSlider carouselSlider;
   int _current = 0;
@@ -59,21 +61,24 @@ class CarouselDemoState extends State<CarouselDemo> {
                     alignment: Alignment.center,
                     children: <Widget>[
                       carouselSlider = CarouselSlider(
-                        initialPage: 0,
-                        enlargeCenterPage: true,
-                        autoPlay: false,
-                        reverse: false,
-                        viewportFraction: 1.0,
-                        enableInfiniteScroll: true,
-                        autoPlayInterval: Duration(seconds: 5),
-                        autoPlayAnimationDuration: Duration(milliseconds: 300),
-                        pauseAutoPlayOnTouch: Duration(seconds: 10),
-                        scrollDirection: Axis.horizontal,
-                        onPageChanged: (index) {
-                          setState(() {
-                            _current = index;
-                          });
-                        },
+                        carouselController: _controller,
+                        options: CarouselOptions(
+                          initialPage: 0,
+                          enlargeCenterPage: true,
+                          autoPlay: false,
+                          reverse: false,
+                          viewportFraction: 1.0,
+                          enableInfiniteScroll: true,
+                          autoPlayInterval: Duration(seconds: 5),
+                          autoPlayAnimationDuration:
+                              Duration(milliseconds: 300),
+                          scrollDirection: Axis.horizontal,
+                          onPageChanged: (index, reason) {
+                            setState(() {
+                              _current = index;
+                            });
+                          },
+                        ),
                         items: snapshot.data.map((data) {
                           return ItemList(
                             data: data,
@@ -132,12 +137,12 @@ class CarouselDemoState extends State<CarouselDemo> {
   }
 
   goToPrevious() {
-    carouselSlider.previousPage(
+    _controller.previousPage(
         duration: Duration(milliseconds: 300), curve: Curves.ease);
   }
 
   goToNext() {
-    carouselSlider.nextPage(
+    _controller.nextPage(
         duration: Duration(milliseconds: 300), curve: Curves.decelerate);
   }
 }

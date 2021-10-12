@@ -12,7 +12,6 @@ class CreateListing extends StatefulWidget {
 }
 
 class _CreateListingState extends State<CreateListing> {
-
   String email, password;
 
   final _key = new GlobalKey<FormState>();
@@ -37,7 +36,8 @@ class _CreateListingState extends State<CreateListing> {
   ];
 
   final TextEditingController _typeAheadController = TextEditingController();
-  final TextEditingController _typeAheadControllerProv = TextEditingController();
+  final TextEditingController _typeAheadControllerProv =
+      TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -58,8 +58,7 @@ class _CreateListingState extends State<CreateListing> {
                 suggestionsCallback: (pattern) async {
                   return await StateService.getSuggestions(pattern);
                 },
-                transitionBuilder:
-                    (context, suggestionsBox, controller) {
+                transitionBuilder: (context, suggestionsBox, controller) {
                   return suggestionsBox;
                 },
                 itemBuilder: (context, suggestion) {
@@ -78,8 +77,7 @@ class _CreateListingState extends State<CreateListing> {
                 suggestionsCallback: (pattern) async {
                   return await StateServiceProv.getSuggestions(pattern);
                 },
-                transitionBuilder:
-                    (context, suggestionsBox, controller) {
+                transitionBuilder: (context, suggestionsBox, controller) {
                   return suggestionsBox;
                 },
                 itemBuilder: (context, suggestion) {
@@ -212,13 +210,11 @@ class _CreateListingState extends State<CreateListing> {
 }
 
 class StateService {
-
   static final List<String> states = [
     'Pertamburan, Jakarta Barat',
     'ANDHRA PRADESH',
     'ARUNACHAL PRADESH'
   ];
-
 
   static List<String> getSuggestions(String query) {
     List<String> matches = List();
@@ -230,7 +226,6 @@ class StateService {
 
 class StateServiceProv {
   static Future<List<dynamic>> getSuggestions(String query) async {
-
     Map<String, String> headerss = {};
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
@@ -242,7 +237,7 @@ class StateServiceProv {
     List list = json.decode(response.body)['data'];
     List matches = List();
 
-    for (int i=0; i<list.length; i++){
+    for (int i = 0; i < list.length; i++) {
       matches.add(list[i]['mprvDescription']);
     }
 

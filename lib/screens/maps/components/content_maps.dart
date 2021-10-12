@@ -7,10 +7,8 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 
-
 class MapsContent extends StatefulWidget {
   MapsContent() : super();
-
 
   @override
   MapsContentState createState() => MapsContentState();
@@ -30,22 +28,23 @@ class MapsContentState extends State<MapsContent> {
   CameraPosition cameraPosition;
 
   void locatePosition() async {
-    Position position = await Geolocator.getCurrentPosition(
+    var locator = new Geolocator();
+    Position position = await locator.getCurrentPosition(
         desiredAccuracy: LocationAccuracy.high);
     currentPosition = position;
 
     LatLng latLng = LatLng(position.latitude, position.longitude);
     cameraPosition = new CameraPosition(target: latLng, zoom: 15);
-    newGoogleMapController.animateCamera(
-        CameraUpdate.newCameraPosition(cameraPosition));
+    newGoogleMapController
+        .animateCamera(CameraUpdate.newCameraPosition(cameraPosition));
   }
 
   Map<String, dynamic> getCoordinate() {
-    String coordinate = "{\"coordinate\":{\"latitude\":-7.313501362255947,\"longitude\":112.72094845609742},\"radius\":200}";
+    String coordinate =
+        "{\"coordinate\":{\"latitude\":-7.313501362255947,\"longitude\":112.72094845609742},\"radius\":200}";
     Map valueMap = json.decode(coordinate);
     return valueMap;
   }
-
 
   static final CameraPosition _position1 = CameraPosition(
     bearing: 192.833,
@@ -92,88 +91,79 @@ class MapsContentState extends State<MapsContent> {
     return myInt;
   }
 
-  _onAddMarkerButtonPressed()  async {
-
-
+  _onAddMarkerButtonPressed() async {
     List data = await getData();
-    for(int i=0;i<data.length;i++){
-      if(data[i]['listCoordinat']!=null){
+    for (int i = 0; i < data.length; i++) {
+      if (data[i]['listCoordinat'] != null) {
         Map s = json.decode(data[i]['listCoordinat']);
         setState(() {
           _markers.add(
             Marker(
               markerId: MarkerId(data[i]['listTitle']),
-              position: LatLng(s['coordinate']['latitude'],s['coordinate']['longitude']),
+              position: LatLng(
+                  s['coordinate']['latitude'], s['coordinate']['longitude']),
               infoWindow: InfoWindow(
                 title: data[i]['listTitle'],
-                snippet:     NumberFormat.compactCurrency(
-                    locale: 'id',
-                    symbol: 'Rp ',
-                    decimalDigits: 0)
+                snippet: NumberFormat.compactCurrency(
+                        locale: 'id', symbol: 'Rp ', decimalDigits: 0)
                     .format(toInt(data[i]['listListingPrice'])),
               ),
               icon: BitmapDescriptor.defaultMarker,
             ),
-
           );
         });
-
       }
-
-    }
-
-    }
-
-        Widget button(Function function, IconData icon, String heroTag)
-    {
-      return FloatingActionButton(
-        onPressed: function,
-        heroTag: heroTag,
-        materialTapTargetSize: MaterialTapTargetSize.padded,
-        backgroundColor: Colors.blue,
-        child: Icon(
-          icon,
-          size: 36.0,
-        ),
-      );
-    }
-
-    @override
-    Widget build(BuildContext context) {
-      return Stack(
-        children: <Widget>[
-          GoogleMap(
-            onMapCreated: _onMapCreated,
-            initialCameraPosition: CameraPosition(
-              target: _center,
-              zoom: 11.0,
-            ),
-
-            mapType: _currentMapType,
-            markers: _markers,
-            onCameraMove: _onCameraMove,
-          ),
-          Padding(
-            padding: EdgeInsets.all(16.0),
-            child: Align(
-              alignment: Alignment.topRight,
-              child: Column(
-                children: <Widget>[
-                  button(_onMapTypeButtonPressed, Icons.map, "btnTag1"),
-                  SizedBox(
-                    height: 16.0,
-                  ),
-//                  button(
-//                      _onAddMarkerButtonPressed, Icons.add_location, "btnTag2"),
-                  SizedBox(
-                    height: 16.0,
-                  ),
-                  button(_goToPosition1, Icons.location_searching, "btnTag3"),
-                ],
-              ),
-            ),
-          ),
-        ],
-      );
     }
   }
+
+  Widget button(Function function, IconData icon, String heroTag) {
+    return FloatingActionButton(
+      onPressed: function,
+      heroTag: heroTag,
+      materialTapTargetSize: MaterialTapTargetSize.padded,
+      backgroundColor: Colors.blue,
+      child: Icon(
+        icon,
+        size: 36.0,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: <Widget>[
+        GoogleMap(
+          onMapCreated: _onMapCreated,
+          initialCameraPosition: CameraPosition(
+            target: _center,
+            zoom: 11.0,
+          ),
+          mapType: _currentMapType,
+          markers: _markers,
+          onCameraMove: _onCameraMove,
+        ),
+        Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Align(
+            alignment: Alignment.topRight,
+            child: Column(
+              children: <Widget>[
+                button(_onMapTypeButtonPressed, Icons.map, "btnTag1"),
+                SizedBox(
+                  height: 16.0,
+                ),
+//                  button(
+//                      _onAddMarkerButtonPressed, Icons.add_location, "btnTag2"),
+                SizedBox(
+                  height: 16.0,
+                ),
+                button(_goToPosition1, Icons.location_searching, "btnTag3"),
+              ],
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}
