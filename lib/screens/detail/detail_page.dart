@@ -5,6 +5,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
@@ -113,6 +114,14 @@ class _DetailPageState extends State<DetailPage> {
     await db.deleteItem(id);
   }
 
+  Future<void> share(String idListing, String judul) async {
+    await FlutterShare.share(
+        title: 'Share',
+        text: judul,
+        linkUrl: 'https://remax.co.id/property/${idListing}',
+        chooserTitle: 'Choose application');
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -214,107 +223,113 @@ class _DetailPageState extends State<DetailPage> {
                     color: Colors.white),
                 child: Column(
                   children: [
-                    // new Container(
-                    //   margin: EdgeInsets.all(15.0),
-                    //   child: new Align(
-                    //     alignment: Alignment.centerLeft,
-                    //     child: new Text(
-                    //       "Detail Informasi",
-                    //       style: new TextStyle(
-                    //           fontSize: 25.0, color: const Color(0xff1A3668)),
-                    //     ),
-                    //   ),
-                    // ),
-                    // new Align(
-                    //   alignment: Alignment.centerLeft,
-                    //   child: Container(
-                    //     margin: EdgeInsets.only(left: 15.0),
-                    //     width: 40,
-                    //     height: 2,
-                    //     color: const Color(0xffDC1B2E),
-                    //   ),
-                    // ),
-                    new Container(
-                      margin: EdgeInsets.only(top: 25.0, left: 15.0),
-                      child: new Row(
-                        children: <Widget>[
-                          new Text(
-                            "ID ",
-                            style: new TextStyle(
-                                fontSize: 12.0, fontWeight: FontWeight.bold),
+                    Row(
+                      children: <Widget>[
+
+                        Column(
+                          children: <Widget>[
+                            new Container(
+                              margin: EdgeInsets.only(top: 25.0, left: 15.0),
+                              child: new Row(
+                                children: <Widget>[
+                                  new Text(
+                                    "ID ",
+                                    style: new TextStyle(
+                                        fontSize: 12.0, fontWeight: FontWeight.bold),
+                                  ),
+                                  new Text(
+                                    "#${widget.list[widget.index]['listIdListing']}",
+                                    style: new TextStyle(
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: const Color(0xffDC1B2E)),
+                                  ),
+                                ],
+                              ),
+                            ),
+                            new Container(
+                              margin: EdgeInsets.only(top: 10.0, left: 15.0),
+                              child: new Row(
+                                children: <Widget>[
+                                  new Container(
+                                      child: SvgPicture.asset(
+                                        "assets/icons/domisili.svg",
+                                        color: kRedColor,
+                                      )),
+                                  new SizedBox(
+                                    width: 4.0,
+                                  ),
+                                  new FutureBuilder<String>(
+                                    future: getDataKota(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasError) print(snapshot.error);
+                                      return snapshot.hasData
+                                          ? new Text(snapshot.data,
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold))
+                                          : new Text("Loading....",
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: const Color(0xff767472)));
+                                    },
+                                  ),
+                                  new FutureBuilder<String>(
+                                    future: getDataProv(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasError) print(snapshot.error);
+                                      return snapshot.hasData
+                                          ? new Text(', ' + snapshot.data,
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold))
+                                          : new Text("Loading....",
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: const Color(0xff767472)));
+                                    },
+                                  ),
+                                  new FutureBuilder<String>(
+                                    future: getDataNegara(),
+                                    builder: (context, snapshot) {
+                                      if (snapshot.hasError) print(snapshot.error);
+                                      return snapshot.hasData
+                                          ? new Text(', ' + snapshot.data,
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold))
+                                          : new Text("Loading....",
+                                          style: new TextStyle(
+                                              fontSize: 12.0,
+                                              fontWeight: FontWeight.bold,
+                                              color: const Color(0xff767472)));
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ],
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                        ),
+                        Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            share(widget.list[widget.index]['id'],
+                                widget.list[widget.index]['listTitle']);
+                          },
+                          child: new Container(
+                            height: 25,
+                            width: 25,
+                            margin: EdgeInsets.all(20.0),
+                            child: SvgPicture.asset(
+                              "assets/icons/share.svg",
+                            ),
                           ),
-                          new Text(
-                            "#${widget.list[widget.index]['listIdListing']}",
-                            style: new TextStyle(
-                                fontSize: 12.0,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xffDC1B2E)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    new Container(
-                      margin: EdgeInsets.only(top: 10.0, left: 15.0),
-                      child: new Row(
-                        children: <Widget>[
-                          new Container(
-                              child: SvgPicture.asset(
-                            "assets/icons/domisili.svg",
-                            color: kRedColor,
-                          )),
-                          new SizedBox(
-                            width: 4.0,
-                          ),
-                          new FutureBuilder<String>(
-                            future: getDataKota(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasError) print(snapshot.error);
-                              return snapshot.hasData
-                                  ? new Text(snapshot.data,
-                                      style: new TextStyle(
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold))
-                                  : new Text("Loading....",
-                                      style: new TextStyle(
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xff767472)));
-                            },
-                          ),
-                          new FutureBuilder<String>(
-                            future: getDataProv(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasError) print(snapshot.error);
-                              return snapshot.hasData
-                                  ? new Text(', ' + snapshot.data,
-                                      style: new TextStyle(
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold))
-                                  : new Text("Loading....",
-                                      style: new TextStyle(
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xff767472)));
-                            },
-                          ),
-                          new FutureBuilder<String>(
-                            future: getDataNegara(),
-                            builder: (context, snapshot) {
-                              if (snapshot.hasError) print(snapshot.error);
-                              return snapshot.hasData
-                                  ? new Text(', ' + snapshot.data,
-                                      style: new TextStyle(
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold))
-                                  : new Text("Loading....",
-                                      style: new TextStyle(
-                                          fontSize: 12.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: const Color(0xff767472)));
-                            },
-                          ),
-                        ],
-                      ),
+                        ),
+
+                      ],
                     ),
                     new Container(
                       margin:

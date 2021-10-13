@@ -68,7 +68,7 @@ class HeaderSignIn extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.topCenter,
                       child: Text(
-                        'Welcome!\nPlease fill the Usernmae and Password to Sign in into Genius System',
+                        'Welcome!\nPlease fill the Username and Password to Sign in into Genius System',
                         style: TextStyle(fontSize: 14.0, color: Colors.white),
                         textAlign: TextAlign.center,
                       ),
