@@ -846,7 +846,7 @@ class _ItemListState extends State<ItemList> {
                             child: new Text(
                               widget.data['listTitle'],
                               overflow: TextOverflow.ellipsis,
-                              maxLines: 3,
+                              maxLines: 2,
                               style: new TextStyle(
                                 fontSize: 13.0,
                                 color: Colors.black,

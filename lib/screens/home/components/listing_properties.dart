@@ -357,7 +357,7 @@ class _ItemListState extends State<ItemList> {
                           alignment: Alignment.centerLeft,
                           child: new Text(
                             widget.data['listTitle'],
-                            maxLines: 2,
+                            maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                             style: new TextStyle(
                               fontSize: 13.0,

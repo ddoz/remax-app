@@ -506,23 +506,23 @@ class _MainDrawerState extends State<MainDrawer> {
               ),
             ),
 
-            GestureDetector(
-              onTap: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).push(new MaterialPageRoute(
-                    builder: (BuildContext context) => new FavoritePage()));
-              },
-              child: Container(
-                margin: EdgeInsets.only(left: 30.0, bottom: 20.0),
-                child: Row(children: <Widget>[
-                  SvgPicture.asset("assets/icons/love.svg"),
-                  SizedBox(
-                    width: 20.0,
-                  ),
-                  Text('Favourite'),
-                ]),
-              ),
-            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     Navigator.of(context).pop();
+            //     Navigator.of(context).push(new MaterialPageRoute(
+            //         builder: (BuildContext context) => new FavoritePage()));
+            //   },
+            //   child: Container(
+            //     margin: EdgeInsets.only(left: 30.0, bottom: 20.0),
+            //     child: Row(children: <Widget>[
+            //       SvgPicture.asset("assets/icons/love.svg"),
+            //       SizedBox(
+            //         width: 20.0,
+            //       ),
+            //       Text('Favourite'),
+            //     ]),
+            //   ),
+            // ),
 //            GestureDetector(
 //              onTap: () {},
 //              child: Container(
