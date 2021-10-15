@@ -324,7 +324,6 @@ class ImageDialogKantor extends StatefulWidget {
 }
 
 class _ImageDialogKantorState extends State<ImageDialogKantor> {
-
   TextEditingController controllerName = new TextEditingController();
   TextEditingController controllerEmail = new TextEditingController();
   TextEditingController controllerPhone = new TextEditingController();
@@ -354,7 +353,6 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
   }
 
   void _showToast(BuildContext context, String message) {
-
     Fluttertoast.showToast(
         msg: message,
         toastLength: Toast.LENGTH_SHORT,
@@ -362,9 +360,7 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
         timeInSecForIosWeb: 1,
         backgroundColor: Colors.grey,
         textColor: Colors.white,
-        fontSize: 16.0
-    );
-
+        fontSize: 16.0);
   }
 
   String validator() {
@@ -375,8 +371,14 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
     } else if (controllerEmail.text.isEmpty) {
       error = "Email tidak boleh kosong";
       return error;
+    } else if (!controllerEmail.text.contains('@')) {
+      error = "Masukkan email yang benar";
+      return error;
     } else if (controllerPhone.text.isEmpty) {
       error = "Phone tidak boleh kosong";
+      return error;
+    } else if (!validateMobileNumber(controllerPhone.text)) {
+      error = "Masukkan nomor telepon yang valid";
       return error;
     } else if (controllerMessage.text.isEmpty) {
       error = "Message tidak boleh kosong";
@@ -384,19 +386,18 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
     } else {
       return error;
     }
-
   }
 
   addData() async {
     print("addData");
     showLoaderDialog(context);
-    if(validator()=="kosong"){
+    if (validator() == "kosong") {
       Map dataListing = {
         "infsCustomerBody": controllerMessage.text,
         "infsCustomerEmail": controllerEmail.text,
         "infsCustomerName": controllerName.text,
         "infsCustomerPhone": controllerPhone.text,
-        "infsToken":"prodesend27701"
+        "infsToken": "prodesend27701"
       };
 
       var body = json.encode(dataListing);
@@ -416,29 +417,31 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
 
         _showToast(context, message);
 
-
-
         controllerName.text = "";
         controllerEmail.text = "";
         controllerPhone.text = "";
         controllerDomisili.text = "";
         controllerMessage.text = "";
 
-
-
-
         print(validator());
-
       } catch (e) {
         print(e);
       }
-
     } else {
       Navigator.pop(context);
       _showToast(context, validator());
       print(validator());
     }
+  }
 
+  bool validateMobileNumber(String value) {
+    String patttern = r'(^(?:[+0]9)?[0-9]{10,12}$)';
+    RegExp regExp = new RegExp(patttern);
+    if (!regExp.hasMatch(value)) {
+      return false;
+    } else {
+      return true;
+    }
   }
 
   @override
@@ -456,7 +459,9 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
               children: <Widget>[
                 Container(
                     margin: EdgeInsets.all(15.0),
-                    child: Text('Kesempatan Penghasilan Tanpa Batas', style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.bold))),
+                    child: Text('Kesempatan Penghasilan Tanpa Batas',
+                        style: TextStyle(
+                            fontSize: 14.0, fontWeight: FontWeight.bold))),
                 Container(
                   margin: EdgeInsets.only(left: 15.0),
                   child: Text(
@@ -507,7 +512,6 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
                   decoration: BoxDecoration(
                     color: kLightGrey,
                     borderRadius: BorderRadius.circular(10),
-
                   ),
                   child: Row(
                     children: <Widget>[
@@ -528,7 +532,10 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
                           ),
                         ),
                       ),
-                      SvgPicture.asset("assets/icons/mail.svg", color: kIconColor,),
+                      SvgPicture.asset(
+                        "assets/icons/mail.svg",
+                        color: kIconColor,
+                      ),
                     ],
                   ),
                 ),
@@ -540,7 +547,6 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
                   decoration: BoxDecoration(
                     color: kLightGrey,
                     borderRadius: BorderRadius.circular(10),
-
                   ),
                   child: Row(
                     children: <Widget>[
@@ -562,7 +568,8 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
                           ),
                         ),
                       ),
-                      SvgPicture.asset("assets/icons/call_sc.svg", color: kIconColor),
+                      SvgPicture.asset("assets/icons/call_sc.svg",
+                          color: kIconColor),
                     ],
                   ),
                 ),
@@ -574,7 +581,6 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
                   decoration: BoxDecoration(
                     color: kLightGrey,
                     borderRadius: BorderRadius.circular(10),
-
                   ),
                   child: Row(
                     children: <Widget>[
@@ -595,7 +601,8 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
                           ),
                         ),
                       ),
-                      SvgPicture.asset("assets/icons/domisili.svg", color: kIconColor),
+                      SvgPicture.asset("assets/icons/domisili.svg",
+                          color: kIconColor),
                     ],
                   ),
                 ),
@@ -632,7 +639,7 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
                   ),
                 ),
                 GestureDetector(
-                  onTap: (){
+                  onTap: () {
                     addData();
                   },
                   child: new Container(
@@ -657,7 +664,6 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
                     ),
                   ),
                 ),
-
               ],
             ),
             GestureDetector(
@@ -686,10 +692,4 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
       ),
     );
   }
-
-
-
-
 }
-
-
