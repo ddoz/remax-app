@@ -34,6 +34,7 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
     // TODO: implement initState
     super.initState();
     getPref();
+    getPrefBahasa();
   }
 
   AddListingStatus _addStatus = AddListingStatus.addInfo;
@@ -1991,6 +1992,23 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
     }
   }
 
+  String label_loading = "";
+  getPrefBahasa() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    label_loading = "Loading";
+    if (preferences.getString("bahasa") != null) {
+      if (preferences.getString("bahasa") == "Indonesian") {
+        label_loading = "Memuat";
+      } else {
+        label_loading = "Loading";
+      }
+      setState(() {
+        label_loading = label_loading;
+      });
+    }
+  }
+
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: new Row(
@@ -2000,7 +2018,8 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
             width: 10,
           ),
           Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+              margin: EdgeInsets.only(left: 7),
+              child: Text("$label_loading...")),
         ],
       ),
     );

@@ -51,7 +51,7 @@ class HeaderSignIn extends StatelessWidget {
                                   color: Colors.white)),
                         ),
                         Spacer(),
-                        SvgPicture.asset("assets/icons/language-choose.svg"),
+                        // SvgPicture.asset("assets/icons/language-choose.svg"),
                       ],
                     ),
                   ),

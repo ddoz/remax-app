@@ -10,7 +10,6 @@ import 'package:remax_app/util/constants.dart';
 import 'package:remax_app/util/session.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-
 class ContentSignIn extends StatefulWidget {
   @override
   _ContentSignInState createState() => _ContentSignInState();
@@ -38,7 +37,6 @@ class _ContentSignInState extends State<ContentSignIn> {
       setState(() {
         headersCookie = headers['cookie'];
       });
-
     }
   }
 
@@ -80,11 +78,12 @@ class _ContentSignInState extends State<ContentSignIn> {
       String name = datas['profile']['name'];
       String member = datas['profile']['member'];
       String office = datas['profile']['office'];
-      String officeName = datas['member']['linked']['mmbsFranchise']['frofOfficeName'];
+      String officeName =
+          datas['member']['linked']['mmbsFranchise']['frofOfficeName'];
       print(name + member + office + officeName);
       setState(() {
         _loginStatus = LoginStatus.signIn;
-        savePref(value, name, member, office, officeName,  headersCookie);
+        savePref(value, name, member, office, officeName, headersCookie);
       });
     }
   }
@@ -96,7 +95,8 @@ class _ContentSignInState extends State<ContentSignIn> {
     return data;
   }
 
-  savePref(int value, String name, String member, String office, String officeName,  String headers) async {
+  savePref(int value, String name, String member, String office,
+      String officeName, String headers) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     setState(() {
       preferences.setInt("value", value);
@@ -134,6 +134,24 @@ class _ContentSignInState extends State<ContentSignIn> {
     // TODO: implement initState
     super.initState();
     getPref();
+    getPrefBahasa();
+  }
+
+  String label_loading = "";
+  getPrefBahasa() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    label_loading = "Loading";
+    if (preferences.getString("bahasa") != null) {
+      if (preferences.getString("bahasa") == "Indonesian") {
+        label_loading = "Memuat";
+      } else {
+        label_loading = "Loading";
+      }
+      setState(() {
+        label_loading = label_loading;
+      });
+    }
   }
 
   @override
@@ -237,19 +255,18 @@ class _ContentSignInState extends State<ContentSignIn> {
                           ],
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(
-                            right: 12.0, top: 10.0, bottom: 15.0),
-                        child: Align(
-                          alignment: Alignment.centerRight,
-                          child: Text(
-                            'Forgot Password?',
-                            style: TextStyle(
-                                color: kAppBarColorTheme,
-                                fontSize: 12.0),
-                          ),
-                        ),
-                      ),
+                      // Container(
+                      //   margin: EdgeInsets.only(
+                      //       right: 12.0, top: 10.0, bottom: 15.0),
+                      //   child: Align(
+                      //     alignment: Alignment.centerRight,
+                      //     child: Text(
+                      //       'Forgot Password?',
+                      //       style: TextStyle(
+                      //           color: kAppBarColorTheme, fontSize: 12.0),
+                      //     ),
+                      //   ),
+                      // ),
                       GestureDetector(
                         onTap: () {
                           check();
@@ -282,32 +299,34 @@ class _ContentSignInState extends State<ContentSignIn> {
                           ),
                         ),
                       ),
-                      Container(
-                        margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Text('Dont have an account?',
-                                style: TextStyle(
-                                    fontSize: 12.0,
-                                )),
-                            SizedBox(
-                              width: 2.0,
-                            ),
-                            GestureDetector(
-                              onTap: (){
-                                Navigator.of(context).push(new MaterialPageRoute(
-                                    builder: (BuildContext context) => new SignUpPage()));
-                              },
-                              child: Text('Sign Up',
-                                  style: TextStyle(
-                                      fontSize: 12.0,
-                                      color: kRedColor,
-                                      fontWeight: FontWeight.bold)),
-                            ),
-                          ],
-                        ),
-                      )
+                      // Container(
+                      //   margin: EdgeInsets.only(top: 10.0, bottom: 10.0),
+                      //   child: Row(
+                      //     mainAxisAlignment: MainAxisAlignment.center,
+                      //     children: <Widget>[
+                      //       Text('Dont have an account?',
+                      //           style: TextStyle(
+                      //             fontSize: 12.0,
+                      //           )),
+                      //       SizedBox(
+                      //         width: 2.0,
+                      //       ),
+                      //       GestureDetector(
+                      //         onTap: () {
+                      //           Navigator.of(context).push(
+                      //               new MaterialPageRoute(
+                      //                   builder: (BuildContext context) =>
+                      //                       new SignUpPage()));
+                      //         },
+                      //         child: Text('Sign Up',
+                      //             style: TextStyle(
+                      //                 fontSize: 12.0,
+                      //                 color: kRedColor,
+                      //                 fontWeight: FontWeight.bold)),
+                      //       ),
+                      //     ],
+                      //   ),
+                      // )
                       // MaterialButton(
                       //   onPressed: () {
                       //     check();
@@ -321,8 +340,7 @@ class _ContentSignInState extends State<ContentSignIn> {
               Container(
                 margin: EdgeInsets.only(top: 20.0, bottom: 30.0),
                 child: Text('REMAX application v2.0',
-                    style:
-                        TextStyle(fontSize: 12.0)),
+                    style: TextStyle(fontSize: 12.0)),
               ),
             ],
           ),
@@ -330,10 +348,10 @@ class _ContentSignInState extends State<ContentSignIn> {
         break;
       case LoginStatus.signIn:
         //return MainMenu(signOut, headers);
-      //return SizedBox();
-      setState(() {
-        Navigator.of(context).pop();
-      });
+        //return SizedBox();
+        setState(() {
+          Navigator.of(context).pop();
+        });
 
         break;
       case LoginStatus.loading:
@@ -350,7 +368,7 @@ class _ContentSignInState extends State<ContentSignIn> {
                   new CircularProgressIndicator(),
                   Container(
                       margin: EdgeInsets.all(20.0),
-                      child: new Text("Loading")),
+                      child: new Text("$label_loading")),
                 ],
               ),
             ),
@@ -419,10 +437,8 @@ class _MainMenuState extends State<MainMenu> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 GestureDetector(
-                   onTap: () => Navigator.of(context).push(
-                       new MaterialPageRoute(
-                           builder: (BuildContext context) =>
-                           new MyListingPage())),
+                  onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                      builder: (BuildContext context) => new MyListingPage())),
                   child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),
@@ -440,10 +456,8 @@ class _MainMenuState extends State<MainMenu> {
                       )),
                 ),
                 GestureDetector(
-                   onTap: () => Navigator.of(context).push(
-                       new MaterialPageRoute(
-                           builder: (BuildContext context) =>
-                           new MyCustomerPage())),
+                  onTap: () => Navigator.of(context).push(new MaterialPageRoute(
+                      builder: (BuildContext context) => new MyCustomerPage())),
                   child: Card(
                       shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(10.0),

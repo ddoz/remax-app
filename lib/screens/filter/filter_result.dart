@@ -10,6 +10,7 @@ import 'package:remax_app/screens/detail/detail_page.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:remax_app/util/database_client.dart';
 import 'package:remax_app/util/date_formatter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shimmer/shimmer.dart';
 
 class FilterResult extends StatefulWidget {
@@ -34,7 +35,6 @@ class _FilterResultState extends State<FilterResult> {
   void initState() {
     super.initState();
     getProp();
-    print(getProp());
     _scrollController.addListener(() {
       if (_scrollController.position.pixels ==
           _scrollController.position.maxScrollExtent) {
@@ -45,6 +45,7 @@ class _FilterResultState extends State<FilterResult> {
         getNext(page);
       }
     });
+    getPrefBahasa();
   }
 
   @override
@@ -97,6 +98,23 @@ class _FilterResultState extends State<FilterResult> {
     dynamic data = json.decode(response.body);
 
     return data;
+  }
+
+  String label_loading = "";
+  getPrefBahasa() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    label_loading = "Loading";
+    if (preferences.getString("bahasa") != null) {
+      if (preferences.getString("bahasa") == "Indonesian") {
+        label_loading = "Memuat";
+      } else {
+        label_loading = "Loading";
+      }
+      setState(() {
+        label_loading = label_loading;
+      });
+    }
   }
 
   @override
@@ -254,6 +272,30 @@ class _ItemListState extends State<ItemList> {
         await http.get("https://genius.remax.co.id/papi/Country/$idNegara");
     String prov = json.decode(response.body)['data']['mctrDescription'];
     return prov;
+  }
+
+  String label_loading = "";
+  getPrefBahasa() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    label_loading = "Loading";
+    if (preferences.getString("bahasa") != null) {
+      if (preferences.getString("bahasa") == "Indonesian") {
+        label_loading = "Memuat";
+      } else {
+        label_loading = "Loading";
+      }
+      setState(() {
+        label_loading = label_loading;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPrefBahasa();
   }
 
   @override
@@ -539,7 +581,7 @@ class _ItemListState extends State<ItemList> {
                                           style: new TextStyle(
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold))
-                                      : new Text("Loading....",
+                                      : new Text("$label_loading....",
                                           style: new TextStyle(
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold,
@@ -556,7 +598,7 @@ class _ItemListState extends State<ItemList> {
                                           style: new TextStyle(
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold))
-                                      : new Text("Loading....",
+                                      : new Text("$label_loading....",
                                           style: new TextStyle(
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold,

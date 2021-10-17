@@ -52,6 +52,7 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
     number = "";
     super.initState();
     getPref();
+    getPrefBahasa();
   }
 
   @override
@@ -90,14 +91,12 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
                 GestureDetector(
                     onTap: () async {
                       Contact contact = await contactPicker.selectContact();
-                      if(contact != null){
+                      if (contact != null) {
                         number = contact.phoneNumber.number;
                         name = contact.fullName;
                         controllerCustName.text = name;
                         controllerCustMobileNumber.text = number;
-                        setState(() {
-                          
-                        });
+                        setState(() {});
                       }
                     },
                     child: SvgPicture.asset("assets/icons/person.svg")),
@@ -466,9 +465,7 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
         }
       };
       var body = json.encode(dataCust);
-      print(body);
       headerss['Content-Type'] = "application/json";
-      print(headerss);
 
       final response = await http.post(
           "https://genius.remax.co.id/api/customer/crud",
@@ -476,8 +473,6 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
           body: body);
 
       final data = jsonDecode(response.body);
-
-      print(data);
 
       String message = "kosong";
       if (data['status'].containsKey('error')) {
@@ -498,6 +493,23 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
     }
   }
 
+  String label_loading = "";
+  getPrefBahasa() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    label_loading = "Loading";
+    if (preferences.getString("bahasa") != null) {
+      if (preferences.getString("bahasa") == "Indonesian") {
+        label_loading = "Memuat";
+      } else {
+        label_loading = "Loading";
+      }
+      setState(() {
+        label_loading = label_loading;
+      });
+    }
+  }
+
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: new Row(
@@ -507,7 +519,8 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
             width: 10,
           ),
           Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+              margin: EdgeInsets.only(left: 7),
+              child: Text("$label_loading...")),
         ],
       ),
     );

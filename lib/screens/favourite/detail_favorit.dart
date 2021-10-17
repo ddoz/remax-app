@@ -14,6 +14,7 @@ import 'package:remax_app/screens/detail/components/listing_by_office.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:remax_app/util/database_client.dart';
 import 'package:remax_app/util/date_formatter.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailFavPage extends StatefulWidget {
   String idListing;
@@ -150,6 +151,30 @@ class _DetailFavPageState extends State<DetailFavPage> {
     await db.deleteItem(id);
   }
 
+  String label_loading = "";
+  getPrefBahasa() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    label_loading = "Loading";
+    if (preferences.getString("bahasa") != null) {
+      if (preferences.getString("bahasa") == "Indonesian") {
+        label_loading = "Memuat";
+      } else {
+        label_loading = "Loading";
+      }
+      setState(() {
+        label_loading = label_loading;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPrefBahasa();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -263,7 +288,7 @@ class _DetailFavPageState extends State<DetailFavPage> {
                                               style: new TextStyle(
                                                   fontSize: 12.0,
                                                   fontWeight: FontWeight.bold))
-                                          : new Text("Loading....",
+                                          : new Text("$label_loading....",
                                               style: new TextStyle(
                                                   fontSize: 12.0,
                                                   fontWeight: FontWeight.bold,
@@ -281,7 +306,7 @@ class _DetailFavPageState extends State<DetailFavPage> {
                                               style: new TextStyle(
                                                   fontSize: 12.0,
                                                   fontWeight: FontWeight.bold))
-                                          : new Text("Loading....",
+                                          : new Text("$label_loading....",
                                               style: new TextStyle(
                                                   fontSize: 12.0,
                                                   fontWeight: FontWeight.bold,
@@ -299,7 +324,7 @@ class _DetailFavPageState extends State<DetailFavPage> {
                                               style: new TextStyle(
                                                   fontSize: 12.0,
                                                   fontWeight: FontWeight.bold))
-                                          : new Text("Loading....",
+                                          : new Text("$label_loading....",
                                               style: new TextStyle(
                                                   fontSize: 12.0,
                                                   fontWeight: FontWeight.bold,
@@ -592,7 +617,8 @@ class _DetailFavPageState extends State<DetailFavPage> {
                                                             fontWeight:
                                                                 FontWeight
                                                                     .bold))
-                                                    : new Text("Loading....",
+                                                    : new Text(
+                                                        "$label_loading....",
                                                         style: new TextStyle(
                                                             fontSize: 12.0,
                                                             fontWeight:
@@ -741,7 +767,8 @@ class _DetailFavPageState extends State<DetailFavPage> {
                                                 ]),
                                               );
                                             } else {
-                                              return new Text("Loading....",
+                                              return new Text(
+                                                  "$label_loading....",
                                                   textAlign: TextAlign.center,
                                                   style: new TextStyle(
                                                       fontSize: 15.0,
@@ -827,7 +854,7 @@ class _DetailFavPageState extends State<DetailFavPage> {
                                                       SizedBox(height: 10),
                                                     ]),
                                               )
-                                            : new Text("Loading....",
+                                            : new Text("$label_loading....",
                                                 style: new TextStyle(
                                                     fontSize: 15.0,
                                                     color: const Color(

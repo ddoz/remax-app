@@ -76,8 +76,8 @@ class _NearMeListingState extends State<NearMeListing> {
   }
 
   Future<List> getData() async {
-    final response = await http
-        .get("https://genius.remax.co.id/papi/listing?language=$bahasa&filter[listIdListing][>]=100");
+    final response = await http.get(
+        "https://genius.remax.co.id/papi/listing?language=$bahasa&filter[listIdListing][>]=100");
     List list = json.decode(response.body)['data'];
     return list;
   }
@@ -768,6 +768,30 @@ class _ItemListState extends State<ItemList> {
     return prov;
   }
 
+  String label_loading = "";
+  getPrefBahasa() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    label_loading = "Loading";
+    if (preferences.getString("bahasa") != null) {
+      if (preferences.getString("bahasa") == "Indonesian") {
+        label_loading = "Memuat";
+      } else {
+        label_loading = "Loading";
+      }
+      setState(() {
+        label_loading = label_loading;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPrefBahasa();
+  }
+
   @override
   Widget build(BuildContext context) {
     listMedia = widget.data['links']['listFile'];
@@ -1090,7 +1114,7 @@ class _ItemListState extends State<ItemList> {
                                           style: new TextStyle(
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold))
-                                      : new Text("Loading....",
+                                      : new Text("$label_loading....",
                                           style: new TextStyle(
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold,
@@ -1107,7 +1131,7 @@ class _ItemListState extends State<ItemList> {
                                           style: new TextStyle(
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold))
-                                      : new Text("Loading....",
+                                      : new Text("$label_loading....",
                                           style: new TextStyle(
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold,

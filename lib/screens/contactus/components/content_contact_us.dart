@@ -6,6 +6,7 @@ import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:http/http.dart' as http;
 import 'package:remax_app/util/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ContentContactUs extends StatefulWidget {
   @override
@@ -18,6 +19,25 @@ class _ContentContactUsState extends State<ContentContactUs> {
   TextEditingController controllerPhone = new TextEditingController();
   TextEditingController controllerMessage = new TextEditingController();
 
+  String label_loading = "";
+  String bahasa = "";
+  getPrefBahasa() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    label_loading = "Loading";
+    if (preferences.getString("bahasa") != null) {
+      if (preferences.getString("bahasa") == "Indonesian") {
+        label_loading = "Memuat";
+      } else {
+        label_loading = "Loading";
+      }
+      setState(() {
+        label_loading = label_loading;
+        bahasa = preferences.getString("bahasa");
+      });
+    }
+  }
+
   showLoaderDialog(BuildContext context) {
     AlertDialog alert = AlertDialog(
       content: new Row(
@@ -27,7 +47,8 @@ class _ContentContactUsState extends State<ContentContactUs> {
             width: 10,
           ),
           Container(
-              margin: EdgeInsets.only(left: 7), child: Text("Loading...")),
+              margin: EdgeInsets.only(left: 7),
+              child: Text("$label_loading...")),
         ],
       ),
     );
@@ -54,22 +75,34 @@ class _ContentContactUsState extends State<ContentContactUs> {
   String validator() {
     String error = "kosong";
     if (controllerName.text.isEmpty) {
-      error = "Nama Tidak Boleh Kosong";
+      error = (bahasa == "Indonesia")
+          ? "Nama Tidak Boleh Kosong"
+          : "Please Input Your Name";
       return error;
     } else if (controllerEmail.text.isEmpty) {
-      error = "Email tidak boleh kosong";
+      error = (bahasa == "Indonesia")
+          ? "Email tidak boleh kosong"
+          : "Please Input Your Email";
       return error;
     } else if (!controllerEmail.text.contains('@')) {
-      error = "Masukkan email yang benar";
+      error = (bahasa == "Indonesia")
+          ? "Masukkan email yang benar"
+          : "Please Input Valid Email";
       return error;
     } else if (controllerPhone.text.isEmpty) {
-      error = "Phone tidak boleh kosong";
+      error = (bahasa == "Indonesia")
+          ? "Phone tidak boleh kosong"
+          : "Please Input your phone number";
       return error;
     } else if (!validateMobileNumber(controllerPhone.text)) {
-      error = "Masukkan nomor telepon yang valid";
+      error = (bahasa == "Indonesia")
+          ? "Masukkan nomor telepon yang valid"
+          : "Please Input valid phone number";
       return error;
     } else if (controllerMessage.text.isEmpty) {
-      error = "Message tidak boleh kosong";
+      error = (bahasa == "Indonesia")
+          ? "Pesan tidak boleh kosong"
+          : "Please Input your message";
       return error;
     } else {
       return error;
@@ -100,7 +133,11 @@ class _ContentContactUsState extends State<ContentContactUs> {
 
         String message = data['status']['message'];
 
-        print(data);
+        if (message == "Data Created") {
+          message = (bahasa == "Indonesia")
+              ? "Data berhasil dikirim"
+              : "Data has been sent";
+        }
 
         Navigator.pop(context);
 
@@ -130,6 +167,13 @@ class _ContentContactUsState extends State<ContentContactUs> {
     } else {
       return true;
     }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPrefBahasa();
   }
 
   @override

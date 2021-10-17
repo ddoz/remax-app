@@ -16,6 +16,7 @@ import 'package:remax_app/util/constants.dart';
 import 'package:remax_app/util/database_client.dart';
 import 'package:remax_app/util/date_formatter.dart';
 import 'package:remax_app/screens/detail/components/listing_by_agent.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class DetailPage extends StatefulWidget {
   List list;
@@ -114,12 +115,36 @@ class _DetailPageState extends State<DetailPage> {
     await db.deleteItem(id);
   }
 
+  String label_loading = "";
+  getPrefBahasa() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    label_loading = "Loading";
+    if (preferences.getString("bahasa") != null) {
+      if (preferences.getString("bahasa") == "Indonesian") {
+        label_loading = "Memuat";
+      } else {
+        label_loading = "Loading";
+      }
+      setState(() {
+        label_loading = label_loading;
+      });
+    }
+  }
+
   Future<void> share(String idListing, String judul) async {
     await FlutterShare.share(
         title: 'Share',
         text: judul,
         linkUrl: 'https://remax.co.id/property/${idListing}',
         chooserTitle: 'Choose application');
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPrefBahasa();
   }
 
   @override
@@ -225,7 +250,6 @@ class _DetailPageState extends State<DetailPage> {
                   children: [
                     Row(
                       children: <Widget>[
-
                         Column(
                           children: <Widget>[
                             new Container(
@@ -235,7 +259,8 @@ class _DetailPageState extends State<DetailPage> {
                                   new Text(
                                     "ID ",
                                     style: new TextStyle(
-                                        fontSize: 12.0, fontWeight: FontWeight.bold),
+                                        fontSize: 12.0,
+                                        fontWeight: FontWeight.bold),
                                   ),
                                   new Text(
                                     "#${widget.list[widget.index]['listIdListing']}",
@@ -253,58 +278,64 @@ class _DetailPageState extends State<DetailPage> {
                                 children: <Widget>[
                                   new Container(
                                       child: SvgPicture.asset(
-                                        "assets/icons/domisili.svg",
-                                        color: kRedColor,
-                                      )),
+                                    "assets/icons/domisili.svg",
+                                    color: kRedColor,
+                                  )),
                                   new SizedBox(
                                     width: 4.0,
                                   ),
                                   new FutureBuilder<String>(
                                     future: getDataKota(),
                                     builder: (context, snapshot) {
-                                      if (snapshot.hasError) print(snapshot.error);
+                                      if (snapshot.hasError)
+                                        print(snapshot.error);
                                       return snapshot.hasData
                                           ? new Text(snapshot.data,
-                                          style: new TextStyle(
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.bold))
-                                          : new Text("Loading....",
-                                          style: new TextStyle(
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.bold,
-                                              color: const Color(0xff767472)));
+                                              style: new TextStyle(
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.bold))
+                                          : new Text("$label_loading....",
+                                              style: new TextStyle(
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.bold,
+                                                  color:
+                                                      const Color(0xff767472)));
                                     },
                                   ),
                                   new FutureBuilder<String>(
                                     future: getDataProv(),
                                     builder: (context, snapshot) {
-                                      if (snapshot.hasError) print(snapshot.error);
+                                      if (snapshot.hasError)
+                                        print(snapshot.error);
                                       return snapshot.hasData
                                           ? new Text(', ' + snapshot.data,
-                                          style: new TextStyle(
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.bold))
-                                          : new Text("Loading....",
-                                          style: new TextStyle(
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.bold,
-                                              color: const Color(0xff767472)));
+                                              style: new TextStyle(
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.bold))
+                                          : new Text("$label_loading....",
+                                              style: new TextStyle(
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.bold,
+                                                  color:
+                                                      const Color(0xff767472)));
                                     },
                                   ),
                                   new FutureBuilder<String>(
                                     future: getDataNegara(),
                                     builder: (context, snapshot) {
-                                      if (snapshot.hasError) print(snapshot.error);
+                                      if (snapshot.hasError)
+                                        print(snapshot.error);
                                       return snapshot.hasData
                                           ? new Text(', ' + snapshot.data,
-                                          style: new TextStyle(
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.bold))
-                                          : new Text("Loading....",
-                                          style: new TextStyle(
-                                              fontSize: 12.0,
-                                              fontWeight: FontWeight.bold,
-                                              color: const Color(0xff767472)));
+                                              style: new TextStyle(
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.bold))
+                                          : new Text("$label_loading....",
+                                              style: new TextStyle(
+                                                  fontSize: 12.0,
+                                                  fontWeight: FontWeight.bold,
+                                                  color:
+                                                      const Color(0xff767472)));
                                     },
                                   ),
                                 ],
@@ -328,7 +359,6 @@ class _DetailPageState extends State<DetailPage> {
                             ),
                           ),
                         ),
-
                       ],
                     ),
                     new Container(
@@ -666,7 +696,7 @@ class _DetailPageState extends State<DetailPage> {
                                                     fontSize: 12.0,
                                                     fontWeight:
                                                         FontWeight.bold))
-                                            : new Text("Loading....",
+                                            : new Text("$label_loading....",
                                                 style: new TextStyle(
                                                     fontSize: 12.0,
                                                     fontWeight: FontWeight.bold,
@@ -875,7 +905,7 @@ class _DetailPageState extends State<DetailPage> {
                         ]),
                       );
                     } else {
-                      return new Text("Loading....",
+                      return new Text("$label_loading....",
                           textAlign: TextAlign.center,
                           style: new TextStyle(
                               fontSize: 15.0, color: const Color(0xff767472)));
@@ -942,7 +972,7 @@ class _DetailPageState extends State<DetailPage> {
                               SizedBox(height: 10),
                             ]),
                       )
-                    : new Text("Loading....",
+                    : new Text("$label_loading....",
                         style: new TextStyle(
                             fontSize: 15.0, color: const Color(0xff767472)));
               },

@@ -418,6 +418,30 @@ class _ItemListState extends State<ItemList> {
     return prov;
   }
 
+  String label_loading = "";
+  getPrefBahasa() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    label_loading = "Loading";
+    if (preferences.getString("bahasa") != null) {
+      if (preferences.getString("bahasa") == "Indonesian") {
+        label_loading = "Memuat";
+      } else {
+        label_loading = "Loading";
+      }
+      setState(() {
+        label_loading = label_loading;
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getPrefBahasa();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return new ListView.builder(
@@ -702,7 +726,7 @@ class _ItemListState extends State<ItemList> {
                                           style: new TextStyle(
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold))
-                                      : new Text("Loading....",
+                                      : new Text("$label_loading....",
                                           style: new TextStyle(
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold,
@@ -719,7 +743,7 @@ class _ItemListState extends State<ItemList> {
                                           style: new TextStyle(
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold))
-                                      : new Text("Loading....",
+                                      : new Text("$label_loading....",
                                           style: new TextStyle(
                                               fontSize: 12.0,
                                               fontWeight: FontWeight.bold,

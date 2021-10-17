@@ -15,8 +15,7 @@ class HeaderWithSearchBox extends StatelessWidget {
   }) : super(key: key);
 
   final Size size;
-  final String dropdownValue = 'One';
-
+  final String dropdownValue = 'Indonesia';
 
   savePrefBahasa(String bahasa) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -27,7 +26,6 @@ class HeaderWithSearchBox extends StatelessWidget {
     preferences.setString("bahasa", bahasa);
     preferences.commit();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -51,56 +49,49 @@ class HeaderWithSearchBox extends StatelessWidget {
               ),
               fit: BoxFit.cover,
             )),
-            child: SafeArea(
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-                  IconButton(
-                    icon: Image.asset("assets/icons/menu_bar.png"),
-                    onPressed: () => Scaffold.of(context).openDrawer(),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: <Widget>[
+                IconButton(
+                  icon: Image.asset("assets/icons/menu_bar.png"),
+                  onPressed: () => Scaffold.of(context).openDrawer(),
+                ),
+                Container(
+                  // width: 151,
+                  // height: 56,
+                  // decoration: BoxDecoration(color: Colors.black),
+                  child: Image.asset("assets/logo/logo_remax.png"),
+                ),
+                DropdownButton<String>(
+                  //value: dropdownValue,
+                  // isDense: true,
+                  icon: Image.asset("assets/icons/language_choose.png"),
+                  iconSize: 24,
+                  elevation: 16,
+                  style: const TextStyle(color: Colors.black),
+                  underline: Container(
+                    height: 2,
+                    color: Colors.transparent,
                   ),
-                  Container(
-                    width: 151,
-                    height: 56,
-                    child: Image.asset("assets/logo/logo_remax.png"),
-                  ),
-                  Row(children: <Widget>[
-                    DropdownButton<String>(
-                      //value: dropdownValue,
-                      icon: Image.asset("assets/icons/language_choose.png"),
-                      iconSize: 24,
-                      elevation: 16,
-                      style: const TextStyle(color: Colors.black),
-                      underline: Container(
-                        height: 2,
-                        color: Colors.transparent,
-                      ),
-                      onChanged: (newValue) {
+                  onChanged: (newValue) {
 //                      setState(() {
 //                        dropdownValue = newValue!;
 //                      });
-                      print(newValue);
-                      if(newValue == "Indonesian"){
-                        savePrefBahasa("id_ID");
-                      } else {
-                        savePrefBahasa("en");
-                      }
-                      },
-                      items: <String>['Indonesian', 'English']
-                          .map<DropdownMenuItem<String>>((String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      }).toList(),
-                    ),
-//                    IconButton(
-//                      icon: Image.asset("assets/icons/language_choose.png"),
-//                      onPressed: () {},
-//                    ),
-                  ]),
-                ],
-              ),
+                    if (newValue == "Indonesian") {
+                      savePrefBahasa("id_ID");
+                    } else {
+                      savePrefBahasa("en");
+                    }
+                  },
+                  items: <String>['ID', 'EN']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ],
             ),
           ),
           Positioned(
