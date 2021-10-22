@@ -585,12 +585,12 @@ class _ItemListState extends State<ItemList> {
   getPrefBahasa() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
-    label_loading = "Loading";
+    label_loading = "";
     if (preferences.getString("bahasa") != null) {
       if (preferences.getString("bahasa") == "Indonesian") {
-        label_loading = "Memuat";
+        label_loading = "";
       } else {
-        label_loading = "Loading";
+        label_loading = "";
       }
       setState(() {
         label_loading = label_loading;
@@ -928,7 +928,7 @@ class _ItemListState extends State<ItemList> {
                                             style: new TextStyle(
                                                 fontSize: 12.0,
                                                 fontWeight: FontWeight.bold))
-                                        : new Text("$label_loading....",
+                                        : new Text("$label_loading",
                                             style: new TextStyle(
                                                 fontSize: 12.0,
                                                 fontWeight: FontWeight.bold,
@@ -947,7 +947,7 @@ class _ItemListState extends State<ItemList> {
                                             style: new TextStyle(
                                                 fontSize: 12.0,
                                                 fontWeight: FontWeight.bold))
-                                        : new Text("$label_loading....",
+                                        : new Text("$label_loading",
                                             style: new TextStyle(
                                                 fontSize: 12.0,
                                                 fontWeight: FontWeight.bold,

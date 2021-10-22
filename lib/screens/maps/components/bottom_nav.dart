@@ -61,7 +61,7 @@ class MyBottomNavBar extends StatelessWidget {
                     height: 16.0,
                     child: SvgPicture.asset("assets/icons/grid.svg")),
                 Text(
-                  'Grid List',
+                  'List View',
                   style: TextStyle(fontSize: 13.0),
                 )
               ]),

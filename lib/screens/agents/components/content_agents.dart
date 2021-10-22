@@ -61,9 +61,37 @@ class _ContentAgentsState extends State<ContentAgents> {
                           color: const Color(0xffDC1B2E),
                         ),
                       ),
-                      Container(
-                          margin: EdgeInsets.only(top: 35.0),
-                          child: ContentSlideAgents()),
+                      // Container(
+                      //     margin: EdgeInsets.only(top: 35.0),
+                      //     child: ContentSlideAgents()),
+                      PartnerCard(
+                        number: "01",
+                        text:
+                        "When you join RE/MAX, you will be part of a marketing super power family with more than 125,000 marketing associates in more than 115 countries.",
+                        image: "assets/images/bg_agents.png",
+                        press: () {},
+                      ),
+                      PartnerCard(
+                        number: "02",
+                        text:
+                        "Together with RE/MAX, you will receive structured training to increase your knowledge and marketing skills to market your salable listings. RE/MAX University, available only to RE/MAX associates 24 hours a day, offers the best training modules in the real estate industry.",
+                        image: "assets/images/bg_agents.png",
+                        press: () {},
+                      ),
+                      PartnerCard(
+                        number: "03",
+                        text:
+                        "Our technology and mobile apps enable you to easily share your salable listings to your client with a push of a button. Direct connection with your clients increase the chance of selling your salable listings.",
+                        image: "assets/images/bg_agents.png",
+                        press: () {},
+                      ),
+                      PartnerCard(
+                        number: "04",
+                        text:
+                        "Cloud based Genius application easily assist you in clear reports, easy and secure billing to your clients. QR code invoicing system ensures the safety of your transactions.",
+                        image: "assets/images/bg_agents.png",
+                        press: () {},
+                      ),
                       Container(
                         margin: EdgeInsets.only(top: 25.0),
                         child: Text(
