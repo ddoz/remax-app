@@ -2,6 +2,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:remax_app/util/constants.dart';
 
+import 'content_agents.dart';
+
 // class ContentSlideAgents extends StatelessWidget {
 //   const ContentSlideAgents({
 //     Key key,
@@ -52,19 +54,28 @@ class PartnerCard extends StatelessWidget {
     Key key,
     this.number,
     this.text,
-    this.image,
-    this.press,
+    this.bg,
+    this.image
+
   }) : super(key: key);
   final String number;
   final String text;
+  final String bg;
   final String image;
-  final Function press;
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return GestureDetector(
-      onTap: press,
+      onTap: () async {
+        await showDialog(
+          builder: (_) => ImageDialogDetail(
+              image,
+              number,
+              text),
+          context: context,
+        );
+      },
       child: Container(
         margin: EdgeInsets.only(
             left: kDefaultPadding,
@@ -77,7 +88,7 @@ class PartnerCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
           image: DecorationImage(
             fit: BoxFit.cover,
-            image: AssetImage(image),
+            image: AssetImage(bg),
           ),
         ),
         child: Stack(
