@@ -77,7 +77,7 @@ class HeaderWithSearchBox extends StatelessWidget {
 //                      setState(() {
 //                        dropdownValue = newValue!;
 //                      });
-                    if (newValue == "Indonesian") {
+                    if (newValue == "ID") {
                       savePrefBahasa("id_ID");
                     } else {
                       savePrefBahasa("en");

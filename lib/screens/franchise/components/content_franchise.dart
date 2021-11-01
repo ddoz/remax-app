@@ -23,6 +23,80 @@ class _ContentFranchiseState extends State<ContentFranchise> {
     return data;
   }
 
+  String label_readMore = "";
+  String label_kantor = "";
+  String label_training = "";
+  String label_contentItem1Title="";
+  String label_contentItem1Sub="";
+  String label_contentItem1Body="";
+  String label_contentItem2Title="";
+  String label_contentItem2Sub="";
+  String label_contentItem2Body="";
+  String label_contentItem3Title="";
+  String label_contentItem3Sub="";
+  String label_contentItem3Body="";
+  String label_contentItem4Title="";
+  String label_contentItem4Sub="";
+  String label_contentItem4Body="";
+
+
+  getPrefBahasa() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    if (preferences.getString("bahasa") != null) {
+      print(preferences.getString("bahasa"));
+      if (preferences.getString("bahasa") == "en") {
+        label_readMore = "Read More";
+        label_kantor = "Own a RE/MAX Office";
+        label_training = "Training";
+        label_contentItem1Title = "Start Up Training";
+        label_contentItem1Sub = "RE/MAX provides the best training program that is offered in the industry.";
+        label_contentItem1Body = "Across the world, the network of RE/MAX is in more than 115 countries and supported by more than 135,000 trusted marketing associates. With the power of this network, RE/MAX has become the leader in real estate industry, providing world class service and achieving maximum results. Together with RE/MAX, you have the opportunity to expand your business, not only nationally, but also internationally.";
+        label_contentItem2Title = "Ongoing Training";
+        label_contentItem2Sub = "The advantage that you will gain by owning a RE/MAX office is not limited to classroom trainings but unlimited access to training 24 hours a day, 365 days a year.";
+        label_contentItem2Body = "RE/MAX builds a tight family culture which synergize and bring the best of each other so parties can achieve maximum results. Each year, RE/MAX held an Asia Pacific convention amongst the region and a global convention in the United States of America so each member can build its network, learn from each other, and compete to be the best";
+        label_contentItem3Title = "Momentum";
+        label_contentItem3Sub = "A specialized training program created for business owners to understand the agency business on a deeper level.";
+        label_contentItem3Body = "The RE/MAX business is built on a entrepreneurial concept. This lucrative business can be built as big as an empire and can be passed down to generations. Even though it is an entrepreneurial concept, with RE/MAX, you are never alone. RE/MAX provides support, training and continuance guidance to assist you in achieving your goal.";
+        label_contentItem4Title = "Bootcamp";
+        label_contentItem4Sub = "A specialized training for agents consisting of 12 modules is proven to increase productivity.";
+        label_contentItem4Body = "RE/MAX technologies create business opportunities between agents and clients. The Genius System is designed to be user friendly and will increase the effectiveness and efficiency of your business.";
+
+
+      } else {
+        label_readMore = "Baca lebih lanjut";
+        label_kantor = "Miliki Kantor RE/MAX";
+        label_training = "Pelatihan";
+        label_contentItem1Title = "Pelatihan Awal";
+        label_contentItem1Sub = "Anda dapat mengikuti program pelatihan yang terbaik yang ditawarkan industri ini.";
+        label_contentItem1Body = "Di seluruh dunia, RE/MAX berada di lebih dari 115 negara dan lebih dari 135,000 marketing associate terpercaya. Dengan kekuatan jaringan ini, RE/MAX menjadi pemimpin dalam industri real estate berskala dunia dengan memberikan pelayanan berkualitas dunia dan meraih hasil yang maksimal. Bersama dengan RE/MAX, anda memiliki peluang untuk mengembangkan bisnis anda tidak hanya secara nasional tetapi secara internasional.";
+        label_contentItem2Title = "Pelatihan Yang Berkesinambungan";
+        label_contentItem2Sub = "Keuntungan yang akan anda peroleh dengan menjadi anggota RE/MAX tidak terbatas pada akses untuk melanjutkan pelatihan untuk anda dan para marketing associate anda.";
+        label_contentItem2Body = "RE/MAX memiliki kultur kekeluargaan yang erat dimana setiap personnel saling membangun dan membantu satu dengan yang lain agar dapat sama–sama mencapai hasil yang maksimal. Setiap tahun, RE/MAX mengadakan satu kali pertemuan antara negara Asia Pasifik dan satu kali pertemuan seluruh dunia di Amerika Serikat agar setiap anggotanya dapat membangun jaringan bisnis yang kuat, belajar dari satu dan yang lainnya, dan saling berkompetisi.";
+        label_contentItem3Title = "Momentum";
+        label_contentItem3Sub = "Pelatihan khusus Momentum bagi business owner dirancang sedemikian rupa agar anda dapat menjalankan usaha ini dan mengerti bagaimana tugas utama anda sebagai pemilik usaha.";
+        label_contentItem3Body = "Usaha RE/MAX didasarkan dengan konsep kewirausahaan mandiri. Usaha yang sangat menggiurkan ini dapat dibangun menjadi usaha yang sangat besar dan luas dan dapat diwariskan ke generasi penerus. Walaupun berjalan dalam konsep kewirausahawaan, bersama RE/MAX anda tidak akan pernah sendirian. RE/MAX selalu siap untuk memberikan dukungan, pelatihan, dan bimbingan yang berkesinambungan agar anda mencapai cita-cita anda.";
+        label_contentItem4Title = "Bootcamp";
+        label_contentItem4Sub = "Pelatihan khusus bagi para marketing associate yang terdiri dari 12 modul telah terbukti dapat meningkatkan kinerja para marketing associate.";
+        label_contentItem4Body = "Teknologi RE/MAX menciptakan peluang usaha yang sangat besar diantara marketing associate dan klien. Teknologi Genius milik RE/MAX dirancang agar ramah pengguna dan dapat meningkatkan efektivitas dan efisiensi usaha anda.";
+
+
+
+      }
+      setState(() {
+        // labeling = labeling;
+        // labeling_body = labeling_body;
+        // bahasa = preferences.getString("bahasa");
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getPrefBahasa();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -46,7 +120,7 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                 margin: EdgeInsets.only(top: 25.0),
                 child: new Align(
                   child: new Text(
-                    'Training',
+                    label_training,
                     style: new TextStyle(
                         fontSize: 20.0,
                         color: Colors.white,
@@ -66,7 +140,7 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                 margin: EdgeInsets.only(top: 25.0),
                 child: new Align(
                   child: new Text(
-                    'Start Up Training',
+                    label_contentItem1Title,
                     style: new TextStyle(
                       fontSize: 20.0,
                       color: Colors.white,
@@ -78,7 +152,7 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                 margin: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
                 child: new Align(
                   child: new Text(
-                    'RE/MAX provides the best training program that is offered in the industry.',
+                    label_contentItem1Sub,
                     textAlign: TextAlign.center,
                     style: new TextStyle(
                       fontSize: 15.0,
@@ -93,7 +167,7 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                   child: new OutlineButton(
                     shape: StadiumBorder(),
                     textColor: Colors.white,
-                    child: Text('Read More'),
+                    child: Text(label_readMore),
                     borderSide: BorderSide(
                         color: Colors.white,
                         style: BorderStyle.solid,
@@ -102,8 +176,8 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                       await showDialog(
                         builder: (_) => ImageDialog(
                             'assets/images/fr_ct_1.png',
-                            'Pelatihan Awal',
-                            'Di seluruh dunia, RE/MAX berada di lebih dari 115 negara dan lebih dari 125,000 marketing associate terpercaya. Dengan kekuatan jaringan ini, RE/MAX menjadi pemimpin dalam industri real estate berskala dunia dengan memberikan pelayanan berkualitas dunia dan meraih hasil yang maksimal. Bersama dengan RE/MAX, anda memiliki peluang untuk mengembangkan bisnis anda tidak hanya secara nasional tetapi secara internasional.'),
+                            label_contentItem1Title,
+                            label_contentItem1Body),
                         context: context,
                       );
                     },
@@ -112,7 +186,7 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                 margin: EdgeInsets.only(top: 25.0),
                 child: new Align(
                   child: new Text(
-                    'On Going Training',
+                    label_contentItem2Title,
                     style: new TextStyle(
                       fontSize: 20.0,
                       color: Colors.white,
@@ -124,7 +198,7 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                 margin: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
                 child: new Align(
                   child: new Text(
-                    'The advantage that you will gain by owning a RE/MAX office is not limited to classroom trainings but unlimited access to training 24 hours a day, 365 days a year.',
+                    label_contentItem2Sub,
                     textAlign: TextAlign.center,
                     style: new TextStyle(
                       fontSize: 15.0,
@@ -139,7 +213,7 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                   child: new OutlineButton(
                     shape: StadiumBorder(),
                     textColor: Colors.white,
-                    child: Text('Read More'),
+                    child: Text(label_readMore),
                     borderSide: BorderSide(
                         color: Colors.white,
                         style: BorderStyle.solid,
@@ -148,8 +222,8 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                       await showDialog(
                         builder: (_) => ImageDialog(
                             'assets/images/fr_ct_2.png',
-                            'Pelatihan Yang Berkesinambungan',
-                            'RE/MAX memiliki kultur kekeluargaan yang erat dimana setiap personnel saling membangun dan membantu satu dengan yang lain agar dapat sama–sama mencapai hasil yang maksimal. Setiap tahun, RE/MAX mengadakan satu kali pertemuan antara negara Asia Pasifik dan satu kali pertemuan seluruh dunia di Amerika Serikat agar setiap anggotanya dapat membangun jaringan bisnis yang kuat, belajar dari satu dan yang lainnya, dan saling berkompetisi.'),
+                            label_contentItem2Title,
+                            label_contentItem2Body),
                         context: context,
                       );
                     },
@@ -161,7 +235,7 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                 margin: EdgeInsets.only(top: 25.0),
                 child: new Align(
                   child: new Text(
-                    'Momentum',
+                    label_contentItem3Title,
                     style: new TextStyle(
                       fontSize: 20.0,
                       color: Colors.white,
@@ -173,7 +247,7 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                 margin: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
                 child: new Align(
                   child: new Text(
-                    'A specialized training program created for business owners to understand the agency business on a deeper level.',
+                    label_contentItem3Sub,
                     textAlign: TextAlign.center,
                     style: new TextStyle(
                       fontSize: 15.0,
@@ -188,7 +262,7 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                   child: new OutlineButton(
                     shape: StadiumBorder(),
                     textColor: Colors.white,
-                    child: Text('Read More'),
+                    child: Text(label_readMore),
                     borderSide: BorderSide(
                         color: Colors.white,
                         style: BorderStyle.solid,
@@ -197,8 +271,8 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                       await showDialog(
                         builder: (_) => ImageDialog(
                             'assets/images/fr_ct_3.png',
-                            'Momentum',
-                            'Usaha RE/MAX didasarkan dengan konsep kewirausahaan mandiri. Usaha yang sangat menggiurkan ini dapat dibangun menjadi usaha yang sangat besar dan luas dan dapat diwariskan ke generasi penerus. Walaupun berjalan dalam konsep kewirausahawaan, bersama RE/MAX anda tidak akan pernah sendirian. RE/MAX selalu siap untuk memberikan dukungan, pelatihan, dan bimbingan yang berkesinambungan agar anda mencapai cita-cita anda.'),
+                            label_contentItem3Title,
+                            label_contentItem3Body),
                         context: context,
                       );
                     },
@@ -207,7 +281,7 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                 margin: EdgeInsets.only(top: 25.0),
                 child: new Align(
                   child: new Text(
-                    'Bootcamp',
+                    label_contentItem4Title,
                     style: new TextStyle(
                       fontSize: 20.0,
                       color: Colors.white,
@@ -219,7 +293,7 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                 margin: EdgeInsets.only(top: 10.0, left: 15.0, right: 15.0),
                 child: new Align(
                   child: new Text(
-                    'A specialized training for agents consisting of 12 modules is proven to increase productivity',
+                    label_contentItem4Sub,
                     textAlign: TextAlign.center,
                     style: new TextStyle(
                       fontSize: 15.0,
@@ -234,7 +308,7 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                   child: new OutlineButton(
                     shape: StadiumBorder(),
                     textColor: Colors.white,
-                    child: Text('Read More'),
+                    child: Text(label_readMore),
                     borderSide: BorderSide(
                         color: Colors.white,
                         style: BorderStyle.solid,
@@ -243,8 +317,8 @@ class _ContentFranchiseState extends State<ContentFranchise> {
                       await showDialog(
                         builder: (_) => ImageDialog(
                             'assets/images/fr_ct_4.png',
-                            'Bootcamp',
-                            'Teknologi RE/MAX menciptakan peluang usaha yang sangat besar diantara marketing associate dan klien. Teknologi Genius milik RE/MAX dirancang agar ramah pengguna dan dapat meningkatkan efektivitas dan efisiensi usaha anda.'),
+                            label_contentItem4Title,
+                            label_contentItem4Body),
                         context: context,
                       );
                     },
