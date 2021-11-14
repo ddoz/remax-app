@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:remax_app/screens/addlisting/addlisting_page.dart';
 import 'package:remax_app/screens/favourite/favourite_page.dart';
 import 'package:remax_app/screens/maps/map_page.dart';
 import 'package:remax_app/screens/search/search_screen.dart';
@@ -102,7 +103,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
               ? GestureDetector(
                   onTap: () {
                     Navigator.of(context).push(new MaterialPageRoute(
-                        builder: (BuildContext context) => SignInPage()));
+                        builder: (BuildContext context) => AddListingPage()));
                   },
                   child: Container(
                     margin: EdgeInsets.all(10.0),
@@ -143,8 +144,8 @@ class _BottomNavBarState extends State<BottomNavBar> {
           _loginStatus == LoginStatus.signIn
               ? GestureDetector(
                   onTap: () {
-                    Navigator.of(context).push(new MaterialPageRoute(
-                        builder: (BuildContext context) => SignInPage()));
+                    // Navigator.of(context).push(new MaterialPageRoute(
+                    //     builder: (BuildContext context) => SignInPage()));
                   },
                   child: Container(
                     margin: EdgeInsets.all(10.0),
