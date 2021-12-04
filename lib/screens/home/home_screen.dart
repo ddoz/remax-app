@@ -4,6 +4,7 @@ import 'package:remax_app/screens/home/components/body.dart';
 import 'package:remax_app/util/constants.dart';
 
 import '../main_drawer.dart';
+import 'components/bottom_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   @override
@@ -11,6 +12,7 @@ class HomeScreen extends StatelessWidget {
     return Scaffold(
       body: Body(),
       drawer: MainDrawer(),
+      bottomNavigationBar: BottomNavBar(),
       //bottomNavigationBar: MyBottomNavBar(),
     );
   }

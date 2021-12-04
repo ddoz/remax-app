@@ -376,7 +376,7 @@ class _MainDrawerState extends State<MainDrawer> {
               child: Container(
                 margin: EdgeInsets.only(left: 30.0, top: 15.0),
                 child: Row(children: <Widget>[
-                  SvgPicture.asset("assets/icons/home.svg"),
+                  SvgPicture.asset("assets/icons/listings.svg"),
                   SizedBox(
                     width: 20.0,
                   ),
@@ -393,7 +393,7 @@ class _MainDrawerState extends State<MainDrawer> {
               child: Container(
                 margin: EdgeInsets.only(left: 30.0, top: 15.0),
                 child: Row(children: <Widget>[
-                  SvgPicture.asset("assets/icons/listings.svg"),
+                  SvgPicture.asset("assets/icons/home.svg"),
                   SizedBox(
                     width: 20.0,
                   ),

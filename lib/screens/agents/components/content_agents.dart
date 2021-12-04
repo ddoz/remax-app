@@ -23,6 +23,22 @@ class _ContentAgentsState extends State<ContentAgents> {
     return data;
   }
 
+  String agentsEn1 = "When you join RE/MAX, you will be part of a marketing super power family with more than 125,000 marketing associates in more than 115 countries.";
+  String agentsEn2 = "Together with RE/MAX, you will receive structured training to increase your knowledge and marketing skills to market your salable listings. RE/MAX University, available only to RE/MAX associates 24 hours a day, offers the best training modules in the real estate industry.";
+  String agentsEn3 = "Our technology and mobile apps enable you to easily share your salable listings to your client with a push of a button. Direct connection with your clients increase the chance of selling your salable listings.";
+  String agentsEn4 = "Cloud based Genius application easily assist you in clear reports, easy and secure billing to your clients. QR code invoicing system ensures the safety of your transactions.";
+  String agentsEnReady ="Are You Ready To Have A Sucessful Real Estate Career? Together with RE/MAX, Your Dreams Can Come True. Join Us Now!";
+  String agentsEnClick = "Click Here to Join Us";
+
+
+  String agentsId1 = "Saat bergabung dengan RE/MAX, anda akan menjadi bagian dari kekuatan pemasaran paling produktif di dunia bersama lebih dari 135,000 marketing associate lain di lebih dari 115 negara.";
+  String agentsId2 = "Bersama RE/MAX, anda akan mendapatkan training dan pelatihan terstruktur untuk menajamkan pengetahuan dan kemampuan pemasaran anda. RE/MAX University menawarkan modul-modul training terbaik dalam industri real estat 24 jam sehari.";
+  String agentsId3 = "Teknologi dan aplikasi RE/MAX memudahkan anda untuk membagi produk properti anda kepada calon pembeli. Kemudahan kontak bagi calon pembeli meningkatkan peluang anda menjual listing yang salable.";
+  String agentsId4 = "Aplikasi Genius berbasis cloud memudahkan anda untuk mendapatkan laporan serta mempermudah sistim penagihan kepada klien. Sistim yang didukung program QR code reader membuat transaksi anda lebih aman.";
+  String agentsIdSiapkah = "Siapkah Anda Memulai Karir Anda ? Bersama RE/MAX, Impian Anda Dapat Terwujud. Mari Bergabung!";
+  String agentsIdKlik = "Klik Disini Untuk Bergabung";
+
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -61,13 +77,41 @@ class _ContentAgentsState extends State<ContentAgents> {
                           color: const Color(0xffDC1B2E),
                         ),
                       ),
-                      Container(
-                          margin: EdgeInsets.only(top: 35.0),
-                          child: ContentSlideAgents()),
+                      // Container(
+                      //     margin: EdgeInsets.only(top: 35.0),
+                      //     child: ContentSlideAgents()),
+                      PartnerCard(
+                        number: "01",
+                        text:
+                        agentsEn1,
+                        bg: "assets/images/bg_agents.png",
+                        image: "assets/images/agents01.jpg",
+                      ),
+                      PartnerCard(
+                        number: "02",
+                        text:
+                        agentsEn2,
+                        bg: "assets/images/bg_agents.png",
+                        image: "assets/images/agents02.jpg",
+                      ),
+                      PartnerCard(
+                        number: "03",
+                        text:
+                        agentsEn3,
+                        bg: "assets/images/bg_agents.png",
+                        image: "assets/images/agents03.jpg",
+                      ),
+                      PartnerCard(
+                        number: "04",
+                        text:
+                        agentsEn4,
+                        bg: "assets/images/bg_agents.png",
+                        image: "assets/images/agents04.jpg",
+                      ),
                       Container(
                         margin: EdgeInsets.only(top: 25.0),
                         child: Text(
-                          'Are You Ready To Have A Sucessful Real Estate Career? Together with RE/MAX, Your Dreams Can Come True. Join Us Now!',
+                          agentsEnReady,
                           textAlign: TextAlign.center,
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),
@@ -89,7 +133,7 @@ class _ContentAgentsState extends State<ContentAgents> {
                           child: new OutlineButton(
                             shape: StadiumBorder(),
                             textColor: kRedColor,
-                            child: Text('Click Here to Join Us'),
+                            child: Text(agentsEnClick),
                             borderSide: BorderSide(
                                 color: kRedColor,
                                 style: BorderStyle.solid,
@@ -502,3 +546,68 @@ class _ImageDialogState extends State<ImageDialog> {
     );
   }
 }
+
+class ImageDialogDetail extends StatelessWidget {
+  final String assets;
+  final String judul;
+  final String deskripsi;
+
+  ImageDialogDetail(this.assets, this.judul, this.deskripsi);
+
+  @override
+  Widget build(BuildContext context) {
+    return Material(
+      child: Container(
+        color: Colors.white,
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        child: Stack(
+          children: <Widget>[
+            Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Image.asset(assets),
+                Container(
+                  margin: EdgeInsets.only(top: 20.0, left: 15.0),
+                  child: Text(
+                    judul,
+                    style: TextStyle(
+                        fontSize: 18.0,
+                        fontWeight: FontWeight.bold,
+                        color: kAppBarColorTheme),
+                  ),
+                ),
+                Container(
+                    margin: EdgeInsets.all(15.0),
+                    child: Text(deskripsi, style: TextStyle(fontSize: 13.0)))
+              ],
+            ),
+            GestureDetector(
+              onTap: () {
+                Navigator.of(context).pop();
+              },
+              child: Align(
+                alignment: Alignment.topRight,
+                child: Container(
+                  padding: EdgeInsets.all(5.0),
+                  decoration: BoxDecoration(
+                    color: kRedColor,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: Radius.circular(14.0),
+                    ),
+                  ),
+                  child: Icon(
+                    Icons.close,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+

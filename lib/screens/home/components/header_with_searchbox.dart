@@ -42,6 +42,7 @@ class HeaderWithSearchBox extends StatelessWidget {
               bottom: 36 + kDefaultPadding,
             ),
             height: 400,
+            width: double.infinity,
             decoration: BoxDecoration(
                 image: DecorationImage(
               image: new AssetImage(
@@ -49,47 +50,66 @@ class HeaderWithSearchBox extends StatelessWidget {
               ),
               fit: BoxFit.cover,
             )),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Stack(
               children: <Widget>[
-                IconButton(
-                  icon: Image.asset("assets/icons/menu_bar.png"),
-                  onPressed: () => Scaffold.of(context).openDrawer(),
-                ),
-                Container(
-                  // width: 151,
-                  // height: 56,
-                  // decoration: BoxDecoration(color: Colors.black),
-                  child: Image.asset("assets/logo/logo_remax.png"),
-                ),
-                DropdownButton<String>(
-                  //value: dropdownValue,
-                  // isDense: true,
-                  icon: Image.asset("assets/icons/language_choose.png"),
-                  iconSize: 24,
-                  elevation: 16,
-                  style: const TextStyle(color: Colors.black),
-                  underline: Container(
-                    height: 2,
-                    color: Colors.transparent,
+                Align(
+                  alignment: Alignment.topLeft,
+                  child: Container(
+                    margin: EdgeInsets.only(top: 70),
+                    child: IconButton(
+                      icon: Image.asset("assets/icons/menu_bar.png"),
+                      onPressed: () => Scaffold.of(context).openDrawer(),
+                    ),
                   ),
-                  onChanged: (newValue) {
+                ),
+                Align(
+                  alignment: Alignment.topCenter,
+                  child: Container(
+                    width: 151,
+                    height: 56,
+                    margin: EdgeInsets.only(top: 70),
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage('assets/logo/logo_remax.png'),
+                      )
+                    ),
+
+                  ),
+                ),
+                Align(
+                  alignment: Alignment.topRight,
+                  child: Container(
+                    margin: EdgeInsets.only(top: 70),
+                    child: DropdownButton<String>(
+                      //value: dropdownValue,
+                      // isDense: true,
+                      icon: Image.asset("assets/icons/language_choose.png"),
+                      iconSize: 24,
+                      elevation: 16,
+                      style: const TextStyle(color: Colors.black),
+                      underline: Container(
+                        height: 2,
+                        color: Colors.transparent,
+                      ),
+                      onChanged: (newValue) {
 //                      setState(() {
 //                        dropdownValue = newValue!;
 //                      });
-                    if (newValue == "Indonesian") {
-                      savePrefBahasa("id_ID");
-                    } else {
-                      savePrefBahasa("en");
-                    }
-                  },
-                  items: <String>['ID', 'EN']
-                      .map<DropdownMenuItem<String>>((String value) {
-                    return DropdownMenuItem<String>(
-                      value: value,
-                      child: Text(value),
-                    );
-                  }).toList(),
+                        if (newValue == "ID") {
+                          savePrefBahasa("id_ID");
+                        } else {
+                          savePrefBahasa("en");
+                        }
+                      },
+                      items: <String>['ID', 'EN']
+                          .map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    ),
+                  ),
                 ),
               ],
             ),

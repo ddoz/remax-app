@@ -25,7 +25,7 @@ class TitleWithLink extends StatelessWidget {
                   builder: (BuildContext context) => new SearchScreen()));
             },
             child: Text('View All Listing',
-                style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold, color: kPrimaryColor)),
+                style: TextStyle(fontSize: 15, color: kPrimaryColor)),
           ),
         ],
       ),
@@ -50,7 +50,7 @@ class TitleWithCustomUnderline extends StatelessWidget {
             padding: const EdgeInsets.only(left: kDefaultPadding / 4),
             child: Text(
               text,
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 15),
             ),
           ),
         ],
