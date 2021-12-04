@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:remax_app/util/constants.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-class HeaderSignIn extends StatelessWidget {
+class HeaderSignIn extends StatefulWidget {
   const HeaderSignIn({
     Key key,
     @required this.size,
@@ -11,11 +12,36 @@ class HeaderSignIn extends StatelessWidget {
   final Size size;
 
   @override
+  State<HeaderSignIn> createState() => _HeaderSignInState();
+}
+
+class _HeaderSignInState extends State<HeaderSignIn> {
+  String bahasa = "";
+  getPrefbaru() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    if (preferences.getString("bahasa") != null) {
+      bahasa = preferences.getString("bahasa");
+    } else {
+      bahasa = "id_ID";
+    }
+    setState(() {
+      bahasa = bahasa;
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    getPrefbaru();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Container(
       margin: EdgeInsets.only(bottom: kDefaultPadding * 2.5),
       // It will cover 20% of our total height
-      height: size.height * 0.65,
+      height: widget.size.height * 0.65,
       child: Stack(
         children: <Widget>[
           Container(
@@ -68,7 +94,9 @@ class HeaderSignIn extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.topCenter,
                       child: Text(
-                        'Welcome!\nPlease fill the Username and Password to Sign in into Genius System',
+                        (bahasa == "id_ID")
+                            ? "Selamat Datang\nSilahkan isi Username dan Password untuk masuk ke Genius System"
+                            : 'Welcome!\nPlease fill the Username and Password to Sign in into Genius System',
                         style: TextStyle(fontSize: 14.0, color: Colors.white),
                         textAlign: TextAlign.center,
                       ),

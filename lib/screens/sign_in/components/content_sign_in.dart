@@ -129,12 +129,26 @@ class _ContentSignInState extends State<ContentSignIn> {
     });
   }
 
+  String bahasa = "";
+  getPrefbaru() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    if (preferences.getString("bahasa") != null) {
+      bahasa = preferences.getString("bahasa");
+    } else {
+      bahasa = "id_ID";
+    }
+    setState(() {
+      bahasa = bahasa;
+    });
+  }
+
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
     getPref();
     getPrefBahasa();
+    getPrefbaru();
   }
 
   String label_loading = "";
@@ -143,7 +157,7 @@ class _ContentSignInState extends State<ContentSignIn> {
 
     label_loading = "Loading";
     if (preferences.getString("bahasa") != null) {
-      if (preferences.getString("bahasa") == "Indonesian") {
+      if (preferences.getString("bahasa") == "id_ID") {
         label_loading = "Memuat";
       } else {
         label_loading = "Loading";
@@ -191,12 +205,14 @@ class _ContentSignInState extends State<ContentSignIn> {
                               child: TextFormField(
                                 validator: (e) {
                                   if (e.isEmpty) {
-                                    return "Please insert username";
+                                    return (bahasa == "id_ID")
+                                        ? "Silahkan masukkan Username"
+                                        : "Please insert username";
                                   }
                                 },
                                 onSaved: (e) => email = e,
                                 decoration: InputDecoration(
-                                  hintText: "Email",
+                                  hintText: "Username",
                                   hintStyle: TextStyle(
                                     fontSize: 13.0,
                                     color: kPrimaryColor.withOpacity(0.5),

@@ -587,7 +587,7 @@ class _ItemListState extends State<ItemList> {
 
     label_loading = "Loading";
     if (preferences.getString("bahasa") != null) {
-      if (preferences.getString("bahasa") == "Indonesian") {
+      if (preferences.getString("bahasa") == "id_ID") {
         label_loading = "Memuat";
       } else {
         label_loading = "Loading";

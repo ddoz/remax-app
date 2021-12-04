@@ -36,7 +36,7 @@ class _ContentAboutState extends State<ContentAbout> {
     label_visi = "Vission";
     label_misi = "Mission";
     if (preferences.getString("bahasa") != null) {
-      if (preferences.getString("bahasa") == "Indonesian") {
+      if (preferences.getString("bahasa") == "id_ID") {
         konten_visi = visi_indo;
         konten_misi = misi_indo;
         label_visi = "Visi";

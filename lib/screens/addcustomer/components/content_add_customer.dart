@@ -6,7 +6,6 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-import 'package:contact_picker/contact_picker.dart';
 
 class ContentAddCustomer extends StatefulWidget {
   @override
@@ -34,7 +33,7 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
   Map<String, String> headerss = {};
 
   String number, name;
-  final ContactPicker contactPicker = new ContactPicker();
+  // final ContactPicker contactPicker = new ContactPicker();
 
   getPref() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -90,14 +89,14 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
                 ),
                 GestureDetector(
                     onTap: () async {
-                      Contact contact = await contactPicker.selectContact();
-                      if (contact != null) {
-                        number = contact.phoneNumber.number;
-                        name = contact.fullName;
-                        controllerCustName.text = name;
-                        controllerCustMobileNumber.text = number;
-                        setState(() {});
-                      }
+                      // Contact contact = await contactPicker.selectContact();
+                      // if (contact != null) {
+                      //   number = contact.phoneNumber.number;
+                      //   name = contact.fullName;
+                      //   controllerCustName.text = name;
+                      //   controllerCustMobileNumber.text = number;
+                      //   setState(() {});
+                      // }
                     },
                     child: SvgPicture.asset("assets/icons/person.svg")),
               ],
@@ -499,7 +498,7 @@ class _ContentAddCustomerState extends State<ContentAddCustomer> {
 
     label_loading = "Loading";
     if (preferences.getString("bahasa") != null) {
-      if (preferences.getString("bahasa") == "Indonesian") {
+      if (preferences.getString("bahasa") == "id_ID") {
         label_loading = "Memuat";
       } else {
         label_loading = "Loading";

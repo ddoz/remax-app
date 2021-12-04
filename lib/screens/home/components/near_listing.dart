@@ -50,23 +50,23 @@ class _NearMeListingState extends State<NearMeListing> {
   //   print(_boundsFromLatLngList(lat, lon));
   // }
 
-  LatLngBounds _boundsFromLatLngList(lat, lon) {
-    double x0, x1, y0, y1;
-    if (x0 == null) {
-      x0 = x1 = lat;
-      y0 = y1 = lon;
-    } else {
-      if (lat > (x1 ?? 0)) x1 = lat;
-      if (lon < x0) x0 = lat;
-      if (lat > (y1 ?? 0)) y1 = lon;
-      if (lon < (y0 ?? double.infinity)) y0 = lon;
-    }
+  // LatLngBounds _boundsFromLatLngList(lat, lon) {
+  //   double x0, x1, y0, y1;
+  //   if (x0 == null) {
+  //     x0 = x1 = lat;
+  //     y0 = y1 = lon;
+  //   } else {
+  //     if (lat > (x1 ?? 0)) x1 = lat;
+  //     if (lon < x0) x0 = lat;
+  //     if (lat > (y1 ?? 0)) y1 = lon;
+  //     if (lon < (y0 ?? double.infinity)) y0 = lon;
+  //   }
 
-    return LatLngBounds(
-      northeast: LatLng(x1 ?? 0, y1 ?? 0),
-      southwest: LatLng(x0 ?? 0, y0 ?? 0),
-    );
-  }
+  //   return LatLngBounds(
+  //     northeast: LatLng(x1 ?? 0, y1 ?? 0),
+  //     southwest: LatLng(x0 ?? 0, y0 ?? 0),
+  //   );
+  // }
 
   getPrefBahasa() async {
     SharedPreferences preferences = await SharedPreferences.getInstance();
@@ -774,7 +774,7 @@ class _ItemListState extends State<ItemList> {
 
     label_loading = "Loading";
     if (preferences.getString("bahasa") != null) {
-      if (preferences.getString("bahasa") == "Indonesian") {
+      if (preferences.getString("bahasa") == "id_ID") {
         label_loading = "Memuat";
       } else {
         label_loading = "Loading";
@@ -824,7 +824,7 @@ class _ItemListState extends State<ItemList> {
                         image: widget.data['listThumbnail'] != null
                             ? NetworkImage('https://genius.remax.co.id/papi/' +
                                 widget.data['listThumbnail'] +
-                                '?size=512,512')
+                                '?size=200,200')
                             : NetworkImage('-'),
                         fit: BoxFit.cover),
                   ),

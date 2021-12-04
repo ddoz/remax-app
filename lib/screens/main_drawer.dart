@@ -320,7 +320,7 @@ class _MainDrawerState extends State<MainDrawer> {
     SharedPreferences preferences = await SharedPreferences.getInstance();
 
     if (preferences.getString("bahasa") != null) {
-      if (preferences.getString("bahasa") == "Indonesian") {
+      if (preferences.getString("bahasa") == "id_ID") {
       } else {}
     }
   }

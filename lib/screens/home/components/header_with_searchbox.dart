@@ -15,7 +15,7 @@ class HeaderWithSearchBox extends StatelessWidget {
   }) : super(key: key);
 
   final Size size;
-  final String dropdownValue = 'Indonesia';
+  final String dropdownValue = 'Indonesian';
 
   savePrefBahasa(String bahasa) async {
     SharedPreferences preferences = await SharedPreferences.getInstance();

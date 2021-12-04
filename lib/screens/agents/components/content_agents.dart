@@ -140,7 +140,7 @@ class _ImageDialogState extends State<ImageDialog> {
 
     labeling = "Loading";
     if (preferences.getString("bahasa") != null) {
-      if (preferences.getString("bahasa") == "Indonesian") {
+      if (preferences.getString("bahasa") == "id_ID") {
         labeling = "Kesempatan Penghasilan Tanpa Batas";
         labeling_body = "Miliki Usaha Anda Sendiri";
         label_loading = "Memuat";

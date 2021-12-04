@@ -1,4 +1,3 @@
-import 'package:android_intent/android_intent.dart';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:remax_app/screens/home/components/header_with_searchbox.dart';
@@ -7,6 +6,7 @@ import 'package:remax_app/screens/home/components/partners.dart';
 import 'package:remax_app/screens/home/components/title_only.dart';
 import 'package:remax_app/screens/home/components/title_with_link.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'near_listing.dart';
 
@@ -19,10 +19,21 @@ class _BodyState extends State<Body> {
   final PermissionHandler permissionHandler = PermissionHandler();
   Map<PermissionGroup, PermissionStatus> permissions;
 
+  savePrefBahasa(String bahasa) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+//    setState(() {
+//      preferences.setString("bahasa", bahasa);
+//      preferences.commit();
+//    });
+    preferences.setString("bahasa", bahasa);
+    preferences.commit();
+  }
+
   void initState() {
     super.initState();
-    requestLocationPermission();
-    _gpsService();
+    // requestLocationPermission();
+    // _gpsService();
+    savePrefBahasa("id_ID");
   }
 
   Future<bool> requestLocationPermission({Function onPermissionDenied}) async {
@@ -66,10 +77,10 @@ class _BodyState extends State<Body> {
                   FlatButton(
                       child: Text('Ok'),
                       onPressed: () {
-                        final AndroidIntent intent = AndroidIntent(
-                            action:
-                                'android.settings.LOCATION_SOURCE_SETTINGS');
-                        intent.launch();
+                        // final AndroidIntent intent = AndroidIntent(
+                        //     action:
+                        //         'android.settings.LOCATION_SOURCE_SETTINGS');
+                        // intent.launch();
                         Navigator.of(context, rootNavigator: true).pop();
                         _gpsService();
                       })

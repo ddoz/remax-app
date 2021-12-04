@@ -340,7 +340,7 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
 
     label_loading = "Loading";
     if (preferences.getString("bahasa") != null) {
-      if (preferences.getString("bahasa") == "Indonesian") {
+      if (preferences.getString("bahasa") == "id_ID") {
         label_loading = "Memuat";
         labeling = "Kesempatan Penghasilan Tanpa Batas";
         labeling_body = "Miliki Usaha Anda Sendiri";
@@ -395,32 +395,32 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
   String validator() {
     String error = "kosong";
     if (controllerName.text.isEmpty) {
-      error = (bahasa == "Indonesia")
+      error = (bahasa == "id_ID")
           ? "Nama Tidak Boleh Kosong"
           : "Please Input Your Name";
       return error;
     } else if (controllerEmail.text.isEmpty) {
-      error = (bahasa == "Indonesia")
+      error = (bahasa == "id_ID")
           ? "Email tidak boleh kosong"
           : "Please Input Your Email";
       return error;
     } else if (!controllerEmail.text.contains('@')) {
-      error = (bahasa == "Indonesia")
+      error = (bahasa == "id_ID")
           ? "Masukkan email yang benar"
           : "Please Input Valid Email";
       return error;
     } else if (controllerPhone.text.isEmpty) {
-      error = (bahasa == "Indonesia")
+      error = (bahasa == "id_ID")
           ? "Phone tidak boleh kosong"
           : "Please Input your phone number";
       return error;
     } else if (!validateMobileNumber(controllerPhone.text)) {
-      error = (bahasa == "Indonesia")
+      error = (bahasa == "id_ID")
           ? "Masukkan nomor telepon yang valid"
           : "Please Input valid phone number";
       return error;
     } else if (controllerMessage.text.isEmpty) {
-      error = (bahasa == "Indonesia")
+      error = (bahasa == "id_ID")
           ? "Pesan tidak boleh kosong"
           : "Please Input your message";
       return error;
@@ -452,9 +452,8 @@ class _ImageDialogKantorState extends State<ImageDialogKantor> {
         String message = data['status']['message'];
 
         if (message == "Data Created") {
-          message = (bahasa == "Indonesia")
-              ? "Data berhasil dikirim"
-              : "Data has been sent";
+          message =
+              (bahasa == "n") ? "Data berhasil dikirim" : "Data has been sent";
         }
 
         Navigator.pop(context);
