@@ -8,37 +8,11 @@ import 'package:remax_app/screens/sign_in/sign_in_page.dart';
 import 'package:remax_app/util/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class BottomNavBar extends StatefulWidget {
-  BottomNavBar({
-    Key key,
-  }) : super(key: key);
+class BottomNavBar extends StatelessWidget {
 
-  @override
-  State<BottomNavBar> createState() => _BottomNavBarState();
-}
+  bool isLogin;
 
-enum LoginStatus { notSignIn, signIn }
-
-class _BottomNavBarState extends State<BottomNavBar> {
-  var value;
-  LoginStatus _loginStatus = LoginStatus.notSignIn;
-
-  getPref() async {
-    SharedPreferences preferences = await SharedPreferences.getInstance();
-    setState(() {
-      value = preferences.getInt("value");
-      print(value);
-
-      _loginStatus = value == 1 ? LoginStatus.signIn : LoginStatus.notSignIn;
-    });
-  }
-
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    getPref();
-  }
+  BottomNavBar(this.isLogin);
 
   @override
   Widget build(BuildContext context) {
@@ -99,24 +73,24 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ),
           ),
           Spacer(),
-          _loginStatus == LoginStatus.signIn
+          isLogin == true
               ? GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(new MaterialPageRoute(
-                        builder: (BuildContext context) => AddListingPage()));
-                  },
-                  child: Container(
-                    margin: EdgeInsets.all(10.0),
-                    child: Column(children: <Widget>[
-                      SizedBox(
-                          height: 16.0,
-                          child: Icon(Icons.add, color: kPrimaryColor,)),
-                      Text(
-                        'Add', style: TextStyle(fontSize: 13.0),
-                      )
-                    ]),
-                  ),
+            onTap: () {
+              Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (BuildContext context) => AddListingPage()));
+            },
+            child: Container(
+              margin: EdgeInsets.all(10.0),
+              child: Column(children: <Widget>[
+                SizedBox(
+                    height: 16.0,
+                    child: Icon(Icons.add, color: kPrimaryColor,)),
+                Text(
+                  'Add', style: TextStyle(fontSize: 13.0),
                 )
+              ]),
+            ),
+          )
               : Container(),
           Spacer(),
           GestureDetector(
@@ -141,46 +115,48 @@ class _BottomNavBarState extends State<BottomNavBar> {
             ),
           ),
           Spacer(),
-          _loginStatus == LoginStatus.signIn
+          isLogin == true
               ? GestureDetector(
-                  onTap: () {
-                    // Navigator.of(context).push(new MaterialPageRoute(
-                    //     builder: (BuildContext context) => SignInPage()));
-                  },
-                  child: Container(
-                    margin: EdgeInsets.all(10.0),
-                    child: Column(children: <Widget>[
-                      SizedBox(
-                          height: 16.0,
-                          child: SvgPicture.asset("assets/icons/person.svg",
-                              color: kPrimaryColor)),
-                      Text(
-                        'Account',
-                        style: TextStyle(fontSize: 13.0),
-                      )
-                    ]),
-                  ),
+            onTap: () {
+              // Navigator.of(context).push(new MaterialPageRoute(
+              //     builder: (BuildContext context) => SignInPage()));
+            },
+            child: Container(
+              margin: EdgeInsets.all(10.0),
+              child: Column(children: <Widget>[
+                SizedBox(
+                    height: 16.0,
+                    child: SvgPicture.asset("assets/icons/person.svg",
+                        color: kPrimaryColor)),
+                Text(
+                  'Account',
+                  style: TextStyle(fontSize: 13.0),
                 )
+              ]),
+            ),
+          )
               : GestureDetector(
-                  onTap: () {
-                    Navigator.of(context).push(new MaterialPageRoute(
-                        builder: (BuildContext context) => SignInPage()));
-                  },
-                  child: Container(
-                    margin: EdgeInsets.all(10.0),
-                    child: Column(children: <Widget>[
-                      SizedBox(
-                          height: 16.0,
-                          child: SvgPicture.asset("assets/icons/signin.svg")),
-                      Text(
-                        'Sign In',
-                        style: TextStyle(fontSize: 13.0),
-                      )
-                    ]),
-                  ),
+            onTap: () {
+              Navigator.of(context).push(new MaterialPageRoute(
+                  builder: (BuildContext context) => SignInPage()));
+            },
+            child: Container(
+              margin: EdgeInsets.all(10.0),
+              child: Column(children: <Widget>[
+                SizedBox(
+                    height: 16.0,
+                    child: SvgPicture.asset("assets/icons/signin.svg")),
+                Text(
+                  'Sign In',
+                  style: TextStyle(fontSize: 13.0),
                 )
+              ]),
+            ),
+          )
         ],
       ),
     );
   }
 }
+
+
