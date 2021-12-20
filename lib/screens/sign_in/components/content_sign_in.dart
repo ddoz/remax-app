@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
+import 'package:remax_app/screens/home/home_screen.dart';
 import 'package:remax_app/screens/member/my_customer_page.dart';
 import 'package:remax_app/screens/member/my_listing_page.dart';
 import 'package:remax_app/screens/sign_up/sign_up_page.dart';
@@ -366,7 +367,8 @@ class _ContentSignInState extends State<ContentSignIn> {
         //return MainMenu(signOut, headers);
         //return SizedBox();
         setState(() {
-          Navigator.of(context).pop();
+          Navigator.of(context).push(new MaterialPageRoute(
+              builder: (BuildContext context) => HomeScreen()));
         });
 
         break;

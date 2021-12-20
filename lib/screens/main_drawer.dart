@@ -7,6 +7,7 @@ import 'package:remax_app/screens/ajukan_kpr/ajukan_kpr_page.dart';
 import 'package:remax_app/screens/contactus/contact_us_page.dart';
 import 'package:remax_app/screens/favourite/favourite_page.dart';
 import 'package:remax_app/screens/franchise/franchise_page.dart';
+import 'package:remax_app/screens/home/home_screen.dart';
 import 'package:remax_app/screens/istilahproperty/istilah_property.dart';
 import 'package:remax_app/screens/member/my_customer_page.dart';
 import 'package:remax_app/screens/tracker/tracker_page.dart';
@@ -651,7 +652,8 @@ class _MainDrawerState extends State<MainDrawer> {
                 ? GestureDetector(
                     onTap: () {
                       signOut();
-                      Navigator.of(context).pop();
+                      Navigator.of(context).pushAndRemoveUntil(new MaterialPageRoute(
+                          builder: (BuildContext context) => HomeScreen()), (route) => false);
                     },
                     child: Container(
                       margin: EdgeInsets.only(left: 30.0, bottom: 10.0),
