@@ -37,6 +37,7 @@ dependencies:
   intl: ^0.16.1
   # flutter_webview_plugin: ^0.4.0
   # android_intent: ^0.3.7+7
+  android_intent: ^0.3.7+7
   pinch_zoom: ^0.1.0
   path_provider: ^2.0.2
   flutter_bloc: ^3.1.1
