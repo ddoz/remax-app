@@ -3,12 +3,12 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:path/path.dart' as p;
+import 'package:path_provider/path_provider.dart';
 import 'package:random_string/random_string.dart';
 import 'package:remax_app/screens/addcustomer/components/content_add_customer.dart';
 import 'package:remax_app/util/constants.dart';
@@ -2123,10 +2123,10 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
       var dio = Dio();
       var j = 1;
       for (var i = 0; i < images.length; i++) {
-        var path =
-            await FlutterAbsolutePath.getAbsolutePath(images[i].identifier);
-        var file = await getImageFileFromAsset(path);
-        var filetype = p.extension(path);
+        // var path =
+        //     await FlutterAbsolutePath.getAbsolutePath(images[i].identifier);
+        var file =  await getImageFileFromAssets(images[i]);
+        var filetype = p.extension(file.path);
         var filename = randomAlphaNumeric(10);
         var formDataPostImage = FormData.fromMap({
           "listFile[0]": new MultipartFile.fromBytes(file.readAsBytesSync(),
@@ -2148,6 +2148,18 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
       Navigator.pop(context);
       _showToast(context, "Gagal Upload, Coba Lagi");
     }
+  }
+
+  Future<File> getImageFileFromAssets(Asset asset) async {
+    final byteData = await asset.getByteData();
+
+    final tempFile =
+    File("${(await getTemporaryDirectory()).path}/${asset.name}");
+    final file = await tempFile.writeAsBytes(
+      byteData.buffer
+          .asUint8List(byteData.offsetInBytes, byteData.lengthInBytes),);
+
+    return file;
   }
 
   void getFileList() async {
