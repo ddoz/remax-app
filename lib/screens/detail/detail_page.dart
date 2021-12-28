@@ -4,7 +4,7 @@ import 'package:carousel_pro/carousel_pro.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
-import 'package:flutter_open_whatsapp/flutter_open_whatsapp.dart';
+import 'package:flutter_launch/flutter_launch.dart';
 import 'package:flutter_share/flutter_share.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:http/http.dart' as http;
@@ -944,8 +944,9 @@ class _DetailPageState extends State<DetailPage> {
                               SizedBox(height: 10),
                               GestureDetector(
                                 onTap: () {
-                                  FlutterOpenWhatsapp.sendSingleMessage(
-                                      snapshot.data['mmbsCellPhone1'], "");
+                                  FlutterLaunch.launchWhatsapp(
+                                      phone: snapshot.data['mmbsCellPhone1'],
+                                      message: "");
                                 },
                                 child: Card(
                                   color: kBtnWa,

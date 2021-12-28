@@ -3,7 +3,6 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_absolute_path/flutter_absolute_path.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:http/http.dart' as http;
@@ -2123,10 +2122,10 @@ class _ContentAddInfoState extends State<ContentAddInfoListing> {
       var dio = Dio();
       var j = 1;
       for (var i = 0; i < images.length; i++) {
-        var path =
-            await FlutterAbsolutePath.getAbsolutePath(images[i].identifier);
-        var file = await getImageFileFromAsset(path);
-        var filetype = p.extension(path);
+        // var path =
+        //     await FlutterAbsolutePath.getAbsolutePath(images[i].identifier);
+        var file = await getImageFileFromAsset(images[i].identifier);
+        var filetype = p.extension(images[i].identifier);
         var filename = randomAlphaNumeric(10);
         var formDataPostImage = FormData.fromMap({
           "listFile[0]": new MultipartFile.fromBytes(file.readAsBytesSync(),

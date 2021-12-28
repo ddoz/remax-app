@@ -15,7 +15,7 @@ publish_to: "none" # Remove this line if you wish to publish to pub.dev
 # In iOS, build-name is used as CFBundleShortVersionString while build-number used as CFBundleVersion.
 # Read more about iOS versioning at
 # https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/CoreFoundationKeys.html
-version: 2.2.5+28
+version: 2.2.5+30
 
 environment:
   sdk: ">=2.7.0 <3.0.0"
@@ -35,21 +35,24 @@ dependencies:
   carousel_pro: ^1.0.0
   flutter_html: ^0.8.2
   intl: ^0.16.1
-  flutter_webview_plugin: ^0.4.0
+  # flutter_webview_plugin: ^0.4.0
   # android_intent: ^0.3.7+7
   pinch_zoom: ^0.1.0
   path_provider: ^2.0.2
   flutter_bloc: ^3.1.1
   flutter_typeahead: ^1.8.1
   flutter_svg: ^0.19.1 #it helps us to use SVG
-  flutter_open_whatsapp: ^0.1.2
+  # flutter_open_whatsapp: ^0.1.2
+  flutter_launch: ^0.3.0
   shimmer: ^1.1.2
   multi_image_picker: ^4.5.5
   google_maps_flutter: ^1.2.0
-  location: ^3.0.0
+  # location: ^3.0.0
   flutter_share: ^1.0.5
   dio: ^3.0.4
-  flutter_absolute_path: ^1.0.6
+  # flutter_absolute_path:
+  #   git:
+  #     url: https://github.com/canewsin/flutter_absolute_path.git
   random_string: ^2.1.0
   geolocator: ^5.3.1
   fluttertoast: ^7.1.8
