@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:http/http.dart' as http;
 import 'package:remax_app/sidebar/navigation_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'detail/detail_page.dart';
 import 'main_drawer.dart';
@@ -41,28 +42,61 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-class ItemList extends StatelessWidget {
+class ItemList extends StatefulWidget {
   List list;
 
   ItemList({this.list});
 
+  @override
+  State<ItemList> createState() => _ItemListState();
+}
+
+class _ItemListState extends State<ItemList> {
   int toInt(String str) {
     var myInt = int.parse(str);
     assert(myInt is int);
     return myInt;
   }
 
+  String bahasa = "id_ID";
+  String labelJual = "DIJUAL";
+  String labelSewa = "DISEWAKAN";
+
+  getPrefBahasa() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+
+    if (preferences.getString("bahasa") != null) {
+      if (preferences.getString("bahasa") == "id_ID") {
+        labelJual = labelJual;
+        labelSewa = labelSewa;
+      } else {
+        labelJual = "SELL";
+        labelSewa = "RENT";
+      }
+      setState(() {
+        bahasa = preferences.getString("bahasa");
+      });
+    }
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    getPrefBahasa();
+  }
+
   @override
   Widget build(BuildContext context) {
     return new ListView.builder(
-      itemCount: list == null ? 0 : list.length,
+      itemCount: widget.list == null ? 0 : widget.list.length,
       itemBuilder: (context, i) {
         return new Container(
           padding: const EdgeInsets.all(10.0),
           child: new GestureDetector(
             onTap: () => Navigator.of(context).push(new MaterialPageRoute(
                 builder: (BuildContext context) => new DetailPage(
-                      list: list,
+                      list: widget.list,
                       index: i,
                     ))),
             child: new Card(
@@ -80,7 +114,7 @@ class ItemList extends StatelessWidget {
                       image: DecorationImage(
                           image: NetworkImage(
                               'https://genius.remax.co.id/papi/' +
-                                  list[i]['listThumbnail']),
+                                  widget.list[i]['listThumbnail']),
                           fit: BoxFit.cover),
                     ),
                   ),
@@ -90,7 +124,7 @@ class ItemList extends StatelessWidget {
                     child: Align(
                       alignment: Alignment.centerLeft,
                       child: new Text(
-                        list[i]['listTitle'],
+                        widget.list[i]['listTitle'],
                         overflow: TextOverflow.ellipsis,
                         style: new TextStyle(
                           fontSize: 16.0,
@@ -111,9 +145,9 @@ class ItemList extends StatelessWidget {
                               children: <Widget>[
                                 new Image.asset('assets/images/bed.png',
                                     width: 15, height: 15),
-                                list[i]['listBedroom'] != null
+                                widget.list[i]['listBedroom'] != null
                                     ? new Text(
-                                        list[i]['listBedroom'],
+                                        widget.list[i]['listBedroom'],
                                         style: new TextStyle(
                                           fontSize: 10.0,
                                           fontWeight: FontWeight.bold,
@@ -136,9 +170,9 @@ class ItemList extends StatelessWidget {
                               children: <Widget>[
                                 new Image.asset('assets/images/bathtub.png',
                                     width: 15, height: 15),
-                                list[i]['listBathroom'] != null
+                                widget.list[i]['listBathroom'] != null
                                     ? new Text(
-                                        list[i]['listBathroom'],
+                                        widget.list[i]['listBathroom'],
                                         style: new TextStyle(
                                           fontSize: 10.0,
                                           fontWeight: FontWeight.bold,
@@ -161,9 +195,9 @@ class ItemList extends StatelessWidget {
                               children: <Widget>[
                                 new Image.asset('assets/images/home.png',
                                     width: 15, height: 15),
-                                list[i]['listBuildingSize'] != null
+                                widget.list[i]['listBuildingSize'] != null
                                     ? new Text(
-                                        list[i]['listBuildingSize'],
+                                        widget.list[i]['listBuildingSize'],
                                         style: new TextStyle(
                                           fontSize: 10.0,
                                           fontWeight: FontWeight.bold,
@@ -186,9 +220,9 @@ class ItemList extends StatelessWidget {
                               children: <Widget>[
                                 new Image.asset('assets/images/area.png',
                                     width: 15, height: 15),
-                                list[i]['listLandSize'] != null
+                                widget.list[i]['listLandSize'] != null
                                     ? new Text(
-                                        list[i]['listLandSize'],
+                                        widget.list[i]['listLandSize'],
                                         style: new TextStyle(
                                           fontSize: 10.0,
                                           fontWeight: FontWeight.bold,
@@ -204,7 +238,7 @@ class ItemList extends StatelessWidget {
                       ),
                     ],
                   ),
-                  list[i]['links']['listListingCategoryId'] == "1"
+                  widget.list[i]['links']['listListingCategoryId'] == "1"
                       ? Row(children: <Widget>[
                           Container(
                             margin: EdgeInsets.all(10.0),
@@ -215,7 +249,8 @@ class ItemList extends StatelessWidget {
                                         locale: 'id',
                                         symbol: 'Rp ',
                                         decimalDigits: 0)
-                                    .format(toInt(list[i]['listListingPrice'])),
+                                    .format(toInt(
+                                        widget.list[i]['listListingPrice'])),
                                 style: new TextStyle(
                                   fontSize: 21.0,
                                   color: const Color(0xffDC1B2E),
@@ -225,7 +260,7 @@ class ItemList extends StatelessWidget {
                             ),
                           ),
                           new Text(
-                            "DIJUAL",
+                            "$labelJual",
                             style: new TextStyle(
                                 fontSize: 12.0, color: const Color(0xffDC1B2E)),
                           )
@@ -240,7 +275,8 @@ class ItemList extends StatelessWidget {
                                         locale: 'id',
                                         symbol: 'Rp ',
                                         decimalDigits: 0)
-                                    .format(toInt(list[i]['listListingPrice'])),
+                                    .format(toInt(
+                                        widget.list[i]['listListingPrice'])),
                                 style: new TextStyle(
                                   fontSize: 21.0,
                                   color: const Color(0xff1A3668),
@@ -250,7 +286,7 @@ class ItemList extends StatelessWidget {
                             ),
                           ),
                           new Text(
-                            "DISEWAKAN",
+                            "$labelSewa",
                             style: new TextStyle(
                                 fontSize: 12.0, color: const Color(0xff1A3668)),
                           )
